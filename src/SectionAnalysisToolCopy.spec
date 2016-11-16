@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['SectionAnalysisTool.py'],
-             pathex=['D:\\Dropbox\\Git\\SectionAnalysisTool\\SectionAnalysisTool\\src'],
+             pathex=['.'],
              binaries=None,
              datas=[('icon.ico','.')],
              hiddenimports=[],
