@@ -3,7 +3,7 @@ from RectangleAnalysis import RectangleAnalysis as RA;
 from PolygonAnalysis import PolygonAnalysis as PA;
 from CircSegAnalysis import CircSegAnalysis as CSA;
 import math;
-__author__ = 'RA029440 - Kim_Nguyen@haci.honda.com'
+__author__ = Kim Nguyen, kbnguyen@ncsu.edu
 class SectionAnalysis:
     ''' analyzes the cumulative list of sections '''
     def __init__(self, Pz, Mx, My, xP, yP):

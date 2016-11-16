@@ -1,6 +1,6 @@
 from Shape import Shape
 from CircSegAnalysis import CircSegAnalysis as CSA
-__author__ = 'RA029440 - Kim_Nguyen@haci.honda.com'
+__author__ = Kim Nguyen, kbnguyen@ncsu.edu
 class Circ(Shape):
     ''' Circle shape '''
     def __init__(self, section):

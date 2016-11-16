@@ -2,7 +2,7 @@ import tkinter.font as tkFont
 import tkinter.ttk as ttk
 import tkinter as tk
 
-__author__ = 'RA029440 - Kim_Nguyen@haci.honda.com'
+__author__ = Kim Nguyen, kbnguyen@ncsu.edu
 class MultiColumnListbox(object):
     '''use a ttk.TreeView as a multicolumn ListBox'''
 

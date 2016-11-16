@@ -1,5 +1,5 @@
-import math;
-__author__ = 'RA029440 - Kim_Nguyen@haci.honda.com'
+yimport math;
+__author__ = Kim Nguyen, kbnguyen@ncsu.edu
 class PartialAnalysis:
     '''
     Parent class for all section analysis

@@ -1,5 +1,5 @@
 from PartialAnalysis import PartialAnalysis
-__author__ = 'RA029440 - Kim_Nguyen@haci.honda.com'
+__author__ = Kim Nguyen, kbnguyen@ncsu.edu
 class PolygonAnalysis(PartialAnalysis):
     '''
     Rectangle section analysis.
