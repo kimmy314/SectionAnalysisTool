@@ -1,7 +1,7 @@
 """
 Section Analysis Tool GUI
 """
-__author__ = Kim Nguyen, kbnguyen@ncsu.edu
+__author__ = 'Kim Nguyen'
 import sys
 import os
 import math

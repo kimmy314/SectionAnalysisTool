@@ -1,6 +1,6 @@
 from Shape import Shape
 from RectangleAnalysis import RectangleAnalysis as RA
-__author__ = Kim Nguyen, kbnguyen@ncsu.edu
+__author__ = 'Kim Nguyen'
 class Rect(Shape):
     ''' rectangle shape '''
     def __init__(self, section):

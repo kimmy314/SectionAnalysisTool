@@ -1,6 +1,6 @@
 from Shape import Shape
 from PolygonAnalysis import PolygonAnalysis as PA
-__author__ = Kim Nguyen, kbnguyen@ncsu.edu
+__author__ = 'Kim Nguyen'
 class Poly(Shape):
     ''' polygon shape '''
     def __init__(self, section):

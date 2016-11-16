@@ -1,6 +1,6 @@
 from PartialAnalysis import PartialAnalysis;
 from colour import Color as Color
-__author__ = Kim Nguyen, kbnguyen@ncsu.edu
+__author__ = 'Kim Nguyen'
 class Shape:
     ''' shape helps draws on the canvas and colors things '''
     def __init__(self, section):
