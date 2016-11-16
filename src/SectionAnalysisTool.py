@@ -162,27 +162,20 @@ def getCanvasData():
     calculates the in to pixel conversion and origin for the canvas
     '''
     minX, minY, maxX, maxY= sa.getMinMax()
-
+    drawingWidth = canvas.winfo_width() - 30;
+    drawingHeight = canvas.winfo_height() - 30;
     if minX == 0 and minY == 0 and maxX == 0 and maxY == 0:
         inToPix = 1
         origin = [(canvas.winfo_width()) / 2, canvas.winfo_height() / 2]
     else:
-        if canvas.winfo_width() < canvas.winfo_height():
-            ratioY = (canvas.winfo_width() - 30) / (canvas.winfo_height() - 30)
-            ratioX = 1
+        if (abs((maxY - minY) / (maxX - minX)) 
+            > drawingHeight /drawingWidth):
+            inToPix = drawingHeight / abs(maxY - minY)
         else:
-            ratioY = 1
-            ratioX = (canvas.winfo_height() - 30) / (canvas.winfo_width() - 30)
-            
-        if (maxY - minY) * ratioY > (maxX - minX) * ratioX:
-            inToPix = (canvas.winfo_height() - 30) / ((maxY - minY) * ratioY)
-        else:
-            inToPix = (canvas.winfo_width() - 30) / ((maxX - minX) * ratioX)
-        
+            inToPix = drawingWidth / abs(maxX - minX)
         originX = 15 - minX/(maxX - minX) * inToPix
         originY = canvas.winfo_height() - 15 + minY/(maxY - minY) * inToPix
         origin = [originX, originY]
-        print(origin)
     return inToPix, origin
 
 def draw():
@@ -212,7 +205,26 @@ def draw():
                        fill='yellow',
                        width='1',
                        arrow=tk.LAST)
-
+    # rotated axis
+    rx = None
+    ry = None
+    try:
+        theta = sa.theta
+        xcg, ycg = Shape.inLocToPix(Shape, inToPix, origin[0], origin[1], sa.xcg, sa.ycg)
+        rx = canvas.create_line(xcg - ycg * math.tan(theta), 0,
+                                xcg + (canvas.winfo_height() - ycg) * math.tan(theta), canvas.winfo_height(),
+                                fill='cyan',
+                                width='1',
+                                dash=(3, 4))
+        ry = canvas.create_line(0, ycg + xcg * math.tan(theta),
+                                canvas.winfo_width(), ycg - (canvas.winfo_width() - xcg) * math.tan(theta),
+                                fill='cyan',
+                                width='1',
+                                dash=(3, 4))
+    except BaseException as e:
+        canvas.delete(rx)
+        canvas.delete(ry)
+        
     try:
         for shape in shapes:
             shape.draw(canvas, inToPix, origin)
@@ -259,25 +271,8 @@ def draw():
                            font='Helvetica 6')
     except BaseException as e:
         messagebox.showerror("Error", repr(e))
-    # rotated axis
-    rx = None
-    ry = None
-    try:
-        theta = sa.theta
-        xcg, ycg = Shape.inLocToPix(Shape, inToPix, origin[0], origin[1], sa.xcg, sa.ycg)
-        rx = canvas.create_line(xcg - ycg * math.tan(theta), 0,
-                                xcg + (canvas.winfo_height() - ycg) * math.tan(theta), canvas.winfo_height(),
-                                fill='cyan',
-                                width='1',
-                                dash=(3, 4))
-        ry = canvas.create_line(0, ycg + xcg * math.tan(theta),
-                                canvas.winfo_width(), ycg - (canvas.winfo_width() - xcg) * math.tan(theta),
-                                fill='cyan',
-                                width='1',
-                                dash=(3, 4))
-    except BaseException as e:
-        canvas.delete(rx)
-        canvas.delete(ry)
+    
+    
 
 def updateSectionResults():
     if len(sa.sectionArr) > 0:
