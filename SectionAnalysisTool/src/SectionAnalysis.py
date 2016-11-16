@@ -269,21 +269,23 @@ class SectionAnalysis:
         del self._sections[:];
         
     def getMinMax(self):
-        minXY = float('inf');
-        maxXY = float('-inf');
+        minX = float('inf');
+        maxX = float('-inf');
+        minY = float('inf');
+        maxY = float('-inf');
         if len(self.sections) > 0:
             for section in self.sections:
                 for c in section.corners():
-                    if min(c[0], c[1]) < minXY:
-                        minXY = min(c[0], c[1]);
-                    if maxXY < max(c[0], c[1]):
-                        maxXY = max(c[0], c[1]);
+                    minX = min(minX, c[0])
+                    minY = min(minY, c[1])
+                    maxX = max(maxX, c[0])
+                    maxY = max(maxY, c[1])
                 for p in section.perimeter():
-                    if min(p[0], p[1]) < minXY:
-                        minXY = min(p[0], p[1]);
-                    if maxXY < max(p[0], p[1]):
-                        maxXY = max(p[0], p[1]);
+                    minX = min(minX, p[0])
+                    minY = min(minY, p[1])
+                    maxX = max(maxX, p[0])
+                    maxY = max(maxY, p[1])
                         
-            return minXY, maxXY;
+            return minX, minY, maxX, maxY
         else:
-            return 0, 0;
+            return 0, 0, 0, 0;

@@ -161,16 +161,28 @@ def getCanvasData():
     '''
     calculates the in to pixel conversion and origin for the canvas
     '''
-    minIn, maxIn, = sa.getMinMax()
+    minX, minY, maxX, maxY= sa.getMinMax()
 
-    if maxIn == 0 and minIn == 0:
+    if minX == 0 and minY == 0 and maxX == 0 and maxY == 0:
         inToPix = 1
         origin = [(canvas.winfo_width()) / 2, canvas.winfo_height() / 2]
     else:
-        inToPix = (canvas.winfo_width() - 30) / (maxIn - minIn)
-        origin = int(-minIn * inToPix) + 15
-        origin = [origin, canvas.winfo_height() - origin]
-
+        if canvas.winfo_width() < canvas.winfo_height():
+            ratioY = (canvas.winfo_width() - 30) / (canvas.winfo_height() - 30)
+            ratioX = 1
+        else:
+            ratioY = 1
+            ratioX = (canvas.winfo_height() - 30) / (canvas.winfo_width() - 30)
+            
+        if (maxY - minY) * ratioY > (maxX - minX) * ratioX:
+            inToPix = (canvas.winfo_height() - 30) / ((maxY - minY) * ratioY)
+        else:
+            inToPix = (canvas.winfo_width() - 30) / ((maxX - minX) * ratioX)
+        
+        originX = 15 - minX/(maxX - minX) * inToPix
+        originY = canvas.winfo_height() - 15 + minY/(maxY - minY) * inToPix
+        origin = [originX, originY]
+        print(origin)
     return inToPix, origin
 
 def draw():
@@ -293,13 +305,8 @@ def runAnalysis():
         global COLOR_VAL
         global SF
         global IDX_MIN_MAX
-        sa.Pz = entryPz.get()
-        sa.Mx = entryMx.get()
-        sa.My = entryMy.get()
-        sa.xP = entryXP.get()
-        sa.yP = entryYP.get()
-        updateSectionResults()
-        stressVar.set('Stress: %.2f ' %sa.getStress(entryX.get(), entryY.get()))
+        sa.Pz, sa.Mx, sa.My, sa.xP, sa.yP = [loadEntrys[i].get() for i in range(5)];
+        stressVar.set('Stress: %.2f ' %sa.getStress(coordEntry[0].get(), coordEntry[1].get()))
         stressLabel.config(textvariable=stressVar, relief='flat')
         temp = sa.stressField()
         SF = temp[0]
@@ -357,7 +364,7 @@ def clearList():
 
 # file manager
 fileFrame = tk.Frame(frame)
-fileFrame.pack(side=tk.TOP, fill='x')
+fileFrame.pack(side=tk.TOP, fill=tk.X)
 loadBtn = tk.Button(fileFrame, text='Load File', command=loadFile)
 loadBtn.pack(side=tk.LEFT, padx=5, pady=5)
 clearBtn = tk.Button(fileFrame, text='Clear List', command=clearList)
@@ -365,50 +372,44 @@ clearBtn.pack(side=tk.LEFT, padx=5, pady=5)
 saveBtn = tk.Button(fileFrame, text='Save File', command=saveFile)
 saveBtn.pack(side=tk.LEFT, padx=5, pady=5)
 
+# Load labels and entries
+loadFrame = tk.Frame(frame)
+loadFrame.pack(side=tk.TOP, fill=tk.X)
+loadFrames = [0 for i in range(5)]
+for i in range(5):
+    loadFrames[i] = tk.Frame(loadFrame)
+    loadFrames[i].pack(side=tk.LEFT, fill=tk.X)
+
+LE_WIDTH = 8
 # Load labels
-loadFrames = tk.Frame(frame)
-loadFrames.pack(side=tk.TOP, fill='x')
-labelPz = tk.Label(loadFrames, text='Pz', width=10)
-labelPz.pack(side=tk.LEFT, padx=5, pady=5)
-labelMx = tk.Label(loadFrames, text='Mx', width=10)
-labelMx.pack(side=tk.LEFT, padx=5, pady=5)
-labelMy = tk.Label(loadFrames, text='My', width=10)
-labelMy.pack(side=tk.LEFT, padx=5, pady=5)
-labelXP = tk.Label(loadFrames, text='xP', width=10)
-labelXP.pack(side=tk.LEFT, padx=5, pady=5)
-labelYP = tk.Label(loadFrames, text='yP', width=10)
-labelYP.pack(side=tk.LEFT, padx=5, pady=5)
-ToolTip(labelPz, 'Pz is the load in the Z direction'
-                 '\nPositive Pz is out of the page')
-ToolTip(labelMx, 'Mx is the moment in the X direction')
-ToolTip(labelMy, 'My is the moment in the Y direction')
-ToolTip(labelXP, 'Load application location')
-ToolTip(labelYP, 'Load application location')
+loadLabelsTxt = ['Pz', 'Mx', 'My', 'xP', 'yP']
+loadLabel = [0 for i in range(5)]
+for i in range(5):
+    loadLabel[i] = tk.Label(loadFrames[i], text=loadLabelsTxt[i], width=LE_WIDTH)
+    loadLabel[i].pack(side=tk.TOP, padx=5, pady=5, fill=tk.X)
+
+ToolTip(loadLabel[0], 'Pz is the load in the Z direction'
+                 '\nPositive Pz is out of the page'
+                 '\nPositive Pz = Tension')
+ToolTip(loadLabel[1], 'Mx is the moment in the X direction'
+                 '\na positive X-coord produces compression')
+ToolTip(loadLabel[2], 'My is the moment in the Y direction'
+                 '\na positive Y-coord produces compression')
+ToolTip(loadLabel[3], 'Load application location')
+ToolTip(loadLabel[4], 'Load application location')
 
 # Load entries
-lEntryFrames = tk.Frame(frame)
-lEntryFrames.pack(side=tk.TOP, fill='x')
-entryPz = tk.Entry(lEntryFrames, width=10, bg='yellow')
-entryPz.pack(side=tk.LEFT, padx=5, pady=5)
-entryPz.insert(0, 0)
-entryMx = tk.Entry(lEntryFrames, width=10, bg='yellow')
-entryMx.pack(side=tk.LEFT, padx=5, pady=5)
-entryMx.insert(0, 0)
-entryMy = tk.Entry(lEntryFrames, width=10, bg='yellow')
-entryMy.pack(side=tk.LEFT, padx=5, pady=5)
-entryMy.insert(0, 0)
-entryXP = tk.Entry(lEntryFrames, width=10, bg='yellow')
-entryXP.pack(side=tk.LEFT, padx=5, pady=5)
-entryXP.insert(0, 0)
-entryYP = tk.Entry(lEntryFrames, width=10, bg='yellow')
-entryYP.pack(side=tk.LEFT, padx=5, pady=5)
-entryYP.insert(0, 0)
+loadEntrys = [0 for i in range(5)]
+for i in range(5):
+    loadEntrys[i] = tk.Entry(loadFrames[i], bg='yellow', width=LE_WIDTH)
+    loadEntrys[i].pack(side=tk.TOP, padx=5, pady=5, fill=tk.X)
+    loadEntrys[i].insert(0, 0)
 
 sectionFrame = tk.Frame(frame)
-sectionFrame.pack(side=tk.TOP,fill='x')
+sectionFrame.pack(side=tk.TOP,fill=tk.X)
 # section list
 sectionEntry = tk.Entry(sectionFrame, bg='yellow')
-sectionEntry.pack(side=tk.TOP, pady=5, fill='x')
+sectionEntry.pack(side=tk.TOP, pady=5, fill=tk.X)
 sectionEntry.insert(0, 'shape, id, x, y, dim1, dim2, orient, alpha')
 ToolTip(sectionEntry, 'Sections must contain the following:'
                       '\nshape: The shape to be added'
@@ -445,7 +446,7 @@ ToolTip(sectionEntry, 'Sections must contain the following:'
                       '\nalpha: the angle fo the circle section')
 #buttons
 buttonFrame = tk.Frame(frame);
-buttonFrame.pack(side=tk.TOP,fill='x', pady=5)
+buttonFrame.pack(side=tk.TOP,fill=tk.X, pady=5)
 button1 = tk.Button(buttonFrame, text='Add section', command=add_item)
 button1.pack(side=tk.LEFT)
 
@@ -474,19 +475,15 @@ IDX_MIN_MAX = [0, 0]
 
 # results
 bottomFrame = tk.Frame(frame)
-bottomFrame.pack(side=tk.TOP, fill='x')
+bottomFrame.pack(side=tk.TOP, fill=tk.BOTH, expand=tk.YES)
 infoFrame = tk.Frame(bottomFrame)
-infoFrame.pack(side=tk.TOP, fill='x')
-nameFrame = tk.Frame(bottomFrame)
-nameFrame.pack(side=tk.TOP, fill='x')
-labelFrame = tk.Frame(bottomFrame)
-labelFrame.pack(side=tk.TOP, fill='x')
+infoFrame.pack(side=tk.TOP, fill=tk.X)
+resultFrame = tk.Frame(bottomFrame)
+resultFrame.pack(side=tk.TOP, fill=tk.X)
 eNameFrame = tk.Frame(bottomFrame)
-eNameFrame.pack(side=tk.TOP, fill='x')
-entryFrame = tk.Frame(bottomFrame)
-entryFrame.pack(side=tk.TOP, fill='x')
+eNameFrame.pack(side=tk.TOP, fill=tk.X)
 stressFrame = tk.Frame(bottomFrame)
-stressFrame.pack(side=tk.TOP, fill='x')
+stressFrame.pack(side=tk.TOP, fill=tk.X)
 
 label1 = tk.Label(infoFrame,
                   text='Section Analysis Results',
@@ -495,39 +492,56 @@ label1.pack(side=tk.TOP)
 label2 = tk.Label(infoFrame, text='MOI about the principal axis')
 label2.pack(side=tk.TOP)
 labelNames = ['Ixp', 'Iyp', 'Theta', 'Area', 'Xcg', 'Ycg']
+
+RF_WIDTH = 7
+resultFrames = [0 for i in range(6)]
+for i in range(6):
+    resultFrames[i] = tk.Frame(resultFrame)
+    resultFrames[i].pack(side=tk.LEFT, fill=tk.X)
+    
 sectionLabels = []
 resultLabels = []
-for name in labelNames:
-    labelName = tk.Label(nameFrame, text=name, width=8, relief='flat')
-    labelName.pack(side=tk.LEFT, padx=3)
+for i in range(6):
+    labelName = tk.Label(resultFrames[i], text=labelNames[i], width=RF_WIDTH, relief='flat')
+    labelName.pack(side=tk.TOP, padx=3)
     sectionLabels.append(labelName)
 
-for label in labelNames:
-    resultLabel = tk.Entry(labelFrame,
-                           width=8,
+for i in range(6):
+    resultLabel = tk.Entry(resultFrames[i],
+                           width=RF_WIDTH,
                            state='readonly',
                            readonlybackground='white',
                            relief='flat')
-    resultLabel.pack(side=tk.LEFT, padx=3)
+    resultLabel.pack(side=tk.TOP, padx=3)
     resultLabels.append(resultLabel)
 
 # get stress at location x y
-eNameX = tk.Label(eNameFrame, text='X coord', width=10)
-eNameX.pack(side=tk.LEFT, padx=5)
-eNameY = tk.Label(eNameFrame, text='Y coord', width=10)
-eNameY.pack(side=tk.LEFT, padx=5)
-entryX = tk.Entry(entryFrame, width=10, bg='yellow')
-entryX.pack(side=tk.LEFT, padx=5)
-entryX.insert(0, 0)
-entryY = tk.Entry(entryFrame, width=10, bg='yellow')
-entryY.pack(side=tk.LEFT, padx=5)
-entryY.insert(0, 0)
-stressBtn = tk.Button(entryFrame, text='Save Stress File', command=saveStress)
+CRD_WIDTH = 12
+eNameFrames = [0 for i in range(2)]
+for i in range(2):
+    eNameFrames[i] = tk.Frame(eNameFrame)
+    eNameFrames[i].pack(side=tk.LEFT, fill=tk.X)
+    
+coordNames = ['X Coord', 'Y Coord']
+coordName = []
+coordEntry = []
+
+for i in range(2):
+    coordName.append(tk.Label(eNameFrames[i], text=coordNames[i], width=CRD_WIDTH))
+    coordName[i].pack(side=tk.TOP, padx=3)
+    
+for i in range(2):
+    coordEntry.append(tk.Entry(eNameFrames[i], bg='yellow', width=CRD_WIDTH))
+    coordEntry[i].pack(side=tk.TOP, padx=3)
+    coordEntry[i].insert(0, 0)
+    
+stressBtn = tk.Button(eNameFrame, text='Save Stress File', command=saveStress)
 stressBtn.pack(side=tk.LEFT, padx=5)
 stressLabel = tk.Entry(stressFrame,
                        state='readonly',
                        readonlybackground='white')
-stressLabel.pack(fill='x', padx=5, pady=5)
+
+stressLabel.pack(fill=tk.X, padx=5, pady=5)
 stressVar = tk.StringVar()
 stressVar.set('Stress: ')
 stressLabel.config(textvariable=stressVar, relief='flat')
