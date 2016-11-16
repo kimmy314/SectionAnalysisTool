@@ -63,12 +63,12 @@ class ResizingCanvas(Canvas):
         hscale = float(event.height)/self.height
         self.width = event.width
         self.height = event.height
-        # resize the canvas 
+        # resize the canvas
         self.config(width=self.width, height=self.height)
         # rescale all the objects tagged with the "all" tag
         self.scale("all",0,0,wscale,hscale)
         draw();
-        
+
 canvasFrame = tk.Frame(root)
 canvasFrame.pack(fill=tk.BOTH, expand=tk.YES)
 ''' Canvas '''
@@ -168,7 +168,7 @@ def getCanvasData():
         inToPix = 1
         origin = [(canvas.winfo_width()) / 2, canvas.winfo_height() / 2]
     else:
-        if (abs((maxY - minY) / (maxX - minX)) 
+        if (abs((maxY - minY) / (maxX - minX))
             > drawingHeight /drawingWidth):
             inToPix = drawingHeight / abs(maxY - minY)
         else:
@@ -205,26 +205,6 @@ def draw():
                        fill='yellow',
                        width='1',
                        arrow=tk.LAST)
-    # rotated axis
-    rx = None
-    ry = None
-    try:
-        theta = sa.theta
-        xcg, ycg = Shape.inLocToPix(Shape, inToPix, origin[0], origin[1], sa.xcg, sa.ycg)
-        rx = canvas.create_line(xcg - ycg * math.tan(theta), 0,
-                                xcg + (canvas.winfo_height() - ycg) * math.tan(theta), canvas.winfo_height(),
-                                fill='cyan',
-                                width='1',
-                                dash=(3, 4))
-        ry = canvas.create_line(0, ycg + xcg * math.tan(theta),
-                                canvas.winfo_width(), ycg - (canvas.winfo_width() - xcg) * math.tan(theta),
-                                fill='cyan',
-                                width='1',
-                                dash=(3, 4))
-    except BaseException as e:
-        canvas.delete(rx)
-        canvas.delete(ry)
-        
     try:
         for shape in shapes:
             shape.draw(canvas, inToPix, origin)
@@ -236,7 +216,18 @@ def draw():
                                            .format(round(s[0], 2),
                                                    round(s[1], 2),
                                                    round(s[2], 2))))
-
+        theta = sa.theta
+        xcg, ycg = Shape.inLocToPix(Shape, inToPix, origin[0], origin[1], sa.xcg, sa.ycg)
+        canvas.create_line(xcg - ycg * math.tan(theta), 0,
+                                xcg + (canvas.winfo_height() - ycg) * math.tan(theta), canvas.winfo_height(),
+                                fill='cyan',
+                                width='1',
+                                dash=(3, 4))
+        canvas.create_line(0, ycg + xcg * math.tan(theta),
+                                canvas.winfo_width(), ycg - (canvas.winfo_width() - xcg) * math.tan(theta),
+                                fill='cyan',
+                                width='1',
+                                dash=(3, 4))
         if not len(SF) is 0:
             minX, minY = Shape.inLocToPix(Shape, inToPix,
                                           origin[0], origin[1],
@@ -271,8 +262,8 @@ def draw():
                            font='Helvetica 6')
     except BaseException as e:
         messagebox.showerror("Error", repr(e))
-    
-    
+
+
 
 def updateSectionResults():
     if len(sa.sectionArr) > 0:
@@ -493,7 +484,7 @@ resultFrames = [0 for i in range(6)]
 for i in range(6):
     resultFrames[i] = tk.Frame(resultFrame)
     resultFrames[i].pack(side=tk.LEFT, fill=tk.X)
-    
+
 sectionLabels = []
 resultLabels = []
 for i in range(6):
@@ -516,7 +507,7 @@ eNameFrames = [0 for i in range(2)]
 for i in range(2):
     eNameFrames[i] = tk.Frame(eNameFrame)
     eNameFrames[i].pack(side=tk.LEFT, fill=tk.X)
-    
+
 coordNames = ['X Coord', 'Y Coord']
 coordName = []
 coordEntry = []
@@ -524,12 +515,12 @@ coordEntry = []
 for i in range(2):
     coordName.append(tk.Label(eNameFrames[i], text=coordNames[i], width=CRD_WIDTH))
     coordName[i].pack(side=tk.TOP, padx=3)
-    
+
 for i in range(2):
     coordEntry.append(tk.Entry(eNameFrames[i], bg='yellow', width=CRD_WIDTH))
     coordEntry[i].pack(side=tk.TOP, padx=3)
     coordEntry[i].insert(0, 0)
-    
+
 stressBtn = tk.Button(eNameFrame, text='Save Stress File', command=saveStress)
 stressBtn.pack(side=tk.LEFT, padx=5)
 stressLabel = tk.Entry(stressFrame,
