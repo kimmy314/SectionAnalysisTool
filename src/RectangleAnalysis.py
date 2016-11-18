@@ -10,8 +10,8 @@ class RectangleAnalysis(PartialAnalysis):
     x - x coordinate of the bottom left corner of rectangle
     y - y coordinate of the bottom left corner of rectangle
     '''
-    def __init__(self, name, x, y, dim1, dim2, orient):
-        super(RectangleAnalysis, self).__init__(name, x, y, dim1, dim2, orient);
+    def __init__(self, name, E, x, y, dim1, dim2, orient):
+        super(RectangleAnalysis, self).__init__(name, E, x, y, dim1, dim2, orient);
         self.calculateSection();
 
     def calculateArea(self):
@@ -58,3 +58,11 @@ class RectangleAnalysis(PartialAnalysis):
                 p[i * pps + j][1] = c[i][1] + blend * (c[ip][1] - c[i][1]);
 
         return p;
+        
+
+'''
+# uncomment block to test
+Rect = RectangleAnalysis('r1', 1000000, 0,0,1,1,0)
+print('Area results: ', Rect.area == 1)
+print('MOI results: ', abs(Rect.getIo()[0] - .333) < .01)
+'''

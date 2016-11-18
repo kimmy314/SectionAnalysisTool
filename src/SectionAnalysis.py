@@ -22,6 +22,8 @@ class SectionAnalysis:
         self._areaTot = 0;
         self._theta = 0;
         self._thetaD = 0;
+        self._E = 0;
+        self._AE = 0;
 
     @property
     def Pz(self):
@@ -67,7 +69,7 @@ class SectionAnalysis:
 
     @property
     def xP(self):
-        ''' Moment in x direction '''
+        ''' load point in x direction '''
         return self._xP;
 
     @xP.setter
@@ -81,7 +83,7 @@ class SectionAnalysis:
 
     @property
     def yP(self):
-        ''' Moment in x direction '''
+        ''' load point in y direction '''
         return self._yP;
 
     @yP.setter
@@ -132,20 +134,34 @@ class SectionAnalysis:
         ''' angle between the x axis and the principal axis in degrees '''
         self.getIcg();
         return self._theta * 180 / math.pi;
+        
+    @property
+    def E(self):
+        ''' Modulus of entire section '''
+        return self._E;
+        
+    @property
+    def AE(self):
+        ''' Modulus of entire section times entire section area '''
+        return self._AE
 
     def calculateCG(self):
         ''' calculates the CG '''
         areaX = 0;
         areaY = 0;
         areaTot = 0;
+        self._E = 0;
+        self._AE = 0;
         for section in self._sections:
-            areaX += section.area * section.xcg;
-            areaY += section.area * section.ycg;
+            areaX += section.E * section.area * section.xcg;
+            areaY += section.E * section.area * section.ycg;
             areaTot += section.area;
+            self._AE += section.E * section.area
         try:
-            self._xcg = areaX / areaTot;
-            self._ycg = areaY / areaTot;
+            self._xcg = areaX / self._AE;
+            self._ycg = areaY / self._AE;
             self._areaTot = areaTot;
+            self._E = self._AE / self._areaTot
         except ZeroDivisionError:
             self._xcg = 0;
             self._ycg = 0;
@@ -158,20 +174,20 @@ class SectionAnalysis:
 
     def removeSection(self, idx):
         ''' remvoes the section from the idx index '''
-        if (idx >= 0 or idx < len(self.sections)):
+        if (idx >= 0 or idx < len(self._sections)):
             del self._sections[idx];
 
     def editSection(self, idx, e):
         ''' edits the section with the edit info '''
-        if (idx < 0 or idx >= len(self.sections)):
+        if (idx < 0 or idx >= len(self._sections)):
             return;
 
         if (e[0][0] is 'R' or e[0][0] is 'r'):
-            self._sections[idx] = RA(e[1], e[2], e[3], e[4], e[5], e[6]);
+            self._sections[idx] = RA(e[1], e[2], e[3], e[4], e[5], e[6], e[7]);
         elif (e[0][0] is 'C' or e[0][0] is 'c'):
-            self._sections[idx] = CSA(e[1], e[2], e[3], e[4], e[5], e[6], e[7]);
+            self._sections[idx] = CSA(e[1], e[2], e[3], e[4], e[5], e[6], e[7], e[8]);
         else:
-            self._sections[idx] = PA(e[1], e[2:]);
+            self._sections[idx] = PA(e[1], e[2], e[3:]);
 
     def getIcg(self):
         ''' gets the I about the CG un roated '''
@@ -179,15 +195,16 @@ class SectionAnalysis:
         Ix = 0;
         Iy = 0;
         Ixy = 0;
+        
         for section in self._sections:
-            Ixo, Iyo, Ixyo = section.getIo();
-            Ix += Ixo;
-            Iy += Iyo;
-            Ixy += Ixyo;
-
-        Ixcg = Ix - self._areaTot * self._ycg**2;
-        Iycg = Iy - self._areaTot * self._xcg**2;
-        Ixycg = Ixy - self._areaTot * self._xcg * self._ycg;
+            Ixo, Iyo, Ixyo = section.getIo()
+            Ix += section.E / self._E * Ixo
+            Iy += section.E / self._E * Iyo
+            Ixy += section.E / self._E * Ixyo
+        Ixcg = Ix - self._areaTot * self._ycg**2
+        Iycg = Iy - self._areaTot * self._xcg**2
+        Ixycg = Ixy - self._areaTot * self._xcg * self._ycg
+        
         try:
             self._theta = math.atan(2 * Ixycg / (Iycg - Ixcg)) / 2;
         except ZeroDivisionError:
@@ -201,38 +218,38 @@ class SectionAnalysis:
         Ixcg, Iycg, Ixycg = self.getIcg();
         Ixp = (Ixcg * math.cos(self._theta)**2
                + Iycg * math.sin(self._theta)**2
-               - 2 * Ixycg * math.sin(self._theta) * math.cos(self._theta));
+               - 2 * Ixycg * math.sin(self.theta) * math.cos(self._theta));
         Iyp = (Ixcg * math.sin(self._theta)**2
                + Iycg * math.cos(self._theta)**2
                + 2 * Ixycg * math.sin(self._theta) * math.cos(self._theta));
         return Ixp, Iyp;
 
-    def getStress(self, x, y):
-        ''' the stress. If bending stress is positive, + Pz / A, else -Pz / A'''
+    def getStress(self, index, x, y):
+        ''' the stress at x , y '''
         try:
+            index = int(index)
             x = float(x);
             y = float(y);
         except ValueError:
             raise ValueError('dimension must be a number');
         Ixp, Iyp = self.getIp();
         Pz = self._Pz;
-        area = self.areaTot
         Mx = (self._Mx - self._Pz * (self._ycg - self._yP));
         My = (self._My + self._Pz * (self._xcg - self._xP));
-        
         Mxp = Mx * math.cos(self._theta) - My * math.sin(self._theta);
         Myp = Mx * math.sin(self._theta) + My * math.cos(self._theta);
         x = x - self._xcg;
         y = y - self._ycg;
         xp = x * math.cos(self._theta) + y * math.sin(self._theta);
         yp = -x * math.sin(self._theta) + y * math.cos(self._theta);
+        EIx = self._E * Ixp;
+        EIy = self._E * Iyp;
         try:
-            sigma = Pz / area - Mxp * yp / Ixp - Myp * xp / Iyp;
+            sigma = self._sections[index].E * (Pz / self._AE - Mxp * yp / EIx - Myp * xp / EIy);
             return sigma;
         except ZeroDivisionError:
             raise ValueError('Error during calculating stress, check section validity');
         
-
     def stressField(self):
         ''' entire stress field of part '''
         stressField = [];
@@ -241,9 +258,10 @@ class SectionAnalysis:
         maxI = 0;
         minI = 0;
         index = 0;
-        for section in self.sections:
+        i = 0;
+        for section in self._sections:
             for c in section.corners():
-                stress = self.getStress(c[0], c[1])
+                stress = self.getStress(i, c[0], c[1])
                 stressField.append([c[0], c[1], stress]);
                 if (maxS < stress):
                     maxS = stress;
@@ -253,7 +271,7 @@ class SectionAnalysis:
                     minI = index;
                 index += 1;
             for p in section.perimeter():
-                stress = self.getStress(p[0], p[1])
+                stress = self.getStress(i, p[0], p[1])
                 stressField.append([p[0], p[1], stress]);
                 if (maxS < stress):
                     maxS = stress;
@@ -262,6 +280,7 @@ class SectionAnalysis:
                     minS = stress;
                     minI = index;
                 index += 1;
+            i += 1
         return stressField, minS, maxS, minI, maxI;
 
     def clear(self):
@@ -273,8 +292,8 @@ class SectionAnalysis:
         maxX = float('-inf');
         minY = float('inf');
         maxY = float('-inf');
-        if len(self.sections) > 0:
-            for section in self.sections:
+        if len(self._sections) > 0:
+            for section in self._sections:
                 for c in section.corners():
                     minX = min(minX, c[0])
                     minY = min(minY, c[1])

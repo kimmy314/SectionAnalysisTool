@@ -10,8 +10,8 @@ class CircSegAnalysis(PartialAnalysis):
     x - x coordinate of the bottom left corner of rectangle
     y - y coordinate of the bottom left corner of rectangle
     '''
-    def __init__(self, name, x, y, dim1, dim2, orient, alpha):
-        super(CircSegAnalysis, self).__init__(name, x, y, dim1, dim2, orient);
+    def __init__(self, name, E, x, y, dim1, dim2, orient, alpha):
+        super(CircSegAnalysis, self).__init__(name, E, x, y, dim1, dim2, orient);
         self._alpha = None;
         self._alphaD = None;
         self.alpha = alpha;

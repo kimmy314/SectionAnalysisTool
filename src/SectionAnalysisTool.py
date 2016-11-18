@@ -36,8 +36,8 @@ global SF
 global IDX_MIN_MAX
 global canvas
 
-WINDOW_WIDTH = 960
-WINDOW_HEIGHT = 720
+WINDOW_WIDTH = 1200
+WINDOW_HEIGHT = 900
 
 ''' Main Window '''
 root = tk.Tk()
@@ -47,7 +47,8 @@ root.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
 root.title('Section Analysis Tool')
 tooltip = Pmw.Balloon(root)
 
-frame = tk.Frame(root, width=500)
+LEFT_WIDTH = 600
+frame = tk.Frame(root, width=LEFT_WIDTH)
 frame.pack(side=tk.LEFT, fill='y', padx=5, pady=5)
 
 class ResizingCanvas(Canvas):
@@ -72,7 +73,7 @@ class ResizingCanvas(Canvas):
 canvasFrame = tk.Frame(root)
 canvasFrame.pack(fill=tk.BOTH, expand=tk.YES)
 ''' Canvas '''
-canvas = ResizingCanvas(canvasFrame,width=460, height=720, bg="grey")
+canvas = ResizingCanvas(canvasFrame,width=WINDOW_WIDTH-LEFT_WIDTH, height=WINDOW_HEIGHT, bg="grey")
 canvas.pack(fill=tk.BOTH, expand=tk.YES, padx=5, pady=5)
 
 def add_item():
@@ -82,80 +83,80 @@ def add_item():
     global canvas
     info = sectionEntry.get().split(',')
 
-    try:
-        section = None
-        if info[0][0] is 'R' or info[0][0] is 'r':
-            if len(info) < 7:
-                raise ValueError('Not enough inputs')
-            section = RA(info[1], info[2], info[3],
-                         info[4], info[5], info[6])
-            shapes.append(Rect(section))
-            listbox.addRow(info)
-        elif info[0][0] is 'C' or info[0][0] is 'c':
-            if len(info) < 8:
-                raise ValueError('Not enough inputs')
-            section = CSA(info[1], info[2], info[3],
-                          info[4], info[5], info[6], info[7])
-            shapes.append(Circ(section))
-            listbox.addRow(info)
-        elif info[0][0] is 'P' or info[0][0] is 'p':
-            if len(info) < 8:
-                raise ValueError('Not enough inputs')
-            section = PA(info[1], info[2:])
-            shapes.append(Poly(section))
-            section.corners()
-            listbox.addRow([info[0], info[1], '', '', '', '', '', ''])
-        else:
-            raise ValueError('R* or r* for rectangle,'
-                             'C* or c* for circle segment,'
-                             'P* or p* for polygon')
-        sa.addSection(section)
-        infoList.append(info)
-        updateSectionResults()
-        draw()
-    except BaseException as e:
-        messagebox.showerror("Error", repr(e))
+    #try:
+    section = None
+    if info[0][0] is 'R' or info[0][0] is 'r':
+        if len(info) < 8:
+            raise ValueError('Not enough inputs')
+        section = RA(info[1], info[2], info[3],
+                     info[4], info[5], info[6], info[7])
+        shapes.append(Rect(section))
+        listbox.addRow(info)
+    elif info[0][0] is 'C' or info[0][0] is 'c':
+        if len(info) < 9:
+            raise ValueError('Not enough inputs')
+        section = CSA(info[1], info[2], info[3],
+                      info[4], info[5], info[6], info[7], info[8])
+        shapes.append(Circ(section))
+        listbox.addRow(info)
+    elif info[0][0] is 'P' or info[0][0] is 'p':
+        if len(info) < 9:
+            raise ValueError('Not enough inputs')
+        section = PA(info[1], info[2:])
+        shapes.append(Poly(section))
+        section.corners()
+        listbox.addRow([info[0], info[1], info[2], '', '', '', '', '', ''])
+    else:
+        raise ValueError('R* or r* for rectangle,'
+                         'C* or c* for circle segment,'
+                         'P* or p* for polygon')
+    sa.addSection(section)
+    infoList.append(info)
+    updateSectionResults()
+    draw()
+    #except BaseException as e:
+        #messagebox.showerror("Error", repr(e))
 
 def delete_item():
     '''
     delete a selected line from the listbox
     '''
     # get selected line index
-    try:
-        index = listbox.removeRow()
-        index = int(index)
-        sa.removeSection(index)
-        del shapes[index]
-        del infoList[index]
-        updateSectionResults()
-        draw()
-    except BaseException as e:
-        messagebox.showerror("Error", repr(e))
+    #try:
+    index = listbox.removeRow()
+    index = int(index)
+    sa.removeSection(index)
+    del shapes[index]
+    del infoList[index]
+    updateSectionResults()
+    draw()
+    #except BaseException as e:
+        #messagebox.showerror("Error", repr(e))
 
 def edit_item():
     '''
     edits the selected item with the input box
     '''
     info = sectionEntry.get().split(',')
-    try:
-        index = listbox.index()
-        sa.editSection(index, info)
-        listbox.editRow(info)
-        if info[0][0] is 'R' or info[0][0] is 'r':
-            shapes[index] = Rect(sa.sections[index])
-        elif info[0][0] is 'C' or info[0][0] is 'c':
-            shapes[index] = Circ(sa.sections[index])
-        elif info[0][0] is 'P' or info[0][0] is 'p':
-            shapes[index] = Poly(sa.sections[index])
-        else:
-            raise ValueError('R* or r* for rectangle,'
-                             'C* or c* for circle segment,'
-                             'P* or p* for polygon')
-        infoList[index] = info
-        updateSectionResults()
-        draw()
-    except BaseException as e:
-        messagebox.showerror("Error", repr(e))
+    #try:
+    index = listbox.index()
+    sa.editSection(index, info)
+    listbox.editRow(info)
+    if info[0][0] is 'R' or info[0][0] is 'r':
+        shapes[index] = Rect(sa.sections[index])
+    elif info[0][0] is 'C' or info[0][0] is 'c':
+        shapes[index] = Circ(sa.sections[index])
+    elif info[0][0] is 'P' or info[0][0] is 'p':
+        shapes[index] = Poly(sa.sections[index])
+    else:
+        raise ValueError('R* or r* for rectangle,'
+                         'C* or c* for circle segment,'
+                         'P* or p* for polygon')
+    infoList[index] = info
+    updateSectionResults()
+    draw()
+    #except BaseException as e:
+        #messagebox.showerror("Error", repr(e))
 
 def getCanvasData():
     '''
@@ -205,63 +206,63 @@ def draw():
                        fill='yellow',
                        width='1',
                        arrow=tk.LAST)
-    try:
-        for shape in shapes:
-            shape.draw(canvas, inToPix, origin)
-        # stress fild
-        for s in SF:
-            x, y = Shape.inLocToPix(Shape, inToPix, origin[0], origin[1], s[0], s[1])
-            item = Shape.point(Shape, canvas, x, y, s[2], COLOR_VAL[0], COLOR_VAL[1])
-            tooltip.tagbind(canvas, item, ('({}, {}) : {}'
-                                           .format(round(s[0], 2),
-                                                   round(s[1], 2),
-                                                   round(s[2], 2))))
-        theta = sa.theta
-        xcg, ycg = Shape.inLocToPix(Shape, inToPix, origin[0], origin[1], sa.xcg, sa.ycg)
-        canvas.create_line(xcg - ycg * math.tan(theta), 0,
-                                xcg + (canvas.winfo_height() - ycg) * math.tan(theta), canvas.winfo_height(),
-                                fill='cyan',
-                                width='1',
-                                dash=(3, 4))
-        canvas.create_line(0, ycg + xcg * math.tan(theta),
-                                canvas.winfo_width(), ycg - (canvas.winfo_width() - xcg) * math.tan(theta),
-                                fill='cyan',
-                                width='1',
-                                dash=(3, 4))
-        if not len(SF) is 0:
-            minX, minY = Shape.inLocToPix(Shape, inToPix,
-                                          origin[0], origin[1],
-                                          SF[IDX_MIN_MAX[0]][0], SF[IDX_MIN_MAX[0]][1])
-            minRect = canvas.create_rectangle(minX - 2, minY - 2, minX + 2, minY + 2,
-                                              fill='yellow',
-                                              outline='black')
-            tooltip.tagbind(canvas, minRect, ('({}, {}) : {}'
-                                              .format(round(SF[IDX_MIN_MAX[0]][0], 2),
-                                                      round(SF[IDX_MIN_MAX[0]][1], 2),
-                                                      round(SF[IDX_MIN_MAX[0]][2], 2))))
-            maxX, maxY = Shape.inLocToPix(Shape, inToPix,
-                                          origin[0], origin[1],
-                                          SF[IDX_MIN_MAX[1]][0], SF[IDX_MIN_MAX[1]][1])
-            maxRect = canvas.create_rectangle(maxX - 2, maxY - 2, maxX + 2, maxY + 2,
-                                              fill='yellow',
-                                              outline='black')
-            tooltip.tagbind(canvas, maxRect, ('({}, {}) : {}'
-                                              .format(round(SF[IDX_MIN_MAX[1]][0], 2),
-                                                      round(SF[IDX_MIN_MAX[1]][1], 2),
-                                                      round(SF[IDX_MIN_MAX[1]][2], 2))))
-        for i in range(int((canvas.winfo_width() - 100) / 2)):
-            Shape.point(Shape, canvas, 51 + i * 2, 6, i, 0, int((canvas.winfo_width() - 100) / 2))
-            Shape.point(Shape, canvas, 51 + i * 2, 8, i, 0, int((canvas.winfo_width() - 100) / 2))
-            Shape.point(Shape, canvas, 51 + i * 2, 10, i, 0, int((canvas.winfo_width() - 100) / 2))
+    #try:
+    for shape in shapes:
+        shape.draw(canvas, inToPix, origin)
+    # stress fild
+    for s in SF:
+        x, y = Shape.inLocToPix(Shape, inToPix, origin[0], origin[1], s[0], s[1])
+        item = Shape.point(Shape, canvas, x, y, s[2], COLOR_VAL[0], COLOR_VAL[1])
+        tooltip.tagbind(canvas, item, ('({}, {}) : {}'
+                                       .format(round(s[0], 2),
+                                               round(s[1], 2),
+                                               round(s[2], 2))))
+    theta = sa.theta
+    xcg, ycg = Shape.inLocToPix(Shape, inToPix, origin[0], origin[1], sa.xcg, sa.ycg)
+    canvas.create_line(xcg - ycg * math.tan(theta), 0,
+                            xcg + (canvas.winfo_height() - ycg) * math.tan(theta), canvas.winfo_height(),
+                            fill='cyan',
+                            width='1',
+                            dash=(3, 4))
+    canvas.create_line(0, ycg + xcg * math.tan(theta),
+                            canvas.winfo_width(), ycg - (canvas.winfo_width() - xcg) * math.tan(theta),
+                            fill='cyan',
+                            width='1',
+                            dash=(3, 4))
+    if not len(SF) is 0:
+        minX, minY = Shape.inLocToPix(Shape, inToPix,
+                                      origin[0], origin[1],
+                                      SF[IDX_MIN_MAX[0]][0], SF[IDX_MIN_MAX[0]][1])
+        minRect = canvas.create_rectangle(minX - 2, minY - 2, minX + 2, minY + 2,
+                                          fill='yellow',
+                                          outline='black')
+        tooltip.tagbind(canvas, minRect, ('({}, {}) : {}'
+                                          .format(round(SF[IDX_MIN_MAX[0]][0], 2),
+                                                  round(SF[IDX_MIN_MAX[0]][1], 2),
+                                                  round(SF[IDX_MIN_MAX[0]][2], 2))))
+        maxX, maxY = Shape.inLocToPix(Shape, inToPix,
+                                      origin[0], origin[1],
+                                      SF[IDX_MIN_MAX[1]][0], SF[IDX_MIN_MAX[1]][1])
+        maxRect = canvas.create_rectangle(maxX - 2, maxY - 2, maxX + 2, maxY + 2,
+                                          fill='yellow',
+                                          outline='black')
+        tooltip.tagbind(canvas, maxRect, ('({}, {}) : {}'
+                                          .format(round(SF[IDX_MIN_MAX[1]][0], 2),
+                                                  round(SF[IDX_MIN_MAX[1]][1], 2),
+                                                  round(SF[IDX_MIN_MAX[1]][2], 2))))
+    for i in range(int((canvas.winfo_width() - 100) / 2)):
+        Shape.point(Shape, canvas, 51 + i * 2, 6, i, 0, int((canvas.winfo_width() - 100) / 2))
+        Shape.point(Shape, canvas, 51 + i * 2, 8, i, 0, int((canvas.winfo_width() - 100) / 2))
+        Shape.point(Shape, canvas, 51 + i * 2, 10, i, 0, int((canvas.winfo_width() - 100) / 2))
 
-        canvas.create_text(25, 7, text=int(COLOR_VAL[0]),
-                           fill='yellow',
-                           font='Helvetica 6')
-        canvas.create_text(canvas.winfo_width() - 25, 7, text=int(COLOR_VAL[1]),
-                           fill='yellow',
-                           font='Helvetica 6')
-    except BaseException as e:
-        messagebox.showerror("Error", repr(e))
+    canvas.create_text(25, 7, text=int(COLOR_VAL[0]),
+                       fill='yellow',
+                       font='Helvetica 6')
+    canvas.create_text(canvas.winfo_width() - 25, 7, text=int(COLOR_VAL[1]),
+                       fill='yellow',
+                       font='Helvetica 6')
+    #except BaseException as e:
+        #messagebox.showerror("Error", repr(e))
 
 
 
@@ -287,32 +288,34 @@ def runAnalysis():
     '''
     Runs the analysis on the section
     '''
-    try:
-        global COLOR_VAL
-        global SF
-        global IDX_MIN_MAX
-        sa.Pz, sa.Mx, sa.My, sa.xP, sa.yP = [loadEntrys[i].get() for i in range(5)];
-        stressVar.set('Stress: %.2f ' %sa.getStress(coordEntry[0].get(), coordEntry[1].get()))
-        stressLabel.config(textvariable=stressVar, relief='flat')
-        temp = sa.stressField()
-        SF = temp[0]
-        COLOR_VAL = [temp[1], temp[2]]
-        IDX_MIN_MAX = [temp[3], temp[4]]
-        draw()
-    except BaseException as e:
-        messagebox.showerror("Error", repr(e))
+    #try:
+    global COLOR_VAL
+    global SF
+    global IDX_MIN_MAX
+    sa.Pz, sa.Mx, sa.My, sa.xP, sa.yP = [loadEntrys[i].get() for i in range(5)];
+    stressVar.set('Stress: %.2f ' %sa.getStress(coordEntry[2].get(),
+                                                coordEntry[0].get(),
+                                                coordEntry[1].get()))
+    stressLabel.config(textvariable=stressVar, relief='flat')
+    temp = sa.stressField()
+    SF = temp[0]
+    COLOR_VAL = [temp[1], temp[2]]
+    IDX_MIN_MAX = [temp[3], temp[4]]
+    draw()
+    #except BaseException as e:
+        #messagebox.showerror("Error", repr(e))
 
 def loadFile():
     fname = filedialog.askopenfilename()
     if fname:
-        try:
-            with open(fname, 'r+') as f:
-                for line in f:
-                    sectionEntry.delete(0, tk.END)
-                    sectionEntry.insert(0, line)
-                    add_item()
-        except BaseException as e:
-            messagebox.showerror("Error", repr(e))
+        #try:
+        with open(fname, 'r+') as f:
+            for line in f:
+                sectionEntry.delete(0, tk.END)
+                sectionEntry.insert(0, line)
+                add_item()
+        #except BaseException as e:
+            #messagebox.showerror("Error", repr(e))
 
 
 def saveFile():
@@ -394,9 +397,10 @@ for i in range(5):
 sectionFrame = tk.Frame(frame)
 sectionFrame.pack(side=tk.TOP,fill=tk.X)
 # section list
+
 sectionEntry = tk.Entry(sectionFrame, bg='yellow')
 sectionEntry.pack(side=tk.TOP, pady=5, fill=tk.X)
-sectionEntry.insert(0, 'shape, id, x, y, dim1, dim2, orient, alpha')
+sectionEntry.insert(0, 'shape, id, E, x, y, dim1, dim2, orient, alpha')
 ToolTip(sectionEntry, 'Sections must contain the following:'
                       '\nshape: The shape to be added'
                       '\n\tshapes can start with'
@@ -405,6 +409,7 @@ ToolTip(sectionEntry, 'Sections must contain the following:'
                       '\n\tC is for Circle Segment'
                       '\n\tP is for Polygon'
                       '\nid: the id for the section'
+                      '\nE: the modulus for the part'
                       '\n\nif the shape is an R then'
                       '\nx, y, dim1, dim2 and orient must be filled'
                       '\nif the shape is an C then'
@@ -430,6 +435,7 @@ ToolTip(sectionEntry, 'Sections must contain the following:'
                       '\n\tto the midpoint of the arc'
                       '\n\trelative to the center of the circle'
                       '\nalpha: the angle fo the circle section')
+
 #buttons
 buttonFrame = tk.Frame(frame);
 buttonFrame.pack(side=tk.TOP,fill=tk.X, pady=5)
@@ -445,16 +451,18 @@ button3.pack(side=tk.LEFT)
 button4 = tk.Button(buttonFrame, text='Run Analysis', command=runAnalysis)
 button4.pack(side=tk.LEFT)
 
-headers = ['shape ', '  id  ', '  x   ', '  y   ', ' dim1 ', ' dim2 ', 'orient', 'alpha ']
-
 sa = SA(0, 0, 0, 0, 0)
 shapes = []
 infoList = []
 data = sa.sectionArr
 
+
+headers = [' shape  ', '   id   ', '   E   ', '   x    ', '   y    ',
+           '  dim1  ', '  dim2  ', ' orient ', ' alpha  ']
 listboxFrame = tk.Frame(frame);
-listboxFrame.pack(side=tk.TOP, padx=5, pady=5, fill=tk.BOTH)
+listboxFrame.pack(side=tk.TOP, padx=5, pady=5, fill=tk.BOTH, expand=tk.YES)
 listbox = MCL(listboxFrame, headers, data, sectionEntry, infoList)
+
 SF = []
 COLOR_VAL = [0, 0]
 IDX_MIN_MAX = [0, 0]
@@ -501,22 +509,22 @@ for i in range(6):
     resultLabel.pack(side=tk.TOP, padx=3)
     resultLabels.append(resultLabel)
 
-# get stress at location x y
+# get stress at location x y on sections[i]
 CRD_WIDTH = 12
-eNameFrames = [0 for i in range(2)]
-for i in range(2):
+eNameFrames = [0 for i in range(3)]
+for i in range(len(eNameFrames)):
     eNameFrames[i] = tk.Frame(eNameFrame)
     eNameFrames[i].pack(side=tk.LEFT, fill=tk.X)
 
-coordNames = ['X Coord', 'Y Coord']
+coordNames = ['X Coord', 'Y Coord', 'Section index']
 coordName = []
 coordEntry = []
 
-for i in range(2):
+for i in range(len(eNameFrames)):
     coordName.append(tk.Label(eNameFrames[i], text=coordNames[i], width=CRD_WIDTH))
     coordName[i].pack(side=tk.TOP, padx=3)
 
-for i in range(2):
+for i in range(len(eNameFrames)):
     coordEntry.append(tk.Entry(eNameFrames[i], bg='yellow', width=CRD_WIDTH))
     coordEntry[i].pack(side=tk.TOP, padx=3)
     coordEntry[i].insert(0, 0)

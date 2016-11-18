@@ -5,7 +5,7 @@ class PartialAnalysis:
     Parent class for all section analysis
     '''
     pps = 7; # number of points per segment
-    def __init__(self, name, x, y, dim1, dim2, orient):
+    def __init__(self, name, E, x, y, dim1, dim2, orient):
         '''
         name - name/id of the section
         x - x coordinate position of section
@@ -21,11 +21,13 @@ class PartialAnalysis:
         self._orientD = None;
         self._x = None;
         self._y = None;
+        self._E = None;
         self.dim1 = dim1;
         self.dim2 = dim2;
         self.orient = orient;
         self.x = x;
         self.y = y;
+        self.E = E;
         self._area = 0;
         self._xcg = 0;
         self._ycg = 0;
@@ -149,6 +151,23 @@ class PartialAnalysis:
     def Ixyc(self):
         self.calculateIc();
         return self._Ixyc;
+        
+    @property
+    def E(self):
+        ''' dimension 1 '''
+        return self._E;
+
+    @E.setter
+    def E(self, value):
+        try:
+            value = float(value);
+        except ValueError:
+            raise ValueError('dimension must be a number');
+
+        if (value < 0):
+            raise ValueError('dimension must be greater than or equal to 0');
+
+        self._E = value;
 
     def calculateArea(self):
         '''

@@ -9,8 +9,8 @@ class PolygonAnalysis(PartialAnalysis):
     x - x coordinate of the bottom left corner of rectangle
     y - y coordinate of the bottom left corner of rectangle
     '''
-    def __init__(self, name, coords):
-        super(PolygonAnalysis, self).__init__(name, 0, 0, 0, 0, 0);
+    def __init__(self, name, E, coords):
+        super(PolygonAnalysis, self).__init__(name, E, 0, 0, 0, 0);
         self._coords = None;
         self._size = None;
         self.coords = coords;
@@ -46,6 +46,7 @@ class PolygonAnalysis(PartialAnalysis):
         x = coords[idx * 2];
         y = coords[idx * 2 + 1];
         return x, y
+        
     def calculateArea(self):
         area = 0;
         for i in range(self.size):
