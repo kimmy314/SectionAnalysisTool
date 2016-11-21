@@ -4,7 +4,7 @@ class PartialAnalysis:
     '''
     Parent class for all section analysis
     '''
-    pps = 7; # number of points per segment
+    pps = 7;  # number of points per segment
     def __init__(self, name, E, x, y, dim1, dim2, orient):
         '''
         name - name/id of the section
@@ -173,51 +173,51 @@ class PartialAnalysis:
         '''
         calculates the area of the section
         '''
-        raise NotImplementedError( "Should have implemented this" );
+        raise NotImplementedError("Should have implemented this");
 
     def calculateCG(self):
         '''
         calculates the cg of section
         '''
-        raise NotImplementedError( "Should have implemented this" );
+        raise NotImplementedError("Should have implemented this");
 
     def calculateI(self):
         '''
         calculates the segment inertias (not inclined)
         '''
-        raise NotImplementedError( "Should have implemented this" );
+        raise NotImplementedError("Should have implemented this");
 
     def getArr(self):
         '''
         gets the array for gui display
         '''
-        raise NotImplementedError( "Should have implemented this" );
+        raise NotImplementedError("Should have implemented this");
 
     def getMinMax(self):
         '''
         gets the min max of the x/y values
         '''
-        raise NotImplementedError( "Should have implemented this" );
+        raise NotImplementedError("Should have implemented this");
 
     def corners(self):
         '''
         gets the corners of the shape
         '''
-        raise NotImplementedError( "Should have implemented this" );
+        raise NotImplementedError("Should have implemented this");
 
     def perimeter(self):
         '''
         gets the perimeter of the shape
         '''
-        raise NotImplementedError( "Should have implemented this" );
+        raise NotImplementedError("Should have implemented this");
 
     def calculateIc(self):
         '''
         calculates the segment inertias (inclined axis)
         '''
-        self._Ixc = self._Ix * math.cos(self._orient)**2 + self._Iy * math.sin(self._orient)**2;
-        self._Iyc = self._Ix * math.sin(self._orient)**2 + self._Iy * math.cos(self._orient)**2;
-        self._Ixyc = - (self._Ix - self._Iy) * math.sin(2 * self._orient) / 2;
+        self._Ixc = self._Ix * math.cos(self._orient) ** 2 + self._Iy * math.sin(self._orient) ** 2;
+        self._Iyc = self._Ix * math.sin(self._orient) ** 2 + self._Iy * math.cos(self._orient) ** 2;
+        self._Ixyc = -(self._Ix - self._Iy) * math.sin(2 * self._orient) / 2;
 
     def calculateSection(self):
         self.calculateArea();
@@ -230,7 +230,7 @@ class PartialAnalysis:
         calculates and returns the MOI about the origin
         '''
         self.calculateSection();
-        Ixo = self._Ixc + self._area * self._ycg**2;
-        Iyo = self._Iyc + self._area * self._xcg**2;
+        Ixo = self._Ixc + self._area * self._ycg ** 2;
+        Iyo = self._Iyc + self._area * self._xcg ** 2;
         Ixyo = self._Ixyc + self._area * self._xcg * self._ycg;
         return Ixo, Iyo, Ixyo;

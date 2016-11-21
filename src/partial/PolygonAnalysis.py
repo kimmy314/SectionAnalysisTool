@@ -1,4 +1,5 @@
-from PartialAnalysis import PartialAnalysis
+from partial.PartialAnalysis import PartialAnalysis
+
 __author__ = 'Kim Nguyen'
 class PolygonAnalysis(PartialAnalysis):
     '''
@@ -50,7 +51,7 @@ class PolygonAnalysis(PartialAnalysis):
     def calculateArea(self):
         area = 0;
         for i in range(self.size):
-            x,y = self.getXY(i);
+            x, y = self.getXY(i);
             xp, yp = self.getXY(i + 1);
             area += (x * yp - xp * y);
         self._area = area / 2;
@@ -64,7 +65,7 @@ class PolygonAnalysis(PartialAnalysis):
         xcg = 0;
         ycg = 0;
         for i in range(self.size):
-            x,y = self.getXY(i);
+            x, y = self.getXY(i);
             xp, yp = self.getXY(i + 1);
             xcg += ((x + xp) * (x * yp - xp * y));
             ycg += ((y + yp) * (x * yp - xp * y));
@@ -85,10 +86,10 @@ class PolygonAnalysis(PartialAnalysis):
         Iy = 0;
         Ixy = 0;
         for i in range(self.size + 1):
-            x,y = self.getXY(i);
+            x, y = self.getXY(i);
             xp, yp = self.getXY((i + 1));
-            Ix += ((y**2 + y * yp + yp**2) * (x * yp - xp * y));
-            Iy += ((x**2 + x * xp + xp**2) * (x * yp - xp * y));
+            Ix += ((y ** 2 + y * yp + yp ** 2) * (x * yp - xp * y));
+            Iy += ((x ** 2 + x * xp + xp ** 2) * (x * yp - xp * y));
             Ixy += ((x * yp + 2 * x * y + 2 * xp * yp + xp * y)
                     * (x * yp - xp * y));
         return Ix / 12, Iy / 12, Ixy / 24;
@@ -101,7 +102,7 @@ class PolygonAnalysis(PartialAnalysis):
         maxC = 0;
         minC = 0;
         for i in range(self.size):
-            x,y = self.getXY(i);
+            x, y = self.getXY(i);
             maxC = max(maxC, max(x, y));
             minC = min(minC, min(x, y))
         return maxC, minC;

@@ -1,5 +1,6 @@
-from Shape import Shape
-from CircSegAnalysis import CircSegAnalysis as CSA
+from shapes.Shape import Shape
+from partial.CircSegAnalysis import CircSegAnalysis as CSA
+
 __author__ = 'Kim Nguyen'
 class Circ(Shape):
     ''' Circle shape '''
@@ -28,22 +29,22 @@ class Circ(Shape):
         x3, y3 = self.inLocToPix(inToPix, xo, yo, x + dim2, y - dim2);
         if (alpha != 360):
             canvas.create_arc(x0, y0, x1, y1,
-                              start = int(orient + 360 - alpha / 2),
-                              extent = int(alpha),
-                              fill ='white',
-                              outline = 'grey');
+                              start=int(orient + 360 - alpha / 2),
+                              extent=int(alpha),
+                              fill='white',
+                              outline='grey');
             canvas.create_arc(x2, y2, x3, y3,
-                              start = int(orient + 360 - alpha / 2),
-                              extent = int(alpha),
-                              fill ='grey',
-                              outline = 'grey');
+                              start=int(orient + 360 - alpha / 2),
+                              extent=int(alpha),
+                              fill='grey',
+                              outline='grey');
         else:
             canvas.create_oval(x0, y0, x1, y1,
-                               fill ='white',
-                               outline = 'grey');
+                               fill='white',
+                               outline='grey');
             canvas.create_oval(x2, y2, x3, y3,
-                               fill ='grey',
-                               outline = 'grey');
+                               fill='grey',
+                               outline='grey');
                               
         xt, yt = self.inLocToPix(inToPix, xo, yo, xcg, ycg);
-        canvas.create_text(xt, yt, text = label, fill = 'blue');
+        canvas.create_text(xt, yt, text=label, fill='blue');

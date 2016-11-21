@@ -1,7 +1,8 @@
-from PartialAnalysis import PartialAnalysis
-from RectangleAnalysis import RectangleAnalysis as RA;
-from PolygonAnalysis import PolygonAnalysis as PA;
-from CircSegAnalysis import CircSegAnalysis as CSA;
+from partial.PartialAnalysis import PartialAnalysis
+from partial.RectangleAnalysis import RectangleAnalysis as RA;
+from partial.PolygonAnalysis import PolygonAnalysis as PA;
+from partial.CircSegAnalysis import CircSegAnalysis as CSA;
+
 import math;
 __author__ = 'Kim Nguyen'
 class SectionAnalysis:
@@ -16,6 +17,8 @@ class SectionAnalysis:
         self.Pz = Pz;
         self.Mx = Mx;
         self.My = My;
+        self.xP = xP
+        self.yP = yP
         self._sections = [];
         self._xcg = 0;
         self._ycg = 0;
@@ -201,8 +204,9 @@ class SectionAnalysis:
             Ix += section.E / self._E * Ixo
             Iy += section.E / self._E * Iyo
             Ixy += section.E / self._E * Ixyo
-        Ixcg = Ix - self._areaTot * self._ycg**2
-        Iycg = Iy - self._areaTot * self._xcg**2
+            
+        Ixcg = Ix - self._areaTot * self._ycg ** 2
+        Iycg = Iy - self._areaTot * self._xcg ** 2
         Ixycg = Ixy - self._areaTot * self._xcg * self._ycg
         
         try:
@@ -216,11 +220,11 @@ class SectionAnalysis:
     def getIp(self):
         ''' gets the I about the principal axis (rotated) '''
         Ixcg, Iycg, Ixycg = self.getIcg();
-        Ixp = (Ixcg * math.cos(self._theta)**2
-               + Iycg * math.sin(self._theta)**2
+        Ixp = (Ixcg * math.cos(self._theta) ** 2
+               + Iycg * math.sin(self._theta) ** 2
                - 2 * Ixycg * math.sin(self.theta) * math.cos(self._theta));
-        Iyp = (Ixcg * math.sin(self._theta)**2
-               + Iycg * math.cos(self._theta)**2
+        Iyp = (Ixcg * math.sin(self._theta) ** 2
+               + Iycg * math.cos(self._theta) ** 2
                + 2 * Ixycg * math.sin(self._theta) * math.cos(self._theta));
         return Ixp, Iyp;
 

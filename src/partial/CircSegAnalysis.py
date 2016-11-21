@@ -1,5 +1,6 @@
 import math;
-from PartialAnalysis import PartialAnalysis
+from partial.PartialAnalysis import PartialAnalysis
+
 __author__ = 'Kim Nguyen'
 class CircSegAnalysis(PartialAnalysis):
     '''
@@ -34,8 +35,8 @@ class CircSegAnalysis(PartialAnalysis):
         self._alpha = value * math.pi / 180;
 
     def calculateArea(self):
-        self._areaOut = self.alpha / 2 * self.dim1**2;
-        self._areaIn = self.alpha / 2 * self.dim2**2;
+        self._areaOut = self.alpha / 2 * self.dim1 ** 2;
+        self._areaIn = self.alpha / 2 * self.dim2 ** 2;
         self._area = self._areaOut - self._areaIn;
 
     def _calculateCircCG(self, r):
@@ -55,18 +56,18 @@ class CircSegAnalysis(PartialAnalysis):
             
     def calculateI(self):
         try:
-            self._Ix = ((self.dim1**4 - (self.dim2)**4) / 4
+            self._Ix = ((self.dim1 ** 4 - (self.dim2) ** 4) / 4
            * (self.alpha / 2 - math.sin(self.alpha / 2)
            * math.cos(self.alpha / 2)));
         except ZeroDivisionError:
             self._Ix = 0;
         try:
-            self._Iy = ((self.dim1**4 - (self.dim2)**4) / 4
+            self._Iy = ((self.dim1 ** 4 - (self.dim2) ** 4) / 4
             * (self.alpha / 2 + math.sin(self.alpha / 2)
             * math.cos(self.alpha / 2))
             - self._area * (2 / 3 * math.sin(self.alpha / 2)
-            * (self.dim1**3 - (self.dim2)**3)
-            / ((self.alpha / 2) * (self.dim1**2 - (self.dim2)**2)))**2);
+            * (self.dim1 ** 3 - (self.dim2) ** 3)
+            / ((self.alpha / 2) * (self.dim1 ** 2 - (self.dim2) ** 2))) ** 2);
         except ZeroDivisionError:
             self._Iy = 0;
             

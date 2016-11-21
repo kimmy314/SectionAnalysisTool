@@ -1,5 +1,6 @@
-from Shape import Shape
-from PolygonAnalysis import PolygonAnalysis as PA
+from shapes.Shape import Shape
+from partial.PolygonAnalysis import PolygonAnalysis as PA
+
 __author__ = 'Kim Nguyen'
 class Poly(Shape):
     ''' polygon shape '''
@@ -24,7 +25,7 @@ class Poly(Shape):
             points.append(xp);
             points.append(yp);
 
-        canvas.create_polygon(points, fill ='white')
+        canvas.create_polygon(points, fill='white')
 
         xt, yt = self.inLocToPix(inToPix, xo, yo, xcg, ycg);
-        canvas.create_text(xt, yt, text = label, fill = 'blue');
+        canvas.create_text(xt, yt, text=label, fill='blue');
