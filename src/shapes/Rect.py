@@ -1,5 +1,6 @@
-from Shape import Shape
-from RectangleAnalysis import RectangleAnalysis as RA
+from shapes.Shape import Shape
+from partial.RectangleAnalysis import RectangleAnalysis as RA
+
 __author__ = 'Kim Nguyen'
 class Rect(Shape):
     ''' rectangle shape '''
@@ -20,7 +21,7 @@ class Rect(Shape):
         x2, y2 = self.inLocToPix(inToPix, xo, yo, c[2][0], c[2][1]);
         x3, y3 = self.inLocToPix(inToPix, xo, yo, c[3][0], c[3][1]);
 
-        canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, fill ='white')
+        canvas.create_polygon(x0, y0, x1, y1, x2, y2, x3, y3, fill='white')
 
         xt, yt = self.inLocToPix(inToPix, xo, yo, xcg, ycg);
-        canvas.create_text(xt, yt, text = label, fill = 'blue');
+        canvas.create_text(xt, yt, text=label, fill='blue');

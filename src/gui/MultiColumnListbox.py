@@ -46,7 +46,7 @@ class MultiColumnListbox(object):
             # adjust column's width if necessary to fit each value
             for ix, val in enumerate(item):
                 col_w = tkFont.Font().measure(val);
-                if self.tree.column(self._headers[ix],width=None)<col_w:
+                if self.tree.column(self._headers[ix], width=None) < col_w:
                     self.tree.column(self._headers[ix], width=col_w);
                     
     def OnDoubleClick(self, event):
@@ -54,13 +54,13 @@ class MultiColumnListbox(object):
         info = self._infoList[index];
         entryVar = tk.StringVar();
         entryVar.set(', '.join(str(x) for x in info));
-        self._entry.configure(textvariable = entryVar);
+        self._entry.configure(textvariable=entryVar);
 
     def addRow(self, item):
-        self.tree.insert('', 'end', values = item);
+        self.tree.insert('', 'end', values=item);
         for i in range(7):
             col_w = tkFont.Font().measure(item[i]);
-            if self.tree.column(self._headers[i],width=None)<col_w:
+            if self.tree.column(self._headers[i], width=None) < col_w:
                 self.tree.column(self._headers[i], width=col_w);
 
     def removeRow(self):
@@ -78,7 +78,7 @@ class MultiColumnListbox(object):
 
     def editRow(self, edits):
         index = self.removeRow();
-        self.tree.insert('', index, values = edits);
+        self.tree.insert('', index, values=edits);
         return index;
 
     def index(self):

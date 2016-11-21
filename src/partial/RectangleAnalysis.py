@@ -1,5 +1,6 @@
+from partial.PartialAnalysis import PartialAnalysis
 import math;
-from PartialAnalysis import PartialAnalysis
+
 __author__ = 'Kim Nguyen'
 class RectangleAnalysis(PartialAnalysis):
     '''
@@ -26,8 +27,8 @@ class RectangleAnalysis(PartialAnalysis):
                     + self.dim2 / 2 * math.cos(self.orient));
 
     def calculateI(self):
-        self._Ix = 1 / 12 * self.dim1 * self.dim2**3;
-        self._Iy = 1 / 12 * self.dim1**3 * self.dim2;
+        self._Ix = 1 / 12 * self.dim1 * self.dim2 ** 3;
+        self._Iy = 1 / 12 * self.dim1 ** 3 * self.dim2;
 
     def getArr(self):
         return (self.name, self._x, self._y,
@@ -58,11 +59,3 @@ class RectangleAnalysis(PartialAnalysis):
                 p[i * pps + j][1] = c[i][1] + blend * (c[ip][1] - c[i][1]);
 
         return p;
-        
-
-'''
-# uncomment block to test
-Rect = RectangleAnalysis('r1', 1000000, 0,0,1,1,0)
-print('Area results: ', Rect.area == 1)
-print('MOI results: ', abs(Rect.getIo()[0] - .333) < .01)
-'''

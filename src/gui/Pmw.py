@@ -1,6 +1,6 @@
 
 
-### Loader functions:
+# ## Loader functions:
 
 _VERSION = '2.0.0'
 
@@ -12,13 +12,13 @@ def setalphaversions(*alpha_versions):
     if alpha_versions != ():
         raise ValueError('Dynamic versioning not available')
 
-def version(alpha = 0):
+def version(alpha=0):
     if alpha:
         return ()
     else:
         return _VERSION
 
-def installedversions(alpha = 0):
+def installedversions(alpha=0):
     if alpha:
         return ()
     else:
@@ -26,7 +26,7 @@ def installedversions(alpha = 0):
 
 
 ######################################################################
-### File: PmwBase.py
+# ## File: PmwBase.py
 # Pmw megawidget base classes.
 
 # This module provides a foundation for building megawidgets.  It
@@ -63,9 +63,9 @@ _DEFAULT_OPTION_VALUE = ['default_option_value']
 _useTkOptionDb = 0
 
 # Symbolic constants for the indexes into an optionInfo list.
-_OPT_DEFAULT         = 0
-_OPT_VALUE           = 1
-_OPT_FUNCTION        = 2
+_OPT_DEFAULT = 0
+_OPT_VALUE = 1
+_OPT_FUNCTION = 2
 
 # Stacks
 
@@ -152,8 +152,8 @@ def __methods(cls):
 # attribute name. The resulting lambda requires only self, but will forward
 # any other parameters.
 __stringBody = (
-    'def %(method)s(this, *args, **kw): return ' +
-    #'apply(this.%(attribute)s.%(method)s, args, kw)')
+    'def %(method)s(this, *args, **kw): return ' + 
+    # 'apply(this.%(attribute)s.%(method)s, args, kw)')
     'this.%(attribute)s.%(method)s(*args, **kw)');
 
 # Get a unique id
@@ -168,11 +168,11 @@ def __unique():
 # but will forward any other parameters. The target instance is identified
 # by invoking the resolution function.
 __funcBody = (
-    'def %(method)s(this, *args, **kw): return ' +
-    #'apply(this.%(forwardFunc)s().%(method)s, args, kw)')
+    'def %(method)s(this, *args, **kw): return ' + 
+    # 'apply(this.%(forwardFunc)s().%(method)s, args, kw)')
     'this.%(forwardFunc)s().%(method)s(*args, **kw)');
 
-def forwardmethods(fromClass, toClass, toPart, exclude = ()):
+def forwardmethods(fromClass, toClass, toPart, exclude=()):
     # Forward all methods from one class to another.
 
     # Forwarders will be created in fromClass to forward method
@@ -207,11 +207,11 @@ def forwardmethods(fromClass, toClass, toPart, exclude = ()):
 
 
     # Allow an attribute name (String) or a function to determine the instance
-    #Python3 strings are not type 'str' but class 'str'...
-    #if type(toPart) != bytes:
+    # Python3 strings are not type 'str' but class 'str'...
+    # if type(toPart) != bytes:
     if not isinstance(toPart, str):
         # check that it is something like a function
-        #for classes, only works in Python 2: if isinstance(toPart, collections.Callable):pyht
+        # for classes, only works in Python 2: if isinstance(toPart, collections.Callable):pyht
         if hasattr(toPart, '__call__'):
             # If a method is passed, use the function within it
             if hasattr(toPart, 'im_func'):
@@ -257,7 +257,7 @@ def forwardmethods(fromClass, toClass, toPart, exclude = ()):
         exec(execString, d)
 
         # this creates a method
-        #fromClass.__dict__[method] = d[method]
+        # fromClass.__dict__[method] = d[method]
         setattr(fromClass, method, d[method])
 
 
@@ -297,12 +297,12 @@ def setgeometryanddeiconify(window, geom):
         # it appears in the top right corner of the screen and also
         # takes about 2 seconds to appear.
 
-        #window.tkraise()
+        # window.tkraise()
         # Call update_idletasks to ensure certain window managers (eg:
         # enlightenment and sawfish) do not cause Tk to delay for
         # about two seconds before displaying window.
-        #window.update_idletasks()
-        #window.deiconify()
+        # window.update_idletasks()
+        # window.deiconify()
 
         window.deiconify()
         if window.overrideredirect():
@@ -319,7 +319,7 @@ class MegaArchetype:
     # implementing useful bases (this class doesn't provide a
     # container widget inside which the megawidget can be built).
 
-    def __init__(self, parent = None, hullClass = None):
+    def __init__(self, parent=None, hullClass=None):
 
         # Mapping from each megawidget option to a list of information
         # about the option
@@ -425,7 +425,7 @@ class MegaArchetype:
     #======================================================================
     # Methods used (mainly) during the construction of the megawidget.
 
-    def defineoptions(self, keywords, optionDefs, dynamicGroups = ()):
+    def defineoptions(self, keywords, optionDefs, dynamicGroups=()):
         # Create options, providing the default value and the method
         # to call when the value is changed.  If any option created by
         # base classes has the same name as one in <optionDefs>, the
@@ -457,9 +457,9 @@ class MegaArchetype:
 
         # optimisations:
         optionInfo = self._optionInfo
-        #optionInfo_has_key = optionInfo.has_key
+        # optionInfo_has_key = optionInfo.has_key
         keywords = self._constructorKeywords
-        #keywords_has_key = keywords.has_key
+        # keywords_has_key = keywords.has_key
         FUNCTION = _OPT_FUNCTION
 
         for name, default, function in optionDefs:
@@ -491,7 +491,7 @@ class MegaArchetype:
 
     def createcomponent(self, componentName, componentAliases,
             componentGroup, widgetClass, *widgetArgs, **kw):
-        #print('inCreateComponent', componentName)
+        # print('inCreateComponent', componentName)
         # Create a component (during construction or later).
 
         if componentName in self.__componentInfo:
@@ -573,7 +573,7 @@ class MegaArchetype:
         self.__componentInfo[name][0].destroy()
         del self.__componentInfo[name]
 
-    def createlabel(self, parent, childCols = 1, childRows = 1):
+    def createlabel(self, parent, childCols=1, childRows=1):
 
         labelpos = self['labelpos']
         labelmargin = self['labelmargin']
@@ -605,7 +605,7 @@ class MegaArchetype:
             label.grid(column=col, row=2, rowspan=childRows, sticky=labelpos)
             parent.grid_columnconfigure(margin, minsize=labelmargin)
 
-    def initialiseoptions(self, dummy = None):
+    def initialiseoptions(self, dummy=None):
         self._initialiseoptions_counter = self._initialiseoptions_counter - 1
         if self._initialiseoptions_counter == 0:
             unusedOptions = []
@@ -676,11 +676,11 @@ class MegaArchetype:
                         config[_OPT_VALUE])
         # optimisations:
         optionInfo = self._optionInfo
-        #Py2 optionInfo_has_key = optionInfo.has_key
+        # Py2 optionInfo_has_key = optionInfo.has_key
         componentInfo = self.__componentInfo
-        #Py2 componentInfo_has_key = componentInfo.has_key
+        # Py2 componentInfo_has_key = componentInfo.has_key
         componentAliases = self.__componentAliases
-        #Py2 componentAliases_has_key = componentAliases.has_key
+        # Py2 componentAliases_has_key = componentAliases.has_key
         VALUE = _OPT_VALUE
         FUNCTION = _OPT_FUNCTION
 
@@ -695,7 +695,7 @@ class MegaArchetype:
         # component and whose values are a dictionary of options and
         # values for the component.
         indirectOptions = {}
-        #Py2 indirectOptions_has_key = indirectOptions.has_key
+        # Py2 indirectOptions_has_key = indirectOptions.has_key
 
         for option, value in list(kw.items()):
             if option in optionInfo:
@@ -746,16 +746,16 @@ class MegaArchetype:
                         if not componentConfigFunc in indirectOptions:
                             indirectOptions[componentConfigFunc] = {}
                         indirectOptions[componentConfigFunc][componentOption] \
-                                = value
+ = value
                 else:
                     raise KeyError('Unknown option "' + option + \
                             '" for ' + self.__class__.__name__)
 
         # Call the configure methods for any components.
-        #list(map(apply, list(indirectOptions.keys()),
+        # list(map(apply, list(indirectOptions.keys()),
         #        ((),) * len(indirectOptions), list(indirectOptions.values())))
         for func in indirectOptions.keys():
-            func( **indirectOptions[func]);
+            func(**indirectOptions[func]);
 
 
         # Call the configuration callback function for each option.
@@ -995,19 +995,19 @@ def _grabtop():
 
 class MegaToplevel(MegaArchetype):
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
         # Define the options for this megawidget.
         optiondefs = (
-            ('activatecommand',   None,                     None),
-            ('deactivatecommand', None,                     None),
-            ('master',            None,                     None),
-            ('title',             None,                     self._settitle),
-            ('hull_class',        self.__class__.__name__,  None),
+            ('activatecommand', None, None),
+            ('deactivatecommand', None, None),
+            ('master', None, None),
+            ('title', None, self._settitle),
+            ('hull_class', self.__class__.__name__, None),
         )
         self.defineoptions(kw, optiondefs)
 
         # Initialise the base class (after defining the options).
-        #MegaArchetype.__init__(self, parent, tkinter.Toplevel)
+        # MegaArchetype.__init__(self, parent, tkinter.Toplevel)
         super().__init__(parent, tkinter.Toplevel)
         
         # Initialise instance.
@@ -1016,9 +1016,9 @@ class MegaToplevel(MegaArchetype):
         # memory does not leak.
         if hasattr(self._hull, '_Pmw_WM_DELETE_name'):
             self._hull.tk.deletecommand(self._hull._Pmw_WM_DELETE_name)
-        #changed from self.register and self.protocol - python3 error...
+        # changed from self.register and self.protocol - python3 error...
         self._hull._Pmw_WM_DELETE_name = \
-                self.register(self._userdeletewindow, needcleanup = 0)
+                self.register(self._userdeletewindow, needcleanup=0)
         self.protocol('WM_DELETE_WINDOW', self._hull._Pmw_WM_DELETE_name)
 
         # Initialise instance variables.
@@ -1070,7 +1070,7 @@ class MegaToplevel(MegaArchetype):
 
             MegaArchetype.destroy(self)
 
-    def show(self, master = None):
+    def show(self, master=None):
         if self.state() != 'normal':
             if self._firstShowing:
                 # Just let the window manager determine the window
@@ -1137,7 +1137,7 @@ class MegaToplevel(MegaArchetype):
         else:
             return None
 
-    def activate(self, globalMode = 0, geometry = 'centerscreenfirst'):
+    def activate(self, globalMode=0, geometry='centerscreenfirst'):
         if self._active:
             raise ValueError('Window is already active')
         if self.state() == 'normal':
@@ -1209,7 +1209,7 @@ class MegaToplevel(MegaArchetype):
             command()
 
         self.withdraw()
-        hidebusycursor(forceFocusRestore = 1)
+        hidebusycursor(forceFocusRestore=1)
 
         self._result = result
         self._wait.set(1)
@@ -1222,10 +1222,10 @@ forwardmethods(MegaToplevel, tkinter.Toplevel, '_hull')
 #=============================================================================
 
 class MegaWidget(MegaArchetype):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
         # Define the options for this megawidget.
         optiondefs = (
-            ('hull_class',       self.__class__.__name__,  None),
+            ('hull_class', self.__class__.__name__, None),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -1243,7 +1243,7 @@ forwardmethods(MegaWidget, tkinter.Frame, '_hull')
 #-----------------
 
 _traceTk = 0
-def tracetk(root = None, on = 1, withStackTrace = 0, file=None):
+def tracetk(root=None, on=1, withStackTrace=0, file=None):
     global _withStackTrace
     global _traceTkFile
     global _traceTk
@@ -1254,8 +1254,8 @@ def tracetk(root = None, on = 1, withStackTrace = 0, file=None):
     _withStackTrace = withStackTrace
     _traceTk = on
     if on == 1:
-        #this causes trace not to work - not enabled by default in tk anymore?
-        #if hasattr(root.tk, '__class__'):
+        # this causes trace not to work - not enabled by default in tk anymore?
+        # if hasattr(root.tk, '__class__'):
             # Tracing already on
         #    return
         if file is None:
@@ -1319,7 +1319,7 @@ def showbusycursor():
         else:
             window.update_idletasks()
 
-def hidebusycursor(forceFocusRestore = 0):
+def hidebusycursor(forceFocusRestore=0):
 
     # Remember the focus as it is now, before it is changed.
     root = tkinter._default_root
@@ -1394,7 +1394,7 @@ def _addRootToToplevelBusyInfo():
     if root not in _toplevelBusyInfo:
         _addToplevelBusyInfo(root)
 
-def busycallback(command, updateFunction = None):
+def busycallback(command, updateFunction=None):
     if not isinstance(command, collections.Callable):
         raise ValueError('cannot register non-command busy callback %s %s' % \
                 (repr(command), type(command)))
@@ -1404,7 +1404,7 @@ def busycallback(command, updateFunction = None):
 _errorReportFile = None
 _errorWindow = None
 
-def reporterrorstofile(file = None):
+def reporterrorstofile(file=None):
     global _errorReportFile
     _errorReportFile = file
 
@@ -1430,12 +1430,12 @@ _root = None
 _disableKeyboardWhileBusy = 1
 
 def initialise(
-        root = None,
-        size = None,
-        fontScheme = None,
-        useTkOptionDb = 0,
-        noBltBusy = 0,
-        disableKeyboardWhileBusy = None,
+        root=None,
+        size=None,
+        fontScheme=None,
+        useTkOptionDb=0,
+        noBltBusy=0,
+        disableKeyboardWhileBusy=None,
 ):
     # Remember if show/hidebusycursor should ignore keyboard events.
     global _disableKeyboardWhileBusy
@@ -1506,7 +1506,7 @@ def initialise(
     _font_initialise(root, size, fontScheme)
     return root
 
-def alignlabels(widgets, sticky = None):
+def alignlabels(widgets, sticky=None):
     if len(widgets) == 0:
         return
 
@@ -1524,7 +1524,7 @@ def alignlabels(widgets, sticky = None):
     for iwid in widgets:
         if sticky is not None:
             iwid.component('label').grid(sticky=sticky)
-        iwid.grid_columnconfigure(0, minsize = maxLabelWidth)
+        iwid.grid_columnconfigure(0, minsize=maxLabelWidth)
 #=============================================================================
 
 # Private routines
@@ -1549,7 +1549,7 @@ class _TraceTk:
             argStr = str(args[0])
         else:
             argStr = str(args)
-        _traceTkFile.write('CALL  TK> %d:%s%s' %
+        _traceTkFile.write('CALL  TK> %d:%s%s' % 
                 (_recursionCounter, '  ' * _recursionCounter, argStr))
         _recursionCounter = _recursionCounter + 1
         try:
@@ -1557,7 +1557,7 @@ class _TraceTk:
         except tkinter.TclError as errorString:
             _callToTkReturned = 1
             _recursionCounter = _recursionCounter - 1
-            _traceTkFile.write('\nTK ERROR> %d:%s-> %s\n' %
+            _traceTkFile.write('\nTK ERROR> %d:%s-> %s\n' % 
                     (_recursionCounter, '  ' * _recursionCounter,
                             repr(errorString)))
             if _withStackTrace:
@@ -1567,7 +1567,7 @@ class _TraceTk:
 
         _recursionCounter = _recursionCounter - 1
         if _callToTkReturned:
-            _traceTkFile.write('CALL RTN> %d:%s-> %s' %
+            _traceTkFile.write('CALL RTN> %d:%s-> %s' % 
                     (_recursionCounter, '  ' * _recursionCounter, repr(result)))
         else:
             _callToTkReturned = 1
@@ -1669,15 +1669,15 @@ class _BusyWrapper:
 
 #=============================================================================
 
-def drawarrow(canvas, color, direction, tag, baseOffset = 0.25, edgeOffset = 0.15):
+def drawarrow(canvas, color, direction, tag, baseOffset=0.25, edgeOffset=0.15):
     canvas.delete(tag)
 
-    #Python 3 conversion
-    #bw = (str.atoi(canvas['borderwidth']) +
+    # Python 3 conversion
+    # bw = (str.atoi(canvas['borderwidth']) +
     #        str.atoi(canvas['highlightthickness']))
-    #width = str.atoi(canvas['width'])
-    #height = str.atoi(canvas['height'])
-    bw = (int(canvas['borderwidth']) +
+    # width = str.atoi(canvas['width'])
+    # height = str.atoi(canvas['height'])
+    bw = (int(canvas['borderwidth']) + 
             int(canvas['highlightthickness']))
     width = int(canvas['width'])
     height = int(canvas['height'])
@@ -1782,7 +1782,7 @@ class __TkinterCallWrapper:
                         argStr = '(%s Event, %s)' % (eventName, args[0].widget)
                 else:
                     argStr = str(args)
-                _traceTkFile.write('CALLBACK> %d:%s%s%s\n' %
+                _traceTkFile.write('CALLBACK> %d:%s%s%s\n' % 
                     (_recursionCounter, '  ' * _recursionCounter, name, argStr))
                 _traceTkFile.flush()
             return self.func(*args)
@@ -1792,19 +1792,19 @@ class __TkinterCallWrapper:
             _reporterror(self.func, args)
 
 _eventTypeToName = {
-    2 : 'KeyPress',         15 : 'VisibilityNotify',   28 : 'PropertyNotify',
-    3 : 'KeyRelease',       16 : 'CreateNotify',       29 : 'SelectionClear',
-    4 : 'ButtonPress',      17 : 'DestroyNotify',      30 : 'SelectionRequest',
-    5 : 'ButtonRelease',    18 : 'UnmapNotify',        31 : 'SelectionNotify',
-    6 : 'MotionNotify',     19 : 'MapNotify',          32 : 'ColormapNotify',
-    7 : 'EnterNotify',      20 : 'MapRequest',         33 : 'ClientMessage',
-    8 : 'LeaveNotify',      21 : 'ReparentNotify',     34 : 'MappingNotify',
-    9 : 'FocusIn',          22 : 'ConfigureNotify',    35 : 'VirtualEvents',
-    10 : 'FocusOut',        23 : 'ConfigureRequest',   36 : 'ActivateNotify',
-    11 : 'KeymapNotify',    24 : 'GravityNotify',      37 : 'DeactivateNotify',
-    12 : 'Expose',          25 : 'ResizeRequest',      38 : 'MouseWheelEvent',
-    13 : 'GraphicsExpose',  26 : 'CirculateNotify',
-    14 : 'NoExpose',        27 : 'CirculateRequest',
+    2 : 'KeyPress', 15 : 'VisibilityNotify', 28 : 'PropertyNotify',
+    3 : 'KeyRelease', 16 : 'CreateNotify', 29 : 'SelectionClear',
+    4 : 'ButtonPress', 17 : 'DestroyNotify', 30 : 'SelectionRequest',
+    5 : 'ButtonRelease', 18 : 'UnmapNotify', 31 : 'SelectionNotify',
+    6 : 'MotionNotify', 19 : 'MapNotify', 32 : 'ColormapNotify',
+    7 : 'EnterNotify', 20 : 'MapRequest', 33 : 'ClientMessage',
+    8 : 'LeaveNotify', 21 : 'ReparentNotify', 34 : 'MappingNotify',
+    9 : 'FocusIn', 22 : 'ConfigureNotify', 35 : 'VirtualEvents',
+    10 : 'FocusOut', 23 : 'ConfigureRequest', 36 : 'ActivateNotify',
+    11 : 'KeymapNotify', 24 : 'GravityNotify', 37 : 'DeactivateNotify',
+    12 : 'Expose', 25 : 'ResizeRequest', 38 : 'MouseWheelEvent',
+    13 : 'GraphicsExpose', 26 : 'CirculateNotify',
+    14 : 'NoExpose', 27 : 'CirculateRequest',
 }
 
 def _reporterror(func, args):
@@ -1827,8 +1827,8 @@ def _reporterror(func, args):
 
     # If the argument to the callback is an event, add the event type.
     if eventArg:
-        #Python 3 conversion
-        #eventNum = str.atoi(args[0].type)
+        # Python 3 conversion
+        # eventNum = str.atoi(args[0].type)
         eventNum = int(args[0].type)
         if eventNum in list(_eventTypeToName.keys()):
             msg = msg + '  Event type: %s (type num: %d)\n' % \
@@ -1876,21 +1876,21 @@ class _ErrorWindow:
         upperframe = tkinter.Frame(self._top)
 
         scrollbar = tkinter.Scrollbar(upperframe, orient='vertical')
-        scrollbar.pack(side = 'right', fill = 'y')
+        scrollbar.pack(side='right', fill='y')
 
         self._text = tkinter.Text(upperframe, yscrollcommand=scrollbar.set)
-        self._text.pack(fill = 'both', expand = 1)
+        self._text.pack(fill='both', expand=1)
         scrollbar.configure(command=self._text.yview)
 
         # Create the buttons and label in a frame
         lowerframe = tkinter.Frame(self._top)
 
         ignore = tkinter.Button(lowerframe,
-                text = 'Ignore remaining errors', command = self._hide)
+                text='Ignore remaining errors', command=self._hide)
         ignore.pack(side='left')
 
         self._nextError = tkinter.Button(lowerframe,
-                text = 'Show next error', command = self._next)
+                text='Show next error', command=self._next)
         self._nextError.pack(side='left')
 
         self._label = tkinter.Label(lowerframe, relief='ridge')
@@ -1898,8 +1898,8 @@ class _ErrorWindow:
 
         # Pack the lower frame first so that it does not disappear
         # when the window is resized.
-        lowerframe.pack(side = 'bottom', fill = 'x')
-        upperframe.pack(side = 'bottom', fill = 'both', expand = 1)
+        lowerframe.pack(side='bottom', fill='x')
+        upperframe.pack(side='bottom', fill='both', expand=1)
 
     def showerror(self, text):
         if self._open:
@@ -1979,7 +1979,7 @@ _bltImported = 1
 _bltbusyOK = 0
 
 ######################################################################
-### File: PmwDialog.py
+# ## File: PmwDialog.py
 # Based on iwidgets2.2.0/dialog.itk and iwidgets2.2.0/dialogshell.itk code.
 
 # Convention:
@@ -1997,21 +1997,21 @@ import collections
 # A Toplevel with a ButtonBox and child site.
 
 class Dialog(Pmw.MegaToplevel):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('buttonbox_hull_borderwidth',   1,         None),
-            ('buttonbox_hull_relief',        'raised',  None),
-            ('buttonboxpos',                 's',       INITOPT),
-            ('buttons',                      ('OK',),   self._buttons),
-            ('command',                      None,      None),
-            ('dialogchildsite_borderwidth',  1,         None),
-            ('dialogchildsite_relief',       'raised',  None),
-            ('defaultbutton',                None,      self._defaultButton),
-            ('master',                       'parent',  None),
-            ('separatorwidth',               0,         INITOPT),
+            ('buttonbox_hull_borderwidth', 1, None),
+            ('buttonbox_hull_relief', 'raised', None),
+            ('buttonboxpos', 's', INITOPT),
+            ('buttons', ('OK',), self._buttons),
+            ('command', None, None),
+            ('dialogchildsite_borderwidth', 1, None),
+            ('dialogchildsite_relief', 'raised', None),
+            ('defaultbutton', None, self._defaultButton),
+            ('master', 'parent', None),
+            ('separatorwidth', 0, INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -2046,17 +2046,17 @@ class Dialog(Pmw.MegaToplevel):
         # Create the button box.
         self._buttonBox = self.createcomponent('buttonbox',
                 (), None,
-                Pmw.ButtonBox, (oldInterior,), orient = orient)
-        self._buttonBox.pack(side = side, fill = fill)
+                Pmw.ButtonBox, (oldInterior,), orient=orient)
+        self._buttonBox.pack(side=side, fill=fill)
 
         # Create the separating line.
         width = self['separatorwidth']
         if width > 0:
             self._separator = self.createcomponent('separator',
                     (), None,
-                    tkinter.Frame, (oldInterior,), relief = 'sunken',
-                    height = width, width = width, borderwidth = width / 2)
-            self._separator.pack(side = side, fill = fill)
+                    tkinter.Frame, (oldInterior,), relief='sunken',
+                    height=width, width=width, borderwidth=width / 2)
+            self._separator.pack(side=side, fill=fill)
 
         # Create the child site.
         self.__dialogChildSite = self.createcomponent('dialogchildsite',
@@ -2077,7 +2077,7 @@ class Dialog(Pmw.MegaToplevel):
     def interior(self):
         return self.__dialogChildSite
 
-    def invoke(self, index = Pmw.DEFAULT):
+    def invoke(self, index=Pmw.DEFAULT):
         return self._buttonBox.invoke(index)
 
     def _invokeDefault(self, event):
@@ -2087,7 +2087,7 @@ class Dialog(Pmw.MegaToplevel):
             return
         self._buttonBox.invoke()
 
-    def _doCommand(self, name = None):
+    def _doCommand(self, name=None):
         if name is not None and self.active() and \
                 Pmw.grabstacktopwindow() != self.component('hull'):
             # This is a modal dialog but is not on the top of the grab
@@ -2165,15 +2165,15 @@ class Dialog(Pmw.MegaToplevel):
                     self._buttonBox.setdefault(defaultbutton)
 
 ######################################################################
-### File: PmwTimeFuncs.py
+# ## File: PmwTimeFuncs.py
 # Functions for dealing with dates and times.
 
 import re
 import string
 
-def timestringtoseconds(text, separator = ':'):
+def timestringtoseconds(text, separator=':'):
     # to Py3
-    #inputList = string.split(string.strip(text), separator)
+    # inputList = string.split(string.strip(text), separator)
     inputList = text.strip().split(separator)
 
     if len(inputList) != 3:
@@ -2185,7 +2185,7 @@ def timestringtoseconds(text, separator = ':'):
             sign = -1
         inputList[0] = inputList[0][1:]
 
-    #Py3 if re.search('[^0-9]', string.join(inputList, '')) is not None:
+    # Py3 if re.search('[^0-9]', string.join(inputList, '')) is not None:
     if re.search('[^0-9]', ''.join(inputList)) is not None:    
         raise ValueError('invalid value: ' + text)
 
@@ -2200,7 +2200,7 @@ def timestringtoseconds(text, separator = ':'):
 _year_pivot = 50
 _century = 2000
 
-def setyearpivot(pivot, century = None):
+def setyearpivot(pivot, century=None):
     global _year_pivot
     global _century
     oldvalues = (_year_pivot, _century)
@@ -2209,13 +2209,13 @@ def setyearpivot(pivot, century = None):
         _century = century
     return oldvalues
 
-def datestringtojdn(text, fmt = 'ymd', separator = '/'):
-    #Py3 inputList = string.split(string.strip(text), separator)
+def datestringtojdn(text, fmt='ymd', separator='/'):
+    # Py3 inputList = string.split(string.strip(text), separator)
     inputList = text.strip().split(separator)
     if len(inputList) != 3:
         raise ValueError('invalid value: ' + text)
 
-    #Py3 if re.search('[^0-9]', string.join(inputList, '')) is not None:
+    # Py3 if re.search('[^0-9]', string.join(inputList, '')) is not None:
     if re.search('[^0-9]', ''.join(inputList)) is not None:
         raise ValueError('invalid value: ' + text)
     formatList = list(fmt)
@@ -2245,16 +2245,16 @@ def _cdiv(a, b):
     else:
         return -int(abs(a) / abs(b))
 
-def ymdtojdn(year, month, day, julian = -1, papal = 1):
+def ymdtojdn(year, month, day, julian=-1, papal=1):
 
     # set Julian flag if auto set
     if julian < 0:
-        if papal:                          # Pope Gregory XIII's decree
-            lastJulianDate = 15821004     # last day to use Julian calendar
-        else:                              # British-American usage
-            lastJulianDate = 17520902     # last day to use Julian calendar
+        if papal:  # Pope Gregory XIII's decree
+            lastJulianDate = 15821004  # last day to use Julian calendar
+        else:  # British-American usage
+            lastJulianDate = 17520902  # last day to use Julian calendar
 
-        julian = ((year * 100) + month) * 100 + day  <=  lastJulianDate
+        julian = ((year * 100) + month) * 100 + day <= lastJulianDate
 
     if year < 0:
         # Adjust BC year
@@ -2268,16 +2268,16 @@ def ymdtojdn(year, month, day, julian = -1, papal = 1):
             _cdiv(1461 * (year + 4800 + _cdiv((month - 14), 12)), 4) + \
             _cdiv(367 * (month - 2 - _cdiv((month - 14), 12) * 12), 12) - \
             _cdiv((3 * _cdiv((year + 4900 + _cdiv((month - 14), 12)), 100)), 4) + \
-            1            # correction by rdg
+            1  # correction by rdg
 
-def jdntoymd(jdn, julian = -1, papal = 1):
+def jdntoymd(jdn, julian=-1, papal=1):
 
     # set Julian flag if auto set
     if julian < 0:
-        if papal:                          # Pope Gregory XIII's decree
-            lastJulianJdn = 2299160       # last jdn to use Julian calendar
-        else:                              # British-American usage
-            lastJulianJdn = 2361221       # last jdn to use Julian calendar
+        if papal:  # Pope Gregory XIII's decree
+            lastJulianJdn = 2299160  # last jdn to use Julian calendar
+        else:  # British-American usage
+            lastJulianJdn = 2361221  # last jdn to use Julian calendar
 
         julian = (jdn <= lastJulianJdn);
 
@@ -2311,19 +2311,19 @@ def jdntoymd(jdn, julian = -1, papal = 1):
 
     return (yy, mm, dd)
 
-def stringtoreal(text, separator = '.'):
+def stringtoreal(text, separator='.'):
     if separator != '.':
-        #Py3 if string.find(text, '.') >= 0:
+        # Py3 if string.find(text, '.') >= 0:
         if text.find('.') >= 0:
             raise ValueError('invalid value: ' + text)
-        #Py3 index = string.find(text, separator)
+        # Py3 index = string.find(text, separator)
         index = text.find(separator)
         if index >= 0:
             text = text[:index] + '.' + text[index + 1:]
     return float(text)
 
 ######################################################################
-### File: PmwBalloon.py
+# ## File: PmwBalloon.py
 import os
 import string
 import tkinter
@@ -2331,22 +2331,22 @@ import Pmw
 import collections
 
 class Balloon(Pmw.MegaToplevel):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         optiondefs = (
-            ('initwait',                 500,            None), # milliseconds
-            ('label_background',         'lightyellow',  None),
-            ('label_foreground',         'black',        None),
-            ('label_justify',            'left',         None),
-            ('master',                   'parent',       None),
-            ('relmouse',                 'none',         self._relmouse),
-            ('state',                    'both',         self._state),
-            ('statuscommand',            None,           None),
-            ('xoffset',                  20,             None), # pixels
-            ('yoffset',                  1,              None), # pixels
-            ('hull_highlightthickness',  1,              None),
-            ('hull_highlightbackground', 'black',        None),
+            ('initwait', 500, None),  # milliseconds
+            ('label_background', 'lightyellow', None),
+            ('label_foreground', 'black', None),
+            ('label_justify', 'left', None),
+            ('master', 'parent', None),
+            ('relmouse', 'none', self._relmouse),
+            ('state', 'both', self._state),
+            ('statuscommand', None, None),
+            ('xoffset', 20, None),  # pixels
+            ('yoffset', 1, None),  # pixels
+            ('hull_highlightthickness', 1, None),
+            ('hull_highlightbackground', 'black', None),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -2367,7 +2367,7 @@ class Balloon(Pmw.MegaToplevel):
         # around the balloon, but avoids a black 'flash' when the
         # balloon is deiconified, before the text appears.
         if 'hull_background' not in kw:
-            self.configure(hull_background = \
+            self.configure(hull_background=\
                     str(self._label.cget('background')))
 
         # Initialise instance variables.
@@ -2390,7 +2390,7 @@ class Balloon(Pmw.MegaToplevel):
             self._timer = None
         Pmw.MegaToplevel.destroy(self)
 
-    def bind(self, widget, balloonHelp, statusHelp = None):
+    def bind(self, widget, balloonHelp, statusHelp=None):
 
         # If a previous bind for this widget exists, remove it.
         self.unbind(widget)
@@ -2401,8 +2401,8 @@ class Balloon(Pmw.MegaToplevel):
         if statusHelp is None:
             statusHelp = balloonHelp
         enterId = widget.bind('<Enter>',
-                lambda event, self = self, w = widget,
-                        sHelp = statusHelp, bHelp = balloonHelp:
+                lambda event, self=self, w=widget,
+                        sHelp=statusHelp, bHelp=balloonHelp:
                                 self._enter(event, w, sHelp, bHelp, 0))
 
         # Set Motion binding so that if the pointer remains at rest
@@ -2412,7 +2412,7 @@ class Balloon(Pmw.MegaToplevel):
         # Note:  The Motion binding only works for basic widgets, and
         # the hull of megawidgets but not for other megawidget components.
         motionId = widget.bind('<Motion>',
-                lambda event = None, self = self, statusHelp = statusHelp:
+                lambda event=None, self=self, statusHelp=statusHelp:
                         self.showstatus(statusHelp))
 
         leaveId = widget.bind('<Leave>', self._leave)
@@ -2455,7 +2455,7 @@ class Balloon(Pmw.MegaToplevel):
                 self.clearstatus()
                 self._currentTrigger = None
 
-    def tagbind(self, widget, tagOrItem, balloonHelp, statusHelp = None):
+    def tagbind(self, widget, tagOrItem, balloonHelp, statusHelp=None):
 
         # If a previous bind for this widget's tagOrItem exists, remove it.
         self.tagunbind(widget, tagOrItem)
@@ -2466,11 +2466,11 @@ class Balloon(Pmw.MegaToplevel):
         if statusHelp is None:
             statusHelp = balloonHelp
         enterId = widget.tag_bind(tagOrItem, '<Enter>',
-                lambda event, self = self, w = widget,
-                        sHelp = statusHelp, bHelp = balloonHelp:
+                lambda event, self=self, w=widget,
+                        sHelp=statusHelp, bHelp=balloonHelp:
                                 self._enter(event, w, sHelp, bHelp, 1))
         motionId = widget.tag_bind(tagOrItem, '<Motion>',
-                lambda event = None, self = self, statusHelp = statusHelp:
+                lambda event=None, self=self, statusHelp=statusHelp:
                         self.showstatus(statusHelp))
         leaveId = widget.tag_bind(tagOrItem, '<Leave>', self._leave)
         buttonId = widget.tag_bind(tagOrItem, '<ButtonPress>', self._buttonpress)
@@ -2511,7 +2511,7 @@ class Balloon(Pmw.MegaToplevel):
                 self.withdraw()
                 self.clearstatus()
                 self._currentTrigger = None
-        else: # The current trigger is a text item.
+        else:  # The current trigger is a text item.
             (triggerWidget, x, y) = self._currentTrigger
             if triggerWidget == widget:
                 currentPos = widget.index('@%d,%d' % (x, y))
@@ -2541,7 +2541,7 @@ class Balloon(Pmw.MegaToplevel):
 
     def _relmouse(self):
         if self['relmouse'] not in ('both', 'x', 'y', 'none'):
-            raise ValueError('bad relmouse option ' + repr(self['relmouse'])+ \
+            raise ValueError('bad relmouse option ' + repr(self['relmouse']) + \
                 ': should be one of \'both\', \'x\', ' + '\'y\' or \'none\'')
 
     def _enter(self, event, widget, statusHelp, balloonHelp, isItem):
@@ -2560,8 +2560,8 @@ class Balloon(Pmw.MegaToplevel):
                 self._timer = None
 
             self._timer = self.after(self['initwait'],
-                    lambda self = self, widget = widget, help = balloonHelp,
-                            isItem = isItem:
+                    lambda self=self, widget=widget, help=balloonHelp,
+                            isItem=isItem:
                             self._showBalloon(widget, help, isItem))
 
         if isItem:
@@ -2620,7 +2620,7 @@ class Balloon(Pmw.MegaToplevel):
 
     def _showBalloon(self, widget, balloonHelp, isItem):
 
-        self._label.configure(text = balloonHelp)
+        self._label.configure(text=balloonHelp)
 
         # First, display the balloon offscreen to get dimensions.
         screenWidth = self.winfo_screenwidth()
@@ -2663,7 +2663,7 @@ class Balloon(Pmw.MegaToplevel):
             toprel = 0
             bottomrel = widget.winfo_height()
 
-        xpointer, ypointer = widget.winfo_pointerxy()   # -1 if off screen
+        xpointer, ypointer = widget.winfo_pointerxy()  # -1 if off screen
 
         if xpointer >= 0 and self['relmouse'] in ('both', 'x'):
             x = xpointer
@@ -2676,10 +2676,10 @@ class Balloon(Pmw.MegaToplevel):
         else:
             y = bottomrel + widget.winfo_rooty()
         y = y + self['yoffset']
-        #Python 3 conversion
-        #edges = (string.atoi(str(self.cget('hull_highlightthickness'))) +
+        # Python 3 conversion
+        # edges = (string.atoi(str(self.cget('hull_highlightthickness'))) +
         #    string.atoi(str(self.cget('hull_borderwidth')))) * 2
-        edges = (int(str(self.cget('hull_highlightthickness'))) +
+        edges = (int(str(self.cget('hull_highlightthickness'))) + 
             int(str(self.cget('hull_borderwidth')))) * 2
         if x + self._label.winfo_reqwidth() + edges > screenWidth:
             x = screenWidth - self._label.winfo_reqwidth() - edges
@@ -2694,7 +2694,7 @@ class Balloon(Pmw.MegaToplevel):
         Pmw.setgeometryanddeiconify(self, '+%d+%d' % (x, y))
 
 ######################################################################
-### File: PmwButtonBox.py
+# ## File: PmwButtonBox.py
 # Based on iwidgets2.2.0/buttonbox.itk code.
 
 import types
@@ -2702,18 +2702,18 @@ import tkinter
 import Pmw
 
 class ButtonBox(Pmw.MegaWidget):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('labelmargin',       0,              INITOPT),
-            ('labelpos',          None,           INITOPT),
-            ('orient',            'horizontal',   INITOPT),
-            ('padx',              3,              INITOPT),
-            ('pady',              3,              INITOPT),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('orient', 'horizontal', INITOPT),
+            ('padx', 3, INITOPT),
+            ('pady', 3, INITOPT),
         )
-        self.defineoptions(kw, optiondefs, dynamicGroups = ('Button',))
+        self.defineoptions(kw, optiondefs, dynamicGroups=('Button',))
 
         # Initialise the base class (after defining the options).
         Pmw.MegaWidget.__init__(self, parent)
@@ -2734,9 +2734,9 @@ class ButtonBox(Pmw.MegaWidget):
 
         orient = self['orient']
         if orient == 'horizontal':
-            interior.grid_columnconfigure(columnOrRow, weight = 1)
+            interior.grid_columnconfigure(columnOrRow, weight=1)
         elif orient == 'vertical':
-            interior.grid_rowconfigure(columnOrRow, weight = 1)
+            interior.grid_rowconfigure(columnOrRow, weight=1)
         else:
             raise ValueError('bad orient option ' + repr(orient) + \
                 ': must be either \'horizontal\' or \'vertical\'')
@@ -2765,7 +2765,7 @@ class ButtonBox(Pmw.MegaWidget):
     def numbuttons(self):
         return len(self._buttonList)
 
-    def index(self, index, forInsert = 0):
+    def index(self, index, forInsert=0):
         listLength = len(self._buttonList)
         if type(index) == int:
             if forInsert and index <= listLength:
@@ -2792,7 +2792,7 @@ class ButtonBox(Pmw.MegaWidget):
             validValues = 'a name, a number, Pmw.END or Pmw.DEFAULT'
             raise ValueError('bad index "%s": must be %s' % (index, validValues))
 
-    def insert(self, componentName, beforeComponent = 0, **kw):
+    def insert(self, componentName, beforeComponent=0, **kw):
         if componentName in self.components():
             raise ValueError('button "%s" already exists' % componentName)
         if 'text' not in kw:
@@ -2811,21 +2811,21 @@ class ButtonBox(Pmw.MegaWidget):
             widget = self._buttonList[i][1]
             pos = i * 2 + 3
             if horizontal:
-                widget.grid(column = pos, row = 0)
+                widget.grid(column=pos, row=0)
             else:
-                widget.grid(column = 0, row = pos)
+                widget.grid(column=0, row=pos)
 
         # Display the new button.
         if horizontal:
-            button.grid(column = index * 2 + 1, row = 0, sticky = 'ew',
-                    padx = self['padx'], pady = self['pady'])
+            button.grid(column=index * 2 + 1, row=0, sticky='ew',
+                    padx=self['padx'], pady=self['pady'])
             self._buttonBoxFrame.grid_columnconfigure(
-                    numButtons * 2 + 2, weight = 1)
+                    numButtons * 2 + 2, weight=1)
         else:
-            button.grid(column = 0, row = index * 2 + 1, sticky = 'ew',
-                    padx = self['padx'], pady = self['pady'])
+            button.grid(column=0, row=index * 2 + 1, sticky='ew',
+                    padx=self['padx'], pady=self['pady'])
             self._buttonBoxFrame.grid_rowconfigure(
-                    numButtons * 2 + 2, weight = 1)
+                    numButtons * 2 + 2, weight=1)
         self._buttonList.insert(index, (componentName, button))
 
         return button
@@ -2847,23 +2847,23 @@ class ButtonBox(Pmw.MegaWidget):
             widget = self._buttonList[i][1]
             pos = i * 2 - 1
             if horizontal:
-                widget.grid(column = pos, row = 0)
+                widget.grid(column=pos, row=0)
             else:
-                widget.grid(column = 0, row = pos)
+                widget.grid(column=0, row=pos)
 
         if horizontal:
             self._buttonBoxFrame.grid_columnconfigure(numButtons * 2 - 1,
-                    minsize = 0)
-            self._buttonBoxFrame.grid_columnconfigure(numButtons * 2, weight = 0)
+                    minsize=0)
+            self._buttonBoxFrame.grid_columnconfigure(numButtons * 2, weight=0)
         else:
-            self._buttonBoxFrame.grid_rowconfigure(numButtons * 2, weight = 0)
+            self._buttonBoxFrame.grid_rowconfigure(numButtons * 2, weight=0)
         del self._buttonList[index]
 
     def setdefault(self, index):
         # Turn off the default ring around the current default button.
         if self._defaultButton is not None:
             button = self._buttonList[self._defaultButton][1]
-            button.configure(default = 'normal')
+            button.configure(default='normal')
             self._defaultButton = None
 
         # Turn on the default ring around the new default button.
@@ -2871,9 +2871,9 @@ class ButtonBox(Pmw.MegaWidget):
             index = self.index(index)
             self._defaultButton = index
             button = self._buttonList[index][1]
-            button.configure(default = 'active')
+            button.configure(default='active')
 
-    def invoke(self, index = Pmw.DEFAULT, noFlash = 0):
+    def invoke(self, index=Pmw.DEFAULT, noFlash=0):
         # Invoke the callback associated with the *index* button.  If
         # *noFlash* is not set, flash the button to indicate to the
         # user that something happened.
@@ -2882,16 +2882,16 @@ class ButtonBox(Pmw.MegaWidget):
         if not noFlash:
             state = button.cget('state')
             relief = button.cget('relief')
-            button.configure(state = 'active', relief = 'sunken')
+            button.configure(state='active', relief='sunken')
             self.update_idletasks()
             self.after(100)
-            button.configure(state = state, relief = relief)
+            button.configure(state=state, relief=relief)
         return button.invoke()
 
     def button(self, buttonIndex):
         return self._buttonList[self.index(buttonIndex)][1]
 
-    def alignbuttons(self, when = 'later'):
+    def alignbuttons(self, when='later'):
         if when == 'later':
             if not self._timerId:
                 self._timerId = self.after_idle(self.alignbuttons, 'now')
@@ -2915,12 +2915,12 @@ class ButtonBox(Pmw.MegaWidget):
         if horizontal:
             for index in range(len(self._buttonList)):
                 self._buttonBoxFrame.grid_columnconfigure(index * 2 + 1,
-                        minsize = max)
+                        minsize=max)
         else:
-            self._buttonBoxFrame.grid_columnconfigure(0, minsize = max)
+            self._buttonBoxFrame.grid_columnconfigure(0, minsize=max)
 
 ######################################################################
-### File: PmwEntryField.py
+# ## File: PmwEntryField.py
 # Based on iwidgets2.2.0/entryfield.itk code.
 
 import re
@@ -2938,21 +2938,21 @@ PARTIAL = -1
 class EntryField(Pmw.MegaWidget):
     _classBindingsDefinedFor = 0
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('command',           None,        None),
-            ('errorbackground',   'pink',      None),
-            ('invalidcommand',    self.bell,   None),
-            ('labelmargin',       0,           INITOPT),
-            ('labelpos',          None,        INITOPT),
-            ('modifiedcommand',   None,        None),
-            ('sticky',            'ew',        INITOPT),
-            ('validate',          None,        self._validate),
-            ('extravalidators',   {},          None),
-            ('value',             '',          INITOPT),
+            ('command', None, None),
+            ('errorbackground', 'pink', None),
+            ('invalidcommand', self.bell, None),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('modifiedcommand', None, None),
+            ('sticky', 'ew', INITOPT),
+            ('validate', None, self._validate),
+            ('extravalidators', {}, None),
+            ('value', '', INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -2989,7 +2989,7 @@ class EntryField(Pmw.MegaWidget):
         # prevent object cleanup.
         if EntryField._classBindingsDefinedFor != tkinter._default_root:
             tagList = self._entryFieldEntry.bindtags()
-            root  = tkinter._default_root
+            root = tkinter._default_root
 
             allSequences = {}
             for tag in tagList:
@@ -3007,7 +3007,7 @@ class EntryField(Pmw.MegaWidget):
 
             EntryField._classBindingsDefinedFor = root
 
-        self._entryFieldEntry.bindtags(('EntryFieldPre',) +
+        self._entryFieldEntry.bindtags(('EntryFieldPre',) + 
                 self._entryFieldEntry.bindtags() + ('EntryFieldPost',))
         self._entryFieldEntry.bind('<Return>', self._executeCommand)
 
@@ -3105,7 +3105,7 @@ class EntryField(Pmw.MegaWidget):
                 'the standard validators %s or extra validators %s'
             raise ValueError(msg % (option, validator, standard, extra))
 
-    def _executeCommand(self, event = None):
+    def _executeCommand(self, event=None):
         cmd = self['command']
         if isinstance(cmd, collections.Callable):
             if event is None:
@@ -3120,7 +3120,7 @@ class EntryField(Pmw.MegaWidget):
         self._previousICursor = self._entryFieldEntry.index('insert')
         self._previousXview = self._entryFieldEntry.index('@0')
         if self._entryFieldEntry.selection_present():
-            self._previousSel= (self._entryFieldEntry.index('sel.first'),
+            self._previousSel = (self._entryFieldEntry.index('sel.first'),
                 self._entryFieldEntry.index('sel.last'))
         else:
             self._previousSel = None
@@ -3214,13 +3214,13 @@ class EntryField(Pmw.MegaWidget):
         if valid == OK:
             if self.normalBackground is not None:
                 self._entryFieldEntry.configure(
-                        background = self.normalBackground)
+                        background=self.normalBackground)
                 self.normalBackground = None
         else:
             if self.normalBackground is None:
                 self.normalBackground = self._entryFieldEntry.cget('background')
                 self._entryFieldEntry.configure(
-                        background = self['errorbackground'])
+                        background=self['errorbackground'])
 
         return oldValidity
 
@@ -3303,12 +3303,12 @@ def hexadecimalvalidator(text):
     except ValueError:
         return ERROR
 
-def realvalidator(text, separator = '.'):
+def realvalidator(text, separator='.'):
     if separator != '.':
-        #Py3 if string.find(text, '.') >= 0:
+        # Py3 if string.find(text, '.') >= 0:
         if text.find('.') >= 0:
             return ERROR
-        #Py3 index = string.find(text, separator)
+        # Py3 index = string.find(text, separator)
         index = text.find(separator)
         if index >= 0:
             text = text[:index] + '.' + text[index + 1:]
@@ -3328,7 +3328,7 @@ def realvalidator(text, separator = '.'):
         except ValueError:
             return ERROR
 
-def timevalidator(text, separator = ':'):
+def timevalidator(text, separator=':'):
     try:
         Pmw.timestringtoseconds(text, separator)
         return OK
@@ -3339,7 +3339,7 @@ def timevalidator(text, separator = ':'):
             return ERROR
         return PARTIAL
 
-def datevalidator(text, format = 'ymd', separator = '/'):
+def datevalidator(text, format='ymd', separator='/'):
     try:
         Pmw.datestringtojdn(text, format, separator)
         return OK
@@ -3349,14 +3349,14 @@ def datevalidator(text, format = 'ymd', separator = '/'):
         return PARTIAL
 
 _standardValidators = {
-    'numeric'      : (numericvalidator,      int),
-    'integer'      : (integervalidator,      int),
-    'hexadecimal'  : (hexadecimalvalidator,  lambda s: int(s, 16)),
-    'real'         : (realvalidator,         Pmw.stringtoreal),
-    'alphabetic'   : (alphabeticvalidator,   len),
+    'numeric'      : (numericvalidator, int),
+    'integer'      : (integervalidator, int),
+    'hexadecimal'  : (hexadecimalvalidator, lambda s: int(s, 16)),
+    'real'         : (realvalidator, Pmw.stringtoreal),
+    'alphabetic'   : (alphabeticvalidator, len),
     'alphanumeric' : (alphanumericvalidator, len),
-    'time'         : (timevalidator,         Pmw.timestringtoseconds),
-    'date'         : (datevalidator,         Pmw.datestringtojdn),
+    'time'         : (timevalidator, Pmw.timestringtoseconds),
+    'date'         : (datevalidator, Pmw.datestringtojdn),
 }
 
 _entryCache = {}
@@ -3384,7 +3384,7 @@ def _postProcess(event):
         _entryCache[event.widget]._postProcess()
 
 ######################################################################
-### File: PmwGroup.py
+# ## File: PmwGroup.py
 import string
 import tkinter
 import Pmw
@@ -3396,10 +3396,10 @@ def aligngrouptags(groups):
     maxTagHeight = 0
     for group in groups:
         if group._tag is None:
-            #Python 3 conversion
-            #height = (string.atoi(str(group._ring.cget('borderwidth'))) +
+            # Python 3 conversion
+            # height = (string.atoi(str(group._ring.cget('borderwidth'))) +
             #        string.atoi(str(group._ring.cget('highlightthickness'))))
-            height = (int(str(group._ring.cget('borderwidth'))) +
+            height = (int(str(group._ring.cget('borderwidth'))) + 
                     int(str(group._ring.cget('highlightthickness'))))
         else:
             height = group._tag.winfo_reqheight()
@@ -3407,34 +3407,34 @@ def aligngrouptags(groups):
             maxTagHeight = height
 
     for group in groups:
-        #Python 3 conversion
-        #ringBorder = (string.atoi(str(group._ring.cget('borderwidth'))) +
+        # Python 3 conversion
+        # ringBorder = (string.atoi(str(group._ring.cget('borderwidth'))) +
         #        string.atoi(str(group._ring.cget('highlightthickness'))))
-        ringBorder = (int(str(group._ring.cget('borderwidth'))) +
+        ringBorder = (int(str(group._ring.cget('borderwidth'))) + 
                 int(str(group._ring.cget('highlightthickness'))))
         topBorder = maxTagHeight / 2 - ringBorder / 2
-        group._hull.grid_rowconfigure(0, minsize = topBorder)
+        group._hull.grid_rowconfigure(0, minsize=topBorder)
         group._ring.grid_rowconfigure(0,
-                minsize = maxTagHeight - topBorder - ringBorder)
+                minsize=maxTagHeight - topBorder - ringBorder)
         if group._tag is not None:
-            group._tag.place(y = maxTagHeight / 2)
+            group._tag.place(y=maxTagHeight / 2)
 
-class Group( Pmw.MegaWidget ):
-    def __init__(self, parent = None, **kw):
+class Group(Pmw.MegaWidget):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
 
-                #TODO rename collapsedsize to collapsedheight
-                #after adding collapsedwitdh (Pmw 1.3.3)
-                #will both stay in place for compatibility...
+                # TODO rename collapsedsize to collapsedheight
+                # after adding collapsedwitdh (Pmw 1.3.3)
+                # will both stay in place for compatibility...
         
         optiondefs = (
-            ('collapsedsize',    6,         INITOPT),
-                ('collapsedheight',     6,      INITOPT),
+            ('collapsedsize', 6, INITOPT),
+                ('collapsedheight', 6, INITOPT),
                 ('collapsedwidth', 20, INITOPT),
-            ('ring_borderwidth', 2,         None),
-            ('ring_relief',      'groove',  None),
-            ('tagindent',        10,        INITOPT),
+            ('ring_borderwidth', 2, None),
+            ('ring_relief', 'groove', None),
+            ('tagindent', 10, INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -3462,28 +3462,28 @@ class Group( Pmw.MegaWidget ):
             tkinter.Label, (interior,),
             )
 
-        ringBorder = (int(str(self._ring.cget('borderwidth'))) +
+        ringBorder = (int(str(self._ring.cget('borderwidth'))) + 
                 int(str(self._ring.cget('highlightthickness'))))
         if self._tag is None:
             tagHeight = ringBorder
         else:
             tagHeight = self._tag.winfo_reqheight()
             self._tag.place(
-                    x = ringBorder + self['tagindent'],
-                    y = tagHeight / 2,
-                    anchor = 'w')
+                    x=ringBorder + self['tagindent'],
+                    y=tagHeight / 2,
+                    anchor='w')
 
         topBorder = tagHeight / 2 - ringBorder / 2
-        self._ring.grid(column = 0, row = 1, sticky = 'nsew')
-        interior.grid_columnconfigure(0, weight = 1)
-        interior.grid_rowconfigure(1, weight = 1)
-        interior.grid_rowconfigure(0, minsize = topBorder)
+        self._ring.grid(column=0, row=1, sticky='nsew')
+        interior.grid_columnconfigure(0, weight=1)
+        interior.grid_rowconfigure(1, weight=1)
+        interior.grid_rowconfigure(0, minsize=topBorder)
 
-        self._groupChildSite.grid(column = 0, row = 1, sticky = 'nsew')
-        self._ring.grid_columnconfigure(0, weight = 1)
-        self._ring.grid_rowconfigure(1, weight = 1)
+        self._groupChildSite.grid(column=0, row=1, sticky='nsew')
+        self._ring.grid_columnconfigure(0, weight=1)
+        self._ring.grid_rowconfigure(1, weight=1)
         self._ring.grid_rowconfigure(0,
-                minsize = tagHeight - topBorder - ringBorder)
+                minsize=tagHeight - topBorder - ringBorder)
 
         self.showing = 1
 
@@ -3498,37 +3498,37 @@ class Group( Pmw.MegaWidget ):
         self.showing = not self.showing
 
     def expand(self):
-        self._groupChildSite.grid(column = 0, row = 1, sticky = 'nsew')
+        self._groupChildSite.grid(column=0, row=1, sticky='nsew')
 
     def collapse(self):
         self._groupChildSite.grid_forget()
-        #Tracker item 1096289
+        # Tracker item 1096289
         if self._tag is None:
             tagHeight = 0
         else:
             tagHeight = self._tag.winfo_reqheight()
             tagWidth = self._tag.winfo_reqwidth()
         self._ring.configure(height=(tagHeight / 2) + self['collapsedheight'],
-                        width = tagWidth + self['collapsedwidth'])
+                        width=tagWidth + self['collapsedwidth'])
 
 
     def interior(self):
         return self._groupChildSite
 
 ######################################################################
-### File: PmwLabeledWidget.py
+# ## File: PmwLabeledWidget.py
 import tkinter
 import Pmw
 
 class LabeledWidget(Pmw.MegaWidget):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('labelmargin',            0,      INITOPT),
-            ('labelpos',               None,   INITOPT),
-            ('sticky',                 'nsew', INITOPT),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('sticky', 'nsew', INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -3553,7 +3553,7 @@ class LabeledWidget(Pmw.MegaWidget):
         return self._labelChildSite
 
 ######################################################################
-### File: PmwMainMenuBar.py
+# ## File: PmwMainMenuBar.py
 # Main menubar
 
 import string
@@ -3563,16 +3563,16 @@ import Pmw
 
 class MainMenuBar(Pmw.MegaArchetype):
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('balloon',      None,       None),
-            ('hotkeys',      1,          INITOPT),
-            ('hull_tearoff', 0,          None),
+            ('balloon', None, None),
+            ('hotkeys', 1, INITOPT),
+            ('hull_tearoff', 0, None),
         )
-        self.defineoptions(kw, optiondefs, dynamicGroups = ('Menu',))
+        self.defineoptions(kw, optiondefs, dynamicGroups=('Menu',))
 
         # Initialise the base class (after defining the options).
         Pmw.MegaArchetype.__init__(self, parent, tkinter.Menu)
@@ -3593,12 +3593,12 @@ class MainMenuBar(Pmw.MegaArchetype):
         # Check keywords and initialise options.
         self.initialiseoptions()
 
-    def deletemenuitems(self, menuName, start, end = None):
+    def deletemenuitems(self, menuName, start, end=None):
         self.component(menuName).delete(start, end)
         if end is None:
             del self._menuInfo[menuName][1][start]
         else:
-            self._menuInfo[menuName][1][start:end+1] = []
+            self._menuInfo[menuName][1][start:end + 1] = []
 
     def deletemenu(self, menuName):
         """Delete should be called for cascaded menus before main menus.
@@ -3625,21 +3625,21 @@ class MainMenuBar(Pmw.MegaArchetype):
 
     def disableall(self):
         for index in range(len(self._menuInfo[None][1])):
-            self.entryconfigure(index, state = 'disabled')
+            self.entryconfigure(index, state='disabled')
 
     def enableall(self):
         for index in range(len(self._menuInfo[None][1])):
-            self.entryconfigure(index, state = 'normal')
+            self.entryconfigure(index, state='normal')
 
-    def addmenu(self, menuName, balloonHelp, statusHelp = None,
-            traverseSpec = None, **kw):
+    def addmenu(self, menuName, balloonHelp, statusHelp=None,
+            traverseSpec=None, **kw):
         if statusHelp is None:
             statusHelp = balloonHelp
         self._addmenu(None, menuName, balloonHelp, statusHelp,
             traverseSpec, kw)
 
     def addcascademenu(self, parentMenuName, menuName, statusHelp='',
-            traverseSpec = None, **kw):
+            traverseSpec=None, **kw):
         self._addmenu(parentMenuName, menuName, None, statusHelp,
             traverseSpec, kw)
 
@@ -3678,7 +3678,7 @@ class MainMenuBar(Pmw.MegaArchetype):
         menu = self.createcomponent(*(menuName,
                 (), 'Menu',
                 tkinter.Menu, (parentMenu,)), **menukw)
-        parentMenu.entryconfigure('end', menu = menu)
+        parentMenu.entryconfigure('end', menu=menu)
 
         self._menuInfo[parentMenuName][1].append(statusHelp)
         self._menuInfo[menuName] = (parentMenuName, [])
@@ -3688,8 +3688,8 @@ class MainMenuBar(Pmw.MegaArchetype):
             lambda event=None, self=self, menuName=menuName:
                     self._menuHelp(event, menuName))
 
-    def addmenuitem(self, menuName, itemType, statusHelp = '',
-            traverseSpec = None, **kw):
+    def addmenuitem(self, menuName, itemType, statusHelp='',
+            traverseSpec=None, **kw):
 
         menu = self.component(menuName)
         if itemType != 'separator':
@@ -3730,7 +3730,7 @@ class MainMenuBar(Pmw.MegaArchetype):
         if end is not None:
             for item in range(end + 1):
                 if menu.type(item) not in ('separator', 'tearoff'):
-                    #Python 3 conversion
+                    # Python 3 conversion
 #                    underline = \
 #                            string.atoi(str(menu.entrycget(item, 'underline')))
                     underline = \
@@ -3760,10 +3760,10 @@ class MainMenuBar(Pmw.MegaArchetype):
     def _menuHelp(self, event, menuName):
         if menuName is None:
             menu = self._menu
-            index = menu.index('@%d'% event.x)
+            index = menu.index('@%d' % event.x)
         else:
             menu = self.component(menuName)
-            index = menu.index('@%d'% event.y)
+            index = menu.index('@%d' % event.y)
 
         balloon = self['balloon']
         if balloon is not None:
@@ -3784,7 +3784,7 @@ class MainMenuBar(Pmw.MegaArchetype):
 Pmw.forwardmethods(MainMenuBar, tkinter.Menu, '_hull')
 
 ######################################################################
-### File: PmwMenuBar.py
+# ## File: PmwMenuBar.py
 # Manager widget for menus.
 
 import string
@@ -3794,16 +3794,16 @@ import Pmw
 
 class MenuBar(Pmw.MegaWidget):
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('balloon',      None,       None),
-            ('hotkeys',      1,          INITOPT),
-            ('padx',         0,          INITOPT),
+            ('balloon', None, None),
+            ('hotkeys', 1, INITOPT),
+            ('padx', 0, INITOPT),
         )
-        self.defineoptions(kw, optiondefs, dynamicGroups = ('Menu', 'Button'))
+        self.defineoptions(kw, optiondefs, dynamicGroups=('Menu', 'Button'))
 
         # Initialise the base class (after defining the options).
         Pmw.MegaWidget.__init__(self, parent)
@@ -3823,12 +3823,12 @@ class MenuBar(Pmw.MegaWidget):
         # Check keywords and initialise options.
         self.initialiseoptions()
 
-    def deletemenuitems(self, menuName, start, end = None):
+    def deletemenuitems(self, menuName, start, end=None):
         self.component(menuName + '-menu').delete(start, end)
         if end is None:
             del self._menuInfo[menuName][1][start]
         else:
-            self._menuInfo[menuName][1][start:end+1] = []
+            self._menuInfo[menuName][1][start:end + 1] = []
 
     def deletemenu(self, menuName):
         """Delete should be called for cascaded menus before main menus.
@@ -3839,7 +3839,7 @@ class MenuBar(Pmw.MegaWidget):
         bindId = self._menuInfo[menuName][2]
         _bindtag = 'PmwMenuBar' + str(self) + menuName
         self.unbind_class(_bindtag, '<Motion>')
-        self._mydeletecommand(bindId) # unbind_class does not clean up
+        self._mydeletecommand(bindId)  # unbind_class does not clean up
         del self._menuInfo[menuName]
 
         if parentName is None:
@@ -3863,22 +3863,22 @@ class MenuBar(Pmw.MegaWidget):
         for menuName in list(self._menuInfo.keys()):
             if self._menuInfo[menuName][0] is None:
                 menubutton = self.component(menuName + '-button')
-                menubutton.configure(state = 'disabled')
+                menubutton.configure(state='disabled')
 
     def enableall(self):
         for menuName in list(self._menuInfo.keys()):
             if self._menuInfo[menuName][0] is None:
                 menubutton = self.component(menuName + '-button')
-                menubutton.configure(state = 'normal')
+                menubutton.configure(state='normal')
 
-    def addmenu(self, menuName, balloonHelp, statusHelp = None,
-            side = 'left', traverseSpec = None, **kw):
+    def addmenu(self, menuName, balloonHelp, statusHelp=None,
+            side='left', traverseSpec=None, **kw):
 
         self._addmenu(None, menuName, balloonHelp, statusHelp,
             traverseSpec, side, 'text', kw)
 
-    def addcascademenu(self, parentMenuName, menuName, statusHelp = '',
-            traverseSpec = None, **kw):
+    def addcascademenu(self, parentMenuName, menuName, statusHelp='',
+            traverseSpec=None, **kw):
 
         self._addmenu(parentMenuName, menuName, None, statusHelp,
             traverseSpec, None, 'label', kw)
@@ -3905,7 +3905,7 @@ class MenuBar(Pmw.MegaWidget):
             button = self.createcomponent(*(menuName + '-button',
                     (), 'Button',
                     tkinter.Menubutton, (self.interior(),)), **kw)
-            button.pack(side=side, padx = self['padx'])
+            button.pack(side=side, padx=self['padx'])
             balloon = self['balloon']
             if balloon is not None:
                 balloon.bind(button, balloonHelp, statusHelp)
@@ -3919,9 +3919,9 @@ class MenuBar(Pmw.MegaWidget):
                 (), 'Menu',
                 tkinter.Menu, (parentMenu,)), **menukw)
         if parentMenuName is None:
-            button.configure(menu = menu)
+            button.configure(menu=menu)
         else:
-            parentMenu.entryconfigure('end', menu = menu)
+            parentMenu.entryconfigure('end', menu=menu)
 
         # Need to put this binding after the class bindings so that
         # menu.index() does not lag behind.
@@ -3934,8 +3934,8 @@ class MenuBar(Pmw.MegaWidget):
 
         self._menuInfo[menuName] = (parentMenuName, [], bindId)
 
-    def addmenuitem(self, menuName, itemType, statusHelp = '',
-            traverseSpec = None, **kw):
+    def addmenuitem(self, menuName, itemType, statusHelp='',
+            traverseSpec=None, **kw):
 
         menu = self.component(menuName + '-menu')
         if itemType != 'separator':
@@ -3972,8 +3972,8 @@ class MenuBar(Pmw.MegaWidget):
             for menuName in list(self._menuInfo.keys()):
                 if self._menuInfo[menuName][0] is None:
                     menubutton = self.component(menuName + '-button')
-                    #Python 3 conversion
-                    #underline = string.atoi(str(menubutton.cget('underline')))
+                    # Python 3 conversion
+                    # underline = string.atoi(str(menubutton.cget('underline')))
                     underline = int(str(menubutton.cget('underline')))
                     if underline != -1:
                         label = str(menubutton.cget(textKey))
@@ -3987,8 +3987,8 @@ class MenuBar(Pmw.MegaWidget):
             if end is not None:
                 for item in range(end + 1):
                     if menu.type(item) not in ('separator', 'tearoff'):
-                        #Python 3 conversion
-                        #underline = string.atoi(
+                        # Python 3 conversion
+                        # underline = string.atoi(
                         #    str(menu.entrycget(item, 'underline')))                        
                         underline = int(
                             str(menu.entrycget(item, 'underline')))
@@ -4035,7 +4035,7 @@ class MenuBar(Pmw.MegaWidget):
             balloon.clearstatus()
 
 ######################################################################
-### File: PmwMessageBar.py
+# ## File: PmwMessageBar.py
 # Class to display messages in an information line.
 
 import string
@@ -4043,7 +4043,7 @@ import tkinter
 import Pmw
 
 class MessageBar(Pmw.MegaWidget):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
@@ -4058,11 +4058,11 @@ class MessageBar(Pmw.MegaWidget):
             'state'        : (0, 0, 0, 0),
         }
         optiondefs = (
-            ('labelmargin',    0,                     INITOPT),
-            ('labelpos',       None,                  INITOPT),
-            ('messagetypes',   defaultMessageTypes,   INITOPT),
-            ('silent',         0,                     None),
-            ('sticky',         'ew',                  INITOPT),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('messagetypes', defaultMessageTypes, INITOPT),
+            ('silent', 0, None),
+            ('sticky', 'ew', INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -4077,9 +4077,9 @@ class MessageBar(Pmw.MegaWidget):
 
         # Can't always use 'disabled', since this greys out text in Tk 8.4.2
         try:
-            self._messageBarEntry.configure(state = 'readonly')
+            self._messageBarEntry.configure(state='readonly')
         except tkinter.TclError:
-            self._messageBarEntry.configure(state = 'disabled')
+            self._messageBarEntry.configure(state='disabled')
 
         self._messageBarEntry.grid(column=2, row=2, sticky=self['sticky'])
         interior.grid_columnconfigure(2, weight=1)
@@ -4168,35 +4168,35 @@ class MessageBar(Pmw.MegaWidget):
             if self._activemessage[priority]:
                 text = self._messagetext[priority]
                 break
-        self._messageBarEntry.configure(state = 'normal')
+        self._messageBarEntry.configure(state='normal')
         self._messageBarEntry.delete(0, 'end')
         self._messageBarEntry.insert('end', text)
 
         # Can't always use 'disabled', since this greys out text in Tk 8.4.2
         try:
-            self._messageBarEntry.configure(state = 'readonly')
+            self._messageBarEntry.configure(state='readonly')
         except tkinter.TclError:
-            self._messageBarEntry.configure(state = 'disabled')
+            self._messageBarEntry.configure(state='disabled')
 
 Pmw.forwardmethods(MessageBar, tkinter.Entry, '_messageBarEntry')
 
 ######################################################################
-### File: PmwMessageDialog.py
+# ## File: PmwMessageDialog.py
 # Based on iwidgets2.2.0/messagedialog.itk code.
 
 import tkinter
 import Pmw
 
 class MessageDialog(Pmw.Dialog):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('borderx',       20,    INITOPT),
-            ('bordery',       20,    INITOPT),
-            ('iconmargin',    20,    INITOPT),
-            ('iconpos',       None,  INITOPT),
+            ('borderx', 20, INITOPT),
+            ('bordery', 20, INITOPT),
+            ('iconmargin', 20, INITOPT),
+            ('iconpos', None, INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -4217,7 +4217,7 @@ class MessageDialog(Pmw.Dialog):
         border_right = 2
         border_bottom = 2
         if iconpos is None:
-            self._message.grid(column = 1, row = 1)
+            self._message.grid(column=1, row=1)
         else:
             self._icon = self.createcomponent('icon',
                     (), None,
@@ -4235,28 +4235,28 @@ class MessageDialog(Pmw.Dialog):
 
             if iconpos in 'ns':
                 # vertical layout
-                self._icon.grid(column = 1, row = icon)
-                self._message.grid(column = 1, row = message)
-                interior.grid_rowconfigure(2, minsize = iconmargin)
+                self._icon.grid(column=1, row=icon)
+                self._message.grid(column=1, row=message)
+                interior.grid_rowconfigure(2, minsize=iconmargin)
                 border_bottom = 4
             else:
                 # horizontal layout
-                self._icon.grid(column = icon, row = 1)
-                self._message.grid(column = message, row = 1)
-                interior.grid_columnconfigure(2, minsize = iconmargin)
+                self._icon.grid(column=icon, row=1)
+                self._message.grid(column=message, row=1)
+                interior.grid_columnconfigure(2, minsize=iconmargin)
                 border_right = 4
 
-        interior.grid_columnconfigure(0, minsize = borderx)
-        interior.grid_rowconfigure(0, minsize = bordery)
-        interior.grid_columnconfigure(border_right, minsize = borderx)
-        interior.grid_rowconfigure(border_bottom, minsize = bordery)
+        interior.grid_columnconfigure(0, minsize=borderx)
+        interior.grid_rowconfigure(0, minsize=bordery)
+        interior.grid_columnconfigure(border_right, minsize=borderx)
+        interior.grid_rowconfigure(border_bottom, minsize=bordery)
 
 
         # Check keywords and initialise options.
         self.initialiseoptions()
 
 ######################################################################
-### File: PmwNoteBook.py
+# ## File: PmwNoteBook.py
 import string
 import types
 import tkinter
@@ -4264,22 +4264,22 @@ import Pmw
 
 class NoteBook(Pmw.MegaArchetype):
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('hull_highlightthickness',  0,           None),
-            ('hull_borderwidth',         0,           None),
-            ('arrownavigation',          1,           INITOPT),
-            ('borderwidth',              2,           INITOPT),
-            ('createcommand',            None,        None),
-            ('lowercommand',             None,        None),
-            ('pagemargin',               4,           INITOPT),
-            ('raisecommand',             None,        None),
-            ('tabpos',                   'n',         INITOPT),
+            ('hull_highlightthickness', 0, None),
+            ('hull_borderwidth', 0, None),
+            ('arrownavigation', 1, INITOPT),
+            ('borderwidth', 2, INITOPT),
+            ('createcommand', None, None),
+            ('lowercommand', None, None),
+            ('pagemargin', 4, INITOPT),
+            ('raisecommand', None, None),
+            ('tabpos', 'n', INITOPT),
         )
-        self.defineoptions(kw, optiondefs, dynamicGroups = ('Page', 'Tab'))
+        self.defineoptions(kw, optiondefs, dynamicGroups=('Page', 'Tab'))
 
         # Initialise the base class (after defining the options).
         Pmw.MegaArchetype.__init__(self, parent, tkinter.Canvas)
@@ -4307,7 +4307,7 @@ class NoteBook(Pmw.MegaArchetype):
         if self._withTabs:
             self._pending['tabs'] = 1
 
-        self._canvasSize = None       # This gets set by <Configure> events
+        self._canvasSize = None  # This gets set by <Configure> events
 
         # Set initial height of space for tabs
         if self._withTabs:
@@ -4318,7 +4318,7 @@ class NoteBook(Pmw.MegaArchetype):
         self._lightBorderColor, self._darkBorderColor = \
                 Pmw.Color.bordercolors(self, self['hull_background'])
 
-        self._pageNames   = []        # List of page names
+        self._pageNames = []  # List of page names
 
         # Map from page name to page info.  Each item is itself a
         # dictionary containing the following items:
@@ -4331,7 +4331,7 @@ class NoteBook(Pmw.MegaArchetype):
         #                  window item, the lightshadow and the darkshadow
         #   left           the left and right canvas coordinates of the tab
         #   right
-        self._pageAttrs   = {}
+        self._pageAttrs = {}
 
         # Name of page currently on top (actually displayed, using
         # create_window, not pending).  Ignored if current top page
@@ -4360,25 +4360,25 @@ class NoteBook(Pmw.MegaArchetype):
         # Create page border shadows.
         if self._withTabs:
             self._pageLeftBorder = self.create_polygon(0, 0, 0, 0, 0, 0,
-                fill = self._lightBorderColor, tags = 'lighttag')
+                fill=self._lightBorderColor, tags='lighttag')
             self._pageBottomRightBorder = self.create_polygon(0, 0, 0, 0, 0, 0,
-                fill = self._darkBorderColor, tags = 'darktag')
+                fill=self._darkBorderColor, tags='darktag')
             self._pageTop1Border = self.create_polygon(0, 0, 0, 0, 0, 0,
-                fill = self._darkBorderColor, tags = 'lighttag')
+                fill=self._darkBorderColor, tags='lighttag')
             self._pageTop2Border = self.create_polygon(0, 0, 0, 0, 0, 0,
-                fill = self._darkBorderColor, tags = 'lighttag')
+                fill=self._darkBorderColor, tags='lighttag')
         else:
             self._pageLeftBorder = self.create_polygon(0, 0, 0, 0, 0, 0,
-                fill = self._darkBorderColor, tags = 'darktag')
+                fill=self._darkBorderColor, tags='darktag')
             self._pageBottomRightBorder = self.create_polygon(0, 0, 0, 0, 0, 0,
-                fill = self._lightBorderColor, tags = 'lighttag')
+                fill=self._lightBorderColor, tags='lighttag')
             self._pageTopBorder = self.create_polygon(0, 0, 0, 0, 0, 0,
-                fill = self._darkBorderColor, tags = 'darktag')
+                fill=self._darkBorderColor, tags='darktag')
 
         # Check keywords and initialise options.
         self.initialiseoptions()
 
-    def insert(self, pageName, before = 0, **kw):
+    def insert(self, pageName, before=0, **kw):
         if pageName in self._pageAttrs:
             msg = 'Page "%s" already exists.' % pageName
             raise ValueError(msg)
@@ -4417,7 +4417,7 @@ class NoteBook(Pmw.MegaArchetype):
 
         if self._withTabs:
             # Create the button for the tab.
-            def raiseThisPage(self = self, pageName = pageName):
+            def raiseThisPage(self=self, pageName=pageName):
                 self.selectpage(pageName)
             tabOptions['command'] = raiseThisPage
             tab = self.createcomponent(*(pageName + '-tab',
@@ -4426,9 +4426,9 @@ class NoteBook(Pmw.MegaArchetype):
 
             if self['arrownavigation']:
                 # Allow the use of the arrow keys for Tab navigation:
-                def next(event, self = self, pageName = pageName):
+                def next(event, self=self, pageName=pageName):
                     self.nextpage(pageName)
-                def prev(event, self = self, pageName = pageName):
+                def prev(event, self=self, pageName=pageName):
                     self.previouspage(pageName)
                 tab.bind('<Left>', prev)
                 tab.bind('<Right>', next)
@@ -4439,11 +4439,11 @@ class NoteBook(Pmw.MegaArchetype):
 
             # Create the canvas item to manage the tab's button and the items
             # for the tab's shadow.
-            windowitem = self.create_window(0, 0, window = tab, anchor = 'nw')
+            windowitem = self.create_window(0, 0, window=tab, anchor='nw')
             lightshadow = self.create_polygon(0, 0, 0, 0, 0, 0,
-                tags = 'lighttag', fill = self._lightBorderColor)
+                tags='lighttag', fill=self._lightBorderColor)
             darkshadow = self.create_polygon(0, 0, 0, 0, 0, 0,
-                tags = 'darktag', fill = self._darkBorderColor)
+                tags='darktag', fill=self._darkBorderColor)
             attributes['tabitems'] = (windowitem, lightshadow, darkshadow)
             self._pending['tabs'] = 1
 
@@ -4521,7 +4521,7 @@ class NoteBook(Pmw.MegaArchetype):
         else:
             return None
 
-    def index(self, index, forInsert = 0):
+    def index(self, index, forInsert=0):
         listLength = len(self._pageNames)
         if type(index) == int:
             if forInsert and index <= listLength:
@@ -4565,7 +4565,7 @@ class NoteBook(Pmw.MegaArchetype):
         if self._withTabs and self['arrownavigation']:
             self._pageAttrs[pageName]['tabbutton'].focus_set()
 
-    def previouspage(self, pageIndex = None):
+    def previouspage(self, pageIndex=None):
         if pageIndex is None:
             curpage = self.index(Pmw.SELECT)
         else:
@@ -4573,7 +4573,7 @@ class NoteBook(Pmw.MegaArchetype):
         if curpage > 0:
             self.selectpage(curpage - 1)
 
-    def nextpage(self, pageIndex = None):
+    def nextpage(self, pageIndex=None):
         if pageIndex is None:
             curpage = self.index(Pmw.SELECT)
         else:
@@ -4581,7 +4581,7 @@ class NoteBook(Pmw.MegaArchetype):
         if curpage < len(self._pageNames) - 1:
             self.selectpage(curpage + 1)
 
-    def setnaturalsize(self, pageNames = None):
+    def setnaturalsize(self, pageNames=None):
         self.update_idletasks()
         maxPageWidth = 1
         maxPageHeight = 1
@@ -4610,7 +4610,7 @@ class NoteBook(Pmw.MegaArchetype):
         # Note that, since the hull is a canvas, the width and height
         # options specify the geometry *inside* the borderwidth and
         # highlightthickness.
-        self.configure(hull_width = width, hull_height = height)
+        self.configure(hull_width=width, hull_height=height)
 
     def recolorborders(self):
         self._pending['borderColor'] = 1
@@ -4671,8 +4671,8 @@ class NoteBook(Pmw.MegaArchetype):
 
         hullWidth, hullHeight = self._canvasSize
         borderWidth = self._borderWidth
-        #Python 3 conversion
-        #canvasBorder = string.atoi(self._hull['borderwidth']) + \
+        # Python 3 conversion
+        # canvasBorder = string.atoi(self._hull['borderwidth']) + \
         #    string.atoi(self._hull['highlightthickness'])
         canvasBorder = int(self._hull['borderwidth']) + \
             int(self._hull['highlightthickness'])
@@ -4726,7 +4726,7 @@ class NoteBook(Pmw.MegaArchetype):
                     # the tabs exactly equals the available width,
                     # without rounding errors.
                     cumTabReqWidth = cumTabReqWidth + pageInfo['tabreqwidth']
-                    tmp = (2*cumTabReqWidth*availableWidth + sumTabReqWidth) \
+                    tmp = (2 * cumTabReqWidth * availableWidth + sumTabReqWidth) \
                             / (2 * sumTabReqWidth)
                     tabwidth = tmp - cumTabWidth
                     cumTabWidth = tmp
@@ -4734,7 +4734,7 @@ class NoteBook(Pmw.MegaArchetype):
                 # Position the tab's button canvas item.
                 self.coords(windowitem, x + borderWidth, tabTop3)
                 self.itemconfigure(windowitem,
-                    width = tabwidth, height = maxTabHeight)
+                    width=tabwidth, height=maxTabHeight)
 
                 # Make a beautiful border around the tab.
                 left = x
@@ -4836,8 +4836,8 @@ class NoteBook(Pmw.MegaArchetype):
 
         # Color borders.
         if 'borderColor' in self._pending:
-            self.itemconfigure('lighttag', fill = self._lightBorderColor)
-            self.itemconfigure('darktag', fill = self._darkBorderColor)
+            self.itemconfigure('lighttag', fill=self._lightBorderColor)
+            self.itemconfigure('darktag', fill=self._darkBorderColor)
 
         newTopPage = self._pending.get('topPage')
         pageBorder = borderWidth + self._pageMargin
@@ -4847,8 +4847,8 @@ class NoteBook(Pmw.MegaArchetype):
             self._topPageName = newTopPage
             self._topPageItem = self.create_window(
                 pageBorder + canvasBorder, self.tabBottom + pageBorder,
-                window = self._pageAttrs[newTopPage]['page'],
-                anchor = 'nw',
+                window=self._pageAttrs[newTopPage]['page'],
+                anchor='nw',
                 )
 
         # Change position of top page if tab height has changed.
@@ -4865,8 +4865,8 @@ class NoteBook(Pmw.MegaArchetype):
                 'size' in self._pending and self._topPageName is not None
                 or oldTabBottom != self.tabBottom):
             self.itemconfigure(self._topPageItem,
-                width = hullWidth - 2 * canvasBorder - pageBorder * 2,
-                height = hullHeight - 2 * canvasBorder - pageBorder * 2 -
+                width=hullWidth - 2 * canvasBorder - pageBorder * 2,
+                height=hullHeight - 2 * canvasBorder - pageBorder * 2 - 
                     (self.tabBottom - canvasBorder),
                 )
 
@@ -4878,7 +4878,7 @@ class NoteBook(Pmw.MegaArchetype):
 Pmw.forwardmethods(NoteBook, tkinter.Canvas, '_hull')
 
 ######################################################################
-### File: PmwOptionMenu.py
+# ## File: PmwOptionMenu.py
 import types
 import tkinter
 import Pmw
@@ -4887,17 +4887,17 @@ import collections
 
 class OptionMenu(Pmw.MegaWidget):
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('command',        None,       None),
-            ('items',          (),         INITOPT),
-            ('initialitem',    None,       INITOPT),
-            ('labelmargin',    0,          INITOPT),
-            ('labelpos',       None,       INITOPT),
-            ('sticky',         'ew',       INITOPT),
+            ('command', None, None),
+            ('items', (), INITOPT),
+            ('initialitem', None, INITOPT),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('sticky', 'ew', INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -4910,25 +4910,25 @@ class OptionMenu(Pmw.MegaWidget):
         self._menubutton = self.createcomponent('menubutton',
                 (), None,
                 tkinter.Menubutton, (interior,),
-                borderwidth = 2,
-                indicatoron = 1,
-                relief = 'raised',
-                anchor = 'c',
-                highlightthickness = 2,
-                direction = 'flush',
-                takefocus = 1,
+                borderwidth=2,
+                indicatoron=1,
+                relief='raised',
+                anchor='c',
+                highlightthickness=2,
+                direction='flush',
+                takefocus=1,
         )
-        self._menubutton.grid(column = 2, row = 2, sticky = self['sticky'])
+        self._menubutton.grid(column=2, row=2, sticky=self['sticky'])
 
         self._menu = self.createcomponent('menu',
                 (), None,
                 tkinter.Menu, (self._menubutton,),
                 tearoff=0
         )
-        self._menubutton.configure(menu = self._menu)
+        self._menubutton.configure(menu=self._menu)
 
-        interior.grid_columnconfigure(2, weight = 1)
-        interior.grid_rowconfigure(2, weight = 1)
+        interior.grid_columnconfigure(2, weight=1)
+        interior.grid_rowconfigure(2, weight=1)
 
         # Create the label.
         self.createlabel(interior)
@@ -4940,8 +4940,8 @@ class OptionMenu(Pmw.MegaWidget):
         # Check keywords and initialise options.
         self.initialiseoptions()
 
-    def setitems(self, items, index = None):
-        #cleaning up old items only required for Python < 2.5.4
+    def setitems(self, items, index=None):
+        # cleaning up old items only required for Python < 2.5.4
         if sys.version_info < (2, 5, 4):
             # Clean up old items and callback commands.
             for oldIndex in range(len(self._itemList)):
@@ -4953,8 +4953,8 @@ class OptionMenu(Pmw.MegaWidget):
 
         # Set the items in the menu component.
         for item in items:
-            self._menu.add_command(label = item,
-    command = lambda self = self, item = item: self._invoke(item))
+            self._menu.add_command(label=item,
+    command=lambda self=self, item=item: self._invoke(item))
 
         # Set the currently selected value.
         if index is None:
@@ -4988,7 +4988,7 @@ class OptionMenu(Pmw.MegaWidget):
     def setvalue(self, text):
         var = str(self._menubutton.cget('textvariable'))
         if var == '':
-            self._menubutton.configure(text = text)
+            self._menubutton.configure(text=text)
         else:
             self._menu.tk.globalsetvar(var, text)
 
@@ -5015,7 +5015,7 @@ class OptionMenu(Pmw.MegaWidget):
             raise ValueError('bad index "%s": must be a ' \
                     'name, a number, Pmw.END or Pmw.SELECT' % (index,))
 
-    def invoke(self, index = Pmw.SELECT):
+    def invoke(self, index=Pmw.SELECT):
         index = self.index(index)
         text = self._itemList[index]
 
@@ -5029,7 +5029,7 @@ class OptionMenu(Pmw.MegaWidget):
             return command(text)
 
 ######################################################################
-### File: PmwPanedWidget.py
+# ## File: PmwPanedWidget.py
 # PanedWidget
 # a frame which may contain several resizable sub-frames
 
@@ -5042,21 +5042,21 @@ import collections
 
 class PanedWidget(Pmw.MegaWidget):
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('command',            None,         None),
-            ('orient',             'vertical',   INITOPT),
-            ('separatorrelief',    'sunken',     INITOPT),
-            ('separatorthickness', 2,            INITOPT),
-            ('handlesize',         8,            INITOPT),
-            ('hull_width',         400,          None),
-            ('hull_height',        400,          None),
+            ('command', None, None),
+            ('orient', 'vertical', INITOPT),
+            ('separatorrelief', 'sunken', INITOPT),
+            ('separatorthickness', 2, INITOPT),
+            ('handlesize', 8, INITOPT),
+            ('hull_width', 400, None),
+            ('hull_height', 400, None),
         )
         self.defineoptions(kw, optiondefs,
-                dynamicGroups = ('Frame', 'Separator', 'Handle'))
+                dynamicGroups=('Frame', 'Separator', 'Handle'))
 
         # Initialise the base class (after defining the options).
         Pmw.MegaWidget.__init__(self, parent)
@@ -5069,8 +5069,8 @@ class PanedWidget(Pmw.MegaWidget):
 
         self._separatorThickness = self['separatorthickness']
         self._handleSize = self['handlesize']
-        self._paneNames = []            # List of pane names
-        self._paneAttrs = {}            # Map from pane name to pane info
+        self._paneNames = []  # List of pane names
+        self._paneAttrs = {}  # Map from pane name to pane info
 
         self._timerId = None
         self._frame = {}
@@ -5095,7 +5095,7 @@ class PanedWidget(Pmw.MegaWidget):
         # Check keywords and initialise options.
         self.initialiseoptions()
 
-    def insert(self, name, before = 0, **kw):
+    def insert(self, name, before=0, **kw):
         # Parse <kw> for options.
         self._initPaneOptions(name)
         self._parsePaneOptions(name, kw)
@@ -5185,23 +5185,23 @@ class PanedWidget(Pmw.MegaWidget):
         # options specify the geometry *outside* the borderwidth and
         # highlightthickness.
         
-        #Python 3 conversion
-        #bw = string.atoi(str(self.cget('hull_borderwidth')))
-        #hl = string.atoi(str(self.cget('hull_highlightthickness')))
+        # Python 3 conversion
+        # bw = string.atoi(str(self.cget('hull_borderwidth')))
+        # hl = string.atoi(str(self.cget('hull_highlightthickness')))
         bw = int(str(self.cget('hull_borderwidth')))
         hl = int(str(self.cget('hull_highlightthickness')))
         extra = (bw + hl) * 2
         if str(self.cget('orient')) == 'horizontal':
             totalWidth = totalWidth + extra
             maxHeight = maxHeight + extra
-            self.configure(hull_width = totalWidth, hull_height = maxHeight)
+            self.configure(hull_width=totalWidth, hull_height=maxHeight)
         else:
-            totalHeight = (totalHeight + extra +
+            totalHeight = (totalHeight + extra + 
                     (len(self._paneNames) - 1) * self._separatorThickness)
             maxWidth = maxWidth + extra
-            self.configure(hull_width = maxWidth, hull_height = totalHeight)
+            self.configure(hull_width=maxWidth, hull_height=totalHeight)
 
-    def move(self, name, newPos, newPosOffset = 0):
+    def move(self, name, newPos, newPosOffset=0):
 
         # see if we can spare ourselves some work
         numPanes = len(self._paneNames)
@@ -5209,7 +5209,7 @@ class PanedWidget(Pmw.MegaWidget):
             return
 
         newPos = self._nameToIndex(newPos) + newPosOffset
-        if newPos < 0 or newPos >=numPanes:
+        if newPos < 0 or newPos >= numPanes:
             return
 
         deletePos = self._nameToIndex(name)
@@ -5276,16 +5276,16 @@ class PanedWidget(Pmw.MegaWidget):
     def _addSeparator(self):
         n = len(self._paneNames) - 1
 
-        downFunc = lambda event, s = self, num=n: s._btnDown(event, num)
-        upFunc = lambda event, s = self, num=n: s._btnUp(event, num)
-        moveFunc = lambda event, s = self, num=n: s._btnMove(event, num)
+        downFunc = lambda event, s = self, num = n: s._btnDown(event, num)
+        upFunc = lambda event, s = self, num = n: s._btnUp(event, num)
+        moveFunc = lambda event, s = self, num = n: s._btnMove(event, num)
 
         # Create the line dividing the panes.
         sep = self.createcomponent(self._sepName(n),
                 (), 'Separator',
                 tkinter.Frame, (self.interior(),),
-                borderwidth = 1,
-                relief = self['separatorrelief'])
+                borderwidth=1,
+                relief=self['separatorrelief'])
         self._separator.append(sep)
 
         sep.bind('<ButtonPress-1>', downFunc)
@@ -5294,12 +5294,12 @@ class PanedWidget(Pmw.MegaWidget):
 
         if self['orient'] == 'vertical':
             cursor = 'sb_v_double_arrow'
-            sep.configure(height = self._separatorThickness,
-                    width = 10000, cursor = cursor)
+            sep.configure(height=self._separatorThickness,
+                    width=10000, cursor=cursor)
         else:
             cursor = 'sb_h_double_arrow'
-            sep.configure(width = self._separatorThickness,
-                    height = 10000, cursor = cursor)
+            sep.configure(width=self._separatorThickness,
+                    height=10000, cursor=cursor)
 
         self._totalSize = self._totalSize + self._separatorThickness
 
@@ -5307,11 +5307,11 @@ class PanedWidget(Pmw.MegaWidget):
         handle = self.createcomponent(self._buttonName(n),
                 (), 'Handle',
                 tkinter.Frame, (self.interior(),),
-                    relief = 'raised',
-                    borderwidth = 1,
-                    width = self._handleSize,
-                    height = self._handleSize,
-                    cursor = cursor,
+                    relief='raised',
+                    borderwidth=1,
+                    width=self._handleSize,
+                    height=self._handleSize,
+                    cursor=cursor,
                 )
         self._button.append(handle)
 
@@ -5340,7 +5340,7 @@ class PanedWidget(Pmw.MegaWidget):
         self._buttonIsDown = 1
         self._movePending = 0
 
-    def _handleConfigure(self, event = None):
+    def _handleConfigure(self, event=None):
         self._getNaturalSizes()
         if self._totalSize == 0:
             return
@@ -5372,9 +5372,9 @@ class PanedWidget(Pmw.MegaWidget):
             self._minorSize = self.winfo_height()
             majorspec = tkinter.Frame.winfo_reqwidth
 
-        #python 3 conversion
-        #bw = string.atoi(str(self.cget('hull_borderwidth')))
-        #hl = string.atoi(str(self.cget('hull_highlightthickness')))
+        # python 3 conversion
+        # bw = string.atoi(str(self.cget('hull_borderwidth')))
+        # hl = string.atoi(str(self.cget('hull_highlightthickness')))
         bw = int(str(self.cget('hull_borderwidth')))
         hl = int(str(self.cget('hull_highlightthickness')))
         extra = (bw + hl) * 2
@@ -5389,7 +5389,7 @@ class PanedWidget(Pmw.MegaWidget):
         for name in self._paneNames:
             # adjust the absolute sizes first...
             if self._relsize[name] is None:
-                #special case
+                # special case
                 if self._size[name] == 0:
                     self._size[name] = majorspec(*(self._frame[name],))
                     self._setrel(name)
@@ -5413,7 +5413,7 @@ class PanedWidget(Pmw.MegaWidget):
             self._totalSize = self._totalSize + self._size[name]
 
         # adjust for separators
-        self._totalSize = (self._totalSize +
+        self._totalSize = (self._totalSize + 
                 (len(self._paneNames) - 1) * self._separatorThickness)
 
     def _setrel(self, name):
@@ -5461,20 +5461,20 @@ class PanedWidget(Pmw.MegaWidget):
         for name in self._paneNames:
             size = self._size[name]
             if self['orient'] == 'vertical':
-                self._frame[name].place(x = 0, relwidth = 1,
-                                        y = totalSize,
-                                        height = size)
+                self._frame[name].place(x=0, relwidth=1,
+                                        y=totalSize,
+                                        height=size)
             else:
-                self._frame[name].place(y = 0, relheight = 1,
-                                        x = totalSize,
-                                        width = size)
+                self._frame[name].place(y=0, relheight=1,
+                                        x=totalSize,
+                                        width=size)
 
             totalSize = totalSize + size + self._separatorThickness
 
         # Invoke the callback command
         cmd = self['command']
         if isinstance(cmd, collections.Callable):
-            cmd(list(map(lambda x, s = self: s._size[x], self._paneNames)))
+            cmd(list(map(lambda x, s=self: s._size[x], self._paneNames)))
 
     def _plotHandles(self):
         if len(self._paneNames) == 0:
@@ -5527,24 +5527,24 @@ class PanedWidget(Pmw.MegaWidget):
                 height = 8 - offset1 + offset2
 
                 if height > 1:
-                    self._button[i].configure(height = height)
-                    self._button[i].place(x = btnp, y = handlepos)
+                    self._button[i].configure(height=height)
+                    self._button[i].place(x=btnp, y=handlepos)
                 else:
                     self._button[i].place_forget()
 
-                self._separator[i].place(x = 0, y = totalSize,
-                                         relwidth = 1)
+                self._separator[i].place(x=0, y=totalSize,
+                                         relwidth=1)
             else:
                 width = 8 - offset1 + offset2
 
                 if width > 1:
-                    self._button[i].configure(width = width)
-                    self._button[i].place(y = btnp, x = handlepos)
+                    self._button[i].configure(width=width)
+                    self._button[i].place(y=btnp, x=handlepos)
                 else:
                     self._button[i].place_forget()
 
-                self._separator[i].place(y = 0, x = totalSize,
-                                         relheight = 1)
+                self._separator[i].place(y=0, x=totalSize,
+                                         relheight=1)
 
             totalSize = totalSize + nextSize + self._separatorThickness
 
@@ -5596,7 +5596,7 @@ class PanedWidget(Pmw.MegaWidget):
 
         if self._movePending == 0:
             self._timerId = self.after_idle(
-                    lambda s = self, i = item: s._btnMoveCompressed(i))
+                    lambda s=self, i=item: s._btnMoveCompressed(i))
             self._movePending = 1
 
     def destroy(self):
@@ -5667,7 +5667,7 @@ class PanedWidget(Pmw.MegaWidget):
         self._curSize = p
 
 ######################################################################
-### File: PmwPromptDialog.py
+# ## File: PmwPromptDialog.py
 # Based on iwidgets2.2.0/promptdialog.itk code.
 
 import Pmw
@@ -5675,12 +5675,12 @@ import Pmw
 # A Dialog with an entryfield
 
 class PromptDialog(Pmw.Dialog):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
         # Define the megawidget options.
         
         optiondefs = (
-            ('borderx',     20,    INITOPT),
-            ('bordery',     20,    INITOPT),
+            ('borderx', 20, INITOPT),
+            ('bordery', 20, INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -5697,13 +5697,13 @@ class PromptDialog(Pmw.Dialog):
                 aliases, None,
                 Pmw.EntryField, (interior,))
         self._promptDialogEntry.pack(fill='x', expand=1,
-                padx = self['borderx'], pady = self['bordery'])
+                padx=self['borderx'], pady=self['bordery'])
 
         if 'activatecommand' not in kw:
             # Whenever this dialog is activated, set the focus to the
             # EntryField's entry widget.
             tkentry = self.component('entry')
-            self.configure(activatecommand = tkentry.focus_set)
+            self.configure(activatecommand=tkentry.focus_set)
 
         # Check keywords and initialise options.
         self.initialiseoptions()
@@ -5721,7 +5721,7 @@ class PromptDialog(Pmw.Dialog):
 Pmw.forwardmethods(PromptDialog, Pmw.EntryField, '_promptDialogEntry')
 
 ######################################################################
-### File: PmwRadioSelect.py
+# ## File: PmwRadioSelect.py
 import types
 import tkinter
 import Pmw
@@ -5732,21 +5732,21 @@ class RadioSelect(Pmw.MegaWidget):
     # button may be selected.  In multiple mode, any number of buttons
     # may be selected.
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('buttontype',    'button',      INITOPT),
-            ('command',       None,          None),
-            ('labelmargin',   0,             INITOPT),
-            ('labelpos',      None,          INITOPT),
-            ('orient',       'horizontal',   INITOPT),
-            ('padx',          5,             INITOPT),
-            ('pady',          5,             INITOPT),
-            ('selectmode',    'single',      INITOPT),
+            ('buttontype', 'button', INITOPT),
+            ('command', None, None),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('orient', 'horizontal', INITOPT),
+            ('padx', 5, INITOPT),
+            ('pady', 5, INITOPT),
+            ('selectmode', 'single', INITOPT),
         )
-        self.defineoptions(kw, optiondefs, dynamicGroups = ('Button',))
+        self.defineoptions(kw, optiondefs, dynamicGroups=('Button',))
 
         # Initialise the base class (after defining the options).
         Pmw.MegaWidget.__init__(self, parent)
@@ -5869,7 +5869,7 @@ class RadioSelect(Pmw.MegaWidget):
             raise ValueError('button "%s" already exists' % componentName)
 
         kw['command'] = \
-                lambda self=self, name=componentName: self.invoke(name)
+                lambda self = self, name = componentName: self.invoke(name)
         if 'text' not in kw:
             kw['text'] = componentName
 
@@ -5891,14 +5891,14 @@ class RadioSelect(Pmw.MegaWidget):
         if self['orient'] == 'horizontal':
             self._radioSelectFrame.grid_rowconfigure(0, weight=1)
             col = len(self._buttonList)
-            button.grid(column=col, row=0, padx = self['padx'],
-                    pady = self['pady'], sticky='nsew')
+            button.grid(column=col, row=0, padx=self['padx'],
+                    pady=self['pady'], sticky='nsew')
             self._radioSelectFrame.grid_columnconfigure(col, weight=1)
         else:
             self._radioSelectFrame.grid_columnconfigure(0, weight=1)
             row = len(self._buttonList)
-            button.grid(column=0, row=row, padx = self['padx'],
-                    pady = self['pady'], sticky='ew')
+            button.grid(column=0, row=row, padx=self['padx'],
+                    pady=self['pady'], sticky='ew')
             self._radioSelectFrame.grid_rowconfigure(row, weight=1)
 
         self._buttonList.append(componentName)
@@ -5958,24 +5958,24 @@ class RadioSelect(Pmw.MegaWidget):
                 return command(name, state)
 
 ######################################################################
-### File: PmwScrolledCanvas.py
+# ## File: PmwScrolledCanvas.py
 import tkinter
 import Pmw
 
 class ScrolledCanvas(Pmw.MegaWidget):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('borderframe',    0,            INITOPT),
-            ('canvasmargin',   0,            INITOPT),
-            ('hscrollmode',    'dynamic',    self._hscrollMode),
-            ('labelmargin',    0,            INITOPT),
-            ('labelpos',       None,         INITOPT),
-            ('scrollmargin',   2,            INITOPT),
-            ('usehullsize',    0,            INITOPT),
-            ('vscrollmode',    'dynamic',    self._vscrollMode),
+            ('borderframe', 0, INITOPT),
+            ('canvasmargin', 0, INITOPT),
+            ('hscrollmode', 'dynamic', self._hscrollMode),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('scrollmargin', 2, INITOPT),
+            ('usehullsize', 0, INITOPT),
+            ('vscrollmode', 'dynamic', self._vscrollMode),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -5993,31 +5993,31 @@ class ScrolledCanvas(Pmw.MegaWidget):
             self._borderframe = self.createcomponent('borderframe',
                     (), None,
                     tkinter.Frame, (self.origInterior,),
-                    relief = 'sunken',
-                    borderwidth = 2,
+                    relief='sunken',
+                    borderwidth=2,
             )
-            self._borderframe.grid(row = 2, column = 2, sticky = 'news')
+            self._borderframe.grid(row=2, column=2, sticky='news')
 
             # Create the canvas widget.
             self._canvas = self.createcomponent('canvas',
                     (), None,
                     tkinter.Canvas, (self._borderframe,),
-                    highlightthickness = 0,
-                    borderwidth = 0,
+                    highlightthickness=0,
+                    borderwidth=0,
             )
-            self._canvas.pack(fill = 'both', expand = 1)
+            self._canvas.pack(fill='both', expand=1)
         else:
             # Create the canvas widget.
             self._canvas = self.createcomponent('canvas',
                     (), None,
                     tkinter.Canvas, (self.origInterior,),
-                    relief = 'sunken',
-                    borderwidth = 2,
+                    relief='sunken',
+                    borderwidth=2,
             )
-            self._canvas.grid(row = 2, column = 2, sticky = 'news')
+            self._canvas.grid(row=2, column=2, sticky='news')
 
-        self.origInterior.grid_rowconfigure(2, weight = 1, minsize = 0)
-        self.origInterior.grid_columnconfigure(2, weight = 1, minsize = 0)
+        self.origInterior.grid_rowconfigure(2, weight=1, minsize=0)
+        self.origInterior.grid_columnconfigure(2, weight=1, minsize=0)
 
         # Create the horizontal scrollbar
         self._horizScrollbar = self.createcomponent('horizscrollbar',
@@ -6035,7 +6035,7 @@ class ScrolledCanvas(Pmw.MegaWidget):
                 command=self._canvas.yview
         )
 
-        self.createlabel(self.origInterior, childCols = 3, childRows = 3)
+        self.createlabel(self.origInterior, childCols=3, childRows=3)
 
         # Initialise instance variables.
         self._horizScrollbarOn = 0
@@ -6214,11 +6214,11 @@ class ScrolledCanvas(Pmw.MegaWidget):
 
         interior = self.origInterior
         if self._horizScrollbarOn:
-            self._horizScrollbar.grid(row = 4, column = 2, sticky = 'news')
-            interior.grid_rowconfigure(3, minsize = self['scrollmargin'])
+            self._horizScrollbar.grid(row=4, column=2, sticky='news')
+            interior.grid_rowconfigure(3, minsize=self['scrollmargin'])
         else:
             self._horizScrollbar.grid_forget()
-            interior.grid_rowconfigure(3, minsize = 0)
+            interior.grid_rowconfigure(3, minsize=0)
 
     def _toggleVertScrollbar(self):
 
@@ -6226,11 +6226,11 @@ class ScrolledCanvas(Pmw.MegaWidget):
 
         interior = self.origInterior
         if self._vertScrollbarOn:
-            self._vertScrollbar.grid(row = 2, column = 4, sticky = 'news')
-            interior.grid_columnconfigure(3, minsize = self['scrollmargin'])
+            self._vertScrollbar.grid(row=2, column=4, sticky='news')
+            interior.grid_columnconfigure(3, minsize=self['scrollmargin'])
         else:
             self._vertScrollbar.grid_forget()
-            interior.grid_columnconfigure(3, minsize = 0)
+            interior.grid_columnconfigure(3, minsize=0)
 
     def _setRegion(self):
         self.setregionTimer = None
@@ -6240,7 +6240,7 @@ class ScrolledCanvas(Pmw.MegaWidget):
             canvasmargin = self['canvasmargin']
             region = (region[0] - canvasmargin, region[1] - canvasmargin,
                 region[2] + canvasmargin, region[3] + canvasmargin)
-            self._canvas.configure(scrollregion = region)
+            self._canvas.configure(scrollregion=region)
 
     # Need to explicitly forward this to override the stupid
     # (grid_)bbox method inherited from Tkinter.Frame.Grid.
@@ -6250,20 +6250,20 @@ class ScrolledCanvas(Pmw.MegaWidget):
 Pmw.forwardmethods(ScrolledCanvas, tkinter.Canvas, '_canvas')
 
 ######################################################################
-### File: PmwScrolledField.py
+# ## File: PmwScrolledField.py
 import tkinter
 import Pmw
 
 class ScrolledField(Pmw.MegaWidget):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('labelmargin',   0,      INITOPT),
-            ('labelpos',      None,   INITOPT),
-            ('sticky',        'ew',   INITOPT),
-            ('text',          '',     self._text),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('sticky', 'ew', INITOPT),
+            ('text', '', self._text),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -6278,9 +6278,9 @@ class ScrolledField(Pmw.MegaWidget):
 
         # Can't always use 'disabled', since this greys out text in Tk 8.4.2
         try:
-            self._scrolledFieldEntry.configure(state = 'readonly')
+            self._scrolledFieldEntry.configure(state='readonly')
         except tkinter.TclError:
-            self._scrolledFieldEntry.configure(state = 'disabled')
+            self._scrolledFieldEntry.configure(state='disabled')
 
         self._scrolledFieldEntry.grid(column=2, row=2, sticky=self['sticky'])
         interior.grid_columnconfigure(2, weight=1)
@@ -6293,42 +6293,42 @@ class ScrolledField(Pmw.MegaWidget):
 
     def _text(self):
         text = self['text']
-        self._scrolledFieldEntry.configure(state = 'normal')
+        self._scrolledFieldEntry.configure(state='normal')
         self._scrolledFieldEntry.delete(0, 'end')
         self._scrolledFieldEntry.insert('end', text)
 
         # Can't always use 'disabled', since this greys out text in Tk 8.4.2
         try:
-            self._scrolledFieldEntry.configure(state = 'readonly')
+            self._scrolledFieldEntry.configure(state='readonly')
         except tkinter.TclError:
-            self._scrolledFieldEntry.configure(state = 'disabled')
+            self._scrolledFieldEntry.configure(state='disabled')
 
 Pmw.forwardmethods(ScrolledField, tkinter.Entry, '_scrolledFieldEntry')
 
 ######################################################################
-### File: PmwScrolledFrame.py
+# ## File: PmwScrolledFrame.py
 import string
 import types
 import tkinter
 import Pmw
 
 class ScrolledFrame(Pmw.MegaWidget):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('borderframe',    1,            INITOPT),
-            ('horizflex',      'fixed',      self._horizflex),
-            ('horizfraction',  0.05,         INITOPT),
-            ('hscrollmode',    'dynamic',    self._hscrollMode),
-            ('labelmargin',    0,            INITOPT),
-            ('labelpos',       None,         INITOPT),
-            ('scrollmargin',   2,            INITOPT),
-            ('usehullsize',    0,            INITOPT),
-            ('vertflex',       'fixed',      self._vertflex),
-            ('vertfraction',   0.05,         INITOPT),
-            ('vscrollmode',    'dynamic',    self._vscrollMode),
+            ('borderframe', 1, INITOPT),
+            ('horizflex', 'fixed', self._horizflex),
+            ('horizfraction', 0.05, INITOPT),
+            ('hscrollmode', 'dynamic', self._hscrollMode),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('scrollmargin', 2, INITOPT),
+            ('usehullsize', 0, INITOPT),
+            ('vertflex', 'fixed', self._vertflex),
+            ('vertfraction', 0.05, INITOPT),
+            ('vscrollmode', 'dynamic', self._vscrollMode),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -6346,35 +6346,35 @@ class ScrolledFrame(Pmw.MegaWidget):
             self._borderframe = self.createcomponent('borderframe',
                     (), None,
                     tkinter.Frame, (self.origInterior,),
-                    relief = 'sunken',
-                    borderwidth = 2,
+                    relief='sunken',
+                    borderwidth=2,
             )
-            self._borderframe.grid(row = 2, column = 2, sticky = 'news')
+            self._borderframe.grid(row=2, column=2, sticky='news')
 
             # Create the clipping window.
             self._clipper = self.createcomponent('clipper',
                     (), None,
                     tkinter.Frame, (self._borderframe,),
-                    width = 400,
-                    height = 300,
-                    highlightthickness = 0,
-                    borderwidth = 0,
+                    width=400,
+                    height=300,
+                    highlightthickness=0,
+                    borderwidth=0,
             )
-            self._clipper.pack(fill = 'both', expand = 1)
+            self._clipper.pack(fill='both', expand=1)
         else:
             # Create the clipping window.
             self._clipper = self.createcomponent('clipper',
                     (), None,
                     tkinter.Frame, (self.origInterior,),
-                    width = 400,
-                    height = 300,
-                    relief = 'sunken',
-                    borderwidth = 2,
+                    width=400,
+                    height=300,
+                    relief='sunken',
+                    borderwidth=2,
             )
-            self._clipper.grid(row = 2, column = 2, sticky = 'news')
+            self._clipper.grid(row=2, column=2, sticky='news')
 
-        self.origInterior.grid_rowconfigure(2, weight = 1, minsize = 0)
-        self.origInterior.grid_columnconfigure(2, weight = 1, minsize = 0)
+        self.origInterior.grid_rowconfigure(2, weight=1, minsize=0)
+        self.origInterior.grid_columnconfigure(2, weight=1, minsize=0)
 
         # Create the horizontal scrollbar
         self._horizScrollbar = self.createcomponent('horizscrollbar',
@@ -6392,7 +6392,7 @@ class ScrolledFrame(Pmw.MegaWidget):
                 command=self.yview
         )
 
-        self.createlabel(self.origInterior, childCols = 3, childRows = 3)
+        self.createlabel(self.origInterior, childCols=3, childRows=3)
 
         # Initialise instance variables.
         self._horizScrollbarOn = 0
@@ -6450,7 +6450,7 @@ class ScrolledFrame(Pmw.MegaWidget):
     # Called when the user clicks in the horizontal scrollbar.
     # Calculates new position of frame then calls reposition() to
     # update the frame and the scrollbar.
-    def xview(self, mode = None, value = None, units = None):
+    def xview(self, mode=None, value=None, units=None):
 
         if type(value) is str:
             value = float(value)
@@ -6459,7 +6459,7 @@ class ScrolledFrame(Pmw.MegaWidget):
         elif mode == 'moveto':
             frameWidth = self._frame.winfo_reqwidth()
             self.startX = value * float(frameWidth)
-        else: # mode == 'scroll'
+        else:  # mode == 'scroll'
             clipperWidth = self._clipper.winfo_width()
             if units == 'units':
                 jump = int(clipperWidth * self['horizfraction'])
@@ -6472,7 +6472,7 @@ class ScrolledFrame(Pmw.MegaWidget):
     # Called when the user clicks in the vertical scrollbar.
     # Calculates new position of frame then calls reposition() to
     # update the frame and the scrollbar.
-    def yview(self, mode = None, value = None, units = None):
+    def yview(self, mode=None, value=None, units=None):
 
         if type(value) is str:
             value = float(value)
@@ -6481,7 +6481,7 @@ class ScrolledFrame(Pmw.MegaWidget):
         elif mode == 'moveto':
             frameHeight = self._frame.winfo_reqheight()
             self.startY = value * float(frameHeight)
-        else: # mode == 'scroll'
+        else:  # mode == 'scroll'
             clipperHeight = self._clipper.winfo_height()
             if units == 'units':
                 jump = int(clipperHeight * self['vertfraction'])
@@ -6595,7 +6595,7 @@ class ScrolledFrame(Pmw.MegaWidget):
                 relwidth = ''
 
         # Position frame relative to clipper.
-        self._frame.place(x = -self.startX, relwidth = relwidth)
+        self._frame.place(x=-self.startX, relwidth=relwidth)
         return (self.startX / float(frameWidth), endScrollX)
 
     def _getyview(self):
@@ -6631,7 +6631,7 @@ class ScrolledFrame(Pmw.MegaWidget):
                 relheight = ''
 
         # Position frame relative to clipper.
-        self._frame.place(y = -self.startY, relheight = relheight)
+        self._frame.place(y=-self.startY, relheight=relheight)
         return (self.startY / float(frameHeight), endScrollY)
 
     # According to the relative geometries of the frame and the
@@ -6686,11 +6686,11 @@ class ScrolledFrame(Pmw.MegaWidget):
 
         interior = self.origInterior
         if self._horizScrollbarOn:
-            self._horizScrollbar.grid(row = 4, column = 2, sticky = 'news')
-            interior.grid_rowconfigure(3, minsize = self['scrollmargin'])
+            self._horizScrollbar.grid(row=4, column=2, sticky='news')
+            interior.grid_rowconfigure(3, minsize=self['scrollmargin'])
         else:
             self._horizScrollbar.grid_forget()
-            interior.grid_rowconfigure(3, minsize = 0)
+            interior.grid_rowconfigure(3, minsize=0)
 
     def _toggleVertScrollbar(self):
 
@@ -6698,14 +6698,14 @@ class ScrolledFrame(Pmw.MegaWidget):
 
         interior = self.origInterior
         if self._vertScrollbarOn:
-            self._vertScrollbar.grid(row = 2, column = 4, sticky = 'news')
-            interior.grid_columnconfigure(3, minsize = self['scrollmargin'])
+            self._vertScrollbar.grid(row=2, column=4, sticky='news')
+            interior.grid_columnconfigure(3, minsize=self['scrollmargin'])
         else:
             self._vertScrollbar.grid_forget()
-            interior.grid_columnconfigure(3, minsize = 0)
+            interior.grid_columnconfigure(3, minsize=0)
 
 ######################################################################
-### File: PmwScrolledListBox.py
+# ## File: PmwScrolledListBox.py
 # Based on iwidgets2.2.0/scrolledlistbox.itk code.
 
 import types
@@ -6716,20 +6716,20 @@ import collections
 class ScrolledListBox(Pmw.MegaWidget):
     _classBindingsDefinedFor = 0
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('dblclickcommand',    None,            None),
-            ('hscrollmode',        'dynamic',       self._hscrollMode),
-            ('items',              (),              INITOPT),
-            ('labelmargin',        0,               INITOPT),
-            ('labelpos',           None,            INITOPT),
-            ('scrollmargin',       2,               INITOPT),
-            ('selectioncommand',   None,            None),
-            ('usehullsize',        0,               INITOPT),
-            ('vscrollmode',        'dynamic',       self._vscrollMode),
+            ('dblclickcommand', None, None),
+            ('hscrollmode', 'dynamic', self._hscrollMode),
+            ('items', (), INITOPT),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('scrollmargin', 2, INITOPT),
+            ('selectioncommand', None, None),
+            ('usehullsize', 0, INITOPT),
+            ('vscrollmode', 'dynamic', self._vscrollMode),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -6746,9 +6746,9 @@ class ScrolledListBox(Pmw.MegaWidget):
         self._listbox = self.createcomponent('listbox',
                 (), None,
                 tkinter.Listbox, (interior,))
-        self._listbox.grid(row = 2, column = 2, sticky = 'news')
-        interior.grid_rowconfigure(2, weight = 1, minsize = 0)
-        interior.grid_columnconfigure(2, weight = 1, minsize = 0)
+        self._listbox.grid(row=2, column=2, sticky='news')
+        interior.grid_rowconfigure(2, weight=1, minsize=0)
+        interior.grid_columnconfigure(2, weight=1, minsize=0)
 
         # Create the horizontal scrollbar
         self._horizScrollbar = self.createcomponent('horizscrollbar',
@@ -6766,7 +6766,7 @@ class ScrolledListBox(Pmw.MegaWidget):
                 command=self._listbox.yview
         )
 
-        self.createlabel(interior, childCols = 3, childRows = 3)
+        self.createlabel(interior, childCols=3, childRows=3)
 
         # Add the items specified by the initialisation option.
         items = self['items']
@@ -6785,7 +6785,7 @@ class ScrolledListBox(Pmw.MegaWidget):
         # prevent object cleanup.
         theTag = 'ScrolledListBoxTag'
         if ScrolledListBox._classBindingsDefinedFor != tkinter._default_root:
-            root  = tkinter._default_root
+            root = tkinter._default_root
 
             def doubleEvent(event):
                 _handleEvent(event, 'double')
@@ -7016,11 +7016,11 @@ class ScrolledListBox(Pmw.MegaWidget):
 
         interior = self.interior()
         if self._horizScrollbarOn:
-            self._horizScrollbar.grid(row = 4, column = 2, sticky = 'news')
-            interior.grid_rowconfigure(3, minsize = self['scrollmargin'])
+            self._horizScrollbar.grid(row=4, column=2, sticky='news')
+            interior.grid_rowconfigure(3, minsize=self['scrollmargin'])
         else:
             self._horizScrollbar.grid_forget()
-            interior.grid_rowconfigure(3, minsize = 0)
+            interior.grid_rowconfigure(3, minsize=0)
 
     def _toggleVertScrollbar(self):
 
@@ -7028,18 +7028,18 @@ class ScrolledListBox(Pmw.MegaWidget):
 
         interior = self.interior()
         if self._vertScrollbarOn:
-            self._vertScrollbar.grid(row = 2, column = 4, sticky = 'news')
-            interior.grid_columnconfigure(3, minsize = self['scrollmargin'])
+            self._vertScrollbar.grid(row=2, column=4, sticky='news')
+            interior.grid_columnconfigure(3, minsize=self['scrollmargin'])
         else:
             self._vertScrollbar.grid_forget()
-            interior.grid_columnconfigure(3, minsize = 0)
+            interior.grid_columnconfigure(3, minsize=0)
 
     def _handleEvent(self, event, eventType):
         if eventType == 'double':
             command = self['dblclickcommand']
         elif eventType == 'key':
             command = self['selectioncommand']
-        else: #eventType == 'release'
+        else:  # eventType == 'release'
             # Do not execute the command if the mouse was released
             # outside the listbox.
             if (event.x < 0 or self._listbox.winfo_width() <= event.x or
@@ -7085,28 +7085,28 @@ def _handleEvent(event, eventType):
         _listboxCache[event.widget]._handleEvent(event, eventType)
 
 ######################################################################
-### File: PmwScrolledText.py
+# ## File: PmwScrolledText.py
 # Based on iwidgets2.2.0/scrolledtext.itk code.
 
 import tkinter
 import Pmw
 
 class ScrolledText(Pmw.MegaWidget):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('borderframe',    0,            INITOPT),
-            ('columnheader',   0,            INITOPT),
-            ('hscrollmode',    'dynamic',    self._hscrollMode),
-            ('labelmargin',    0,            INITOPT),
-            ('labelpos',       None,         INITOPT),
-            ('rowcolumnheader',0,            INITOPT),
-            ('rowheader',      0,            INITOPT),
-            ('scrollmargin',   2,            INITOPT),
-            ('usehullsize',    0,            INITOPT),
-            ('vscrollmode',    'dynamic',    self._vscrollMode),
+            ('borderframe', 0, INITOPT),
+            ('columnheader', 0, INITOPT),
+            ('hscrollmode', 'dynamic', self._hscrollMode),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('rowcolumnheader', 0, INITOPT),
+            ('rowheader', 0, INITOPT),
+            ('scrollmargin', 2, INITOPT),
+            ('usehullsize', 0, INITOPT),
+            ('vscrollmode', 'dynamic', self._vscrollMode),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -7128,19 +7128,19 @@ class ScrolledText(Pmw.MegaWidget):
             self._borderframe = self.createcomponent('borderframe',
                     (), None,
                     tkinter.Frame, (interior,),
-                    relief = 'sunken',
-                    borderwidth = 2,
+                    relief='sunken',
+                    borderwidth=2,
             )
-            self._borderframe.grid(row = 4, column = 4, sticky = 'news')
+            self._borderframe.grid(row=4, column=4, sticky='news')
 
             # Create the text widget.
             self._textbox = self.createcomponent('text',
                     (), None,
                     tkinter.Text, (self._borderframe,),
-                    highlightthickness = 0,
-                    borderwidth = 0,
+                    highlightthickness=0,
+                    borderwidth=0,
             )
-            self._textbox.pack(fill = 'both', expand = 1)
+            self._textbox.pack(fill='both', expand=1)
 
             bw = self._borderframe.cget('borderwidth'),
             ht = self._borderframe.cget('highlightthickness'),
@@ -7150,7 +7150,7 @@ class ScrolledText(Pmw.MegaWidget):
                     (), None,
                     tkinter.Text, (interior,),
             )
-            self._textbox.grid(row = 4, column = 4, sticky = 'news')
+            self._textbox.grid(row=4, column=4, sticky='news')
 
             bw = self._textbox.cget('borderwidth'),
             ht = self._textbox.cget('highlightthickness'),
@@ -7162,24 +7162,24 @@ class ScrolledText(Pmw.MegaWidget):
                     tkinter.Text, (interior,),
                     height=1,
                     wrap='none',
-                    borderwidth = bw,
-                    highlightthickness = ht,
+                    borderwidth=bw,
+                    highlightthickness=ht,
             )
-            self._columnheader.grid(row = 2, column = 4, sticky = 'ew')
+            self._columnheader.grid(row=2, column=4, sticky='ew')
             self._columnheader.configure(
-                    xscrollcommand = self._columnheaderscrolled)
+                    xscrollcommand=self._columnheaderscrolled)
 
         if self['rowheader']:
             self._rowheader = self.createcomponent('rowheader',
                     (), 'Header',
                     tkinter.Text, (interior,),
                     wrap='none',
-                    borderwidth = bw,
-                    highlightthickness = ht,
+                    borderwidth=bw,
+                    highlightthickness=ht,
             )
-            self._rowheader.grid(row = 4, column = 2, sticky = 'ns')
+            self._rowheader.grid(row=4, column=2, sticky='ns')
             self._rowheader.configure(
-                    yscrollcommand = self._rowheaderscrolled)
+                    yscrollcommand=self._rowheaderscrolled)
 
         if self['rowcolumnheader']:
             self._rowcolumnheader = self.createcomponent('rowcolumnheader',
@@ -7187,13 +7187,13 @@ class ScrolledText(Pmw.MegaWidget):
                     tkinter.Text, (interior,),
                     height=1,
                     wrap='none',
-                    borderwidth = bw,
-                    highlightthickness = ht,
+                    borderwidth=bw,
+                    highlightthickness=ht,
             )
-            self._rowcolumnheader.grid(row = 2, column = 2, sticky = 'nsew')
+            self._rowcolumnheader.grid(row=2, column=2, sticky='nsew')
 
-        interior.grid_rowconfigure(4, weight = 1, minsize = 0)
-        interior.grid_columnconfigure(4, weight = 1, minsize = 0)
+        interior.grid_rowconfigure(4, weight=1, minsize=0)
+        interior.grid_columnconfigure(4, weight=1, minsize=0)
 
         # Create the horizontal scrollbar
         self._horizScrollbar = self.createcomponent('horizscrollbar',
@@ -7211,7 +7211,7 @@ class ScrolledText(Pmw.MegaWidget):
                 command=self._textbox.yview
         )
 
-        self.createlabel(interior, childCols = 5, childRows = 5)
+        self.createlabel(interior, childCols=5, childRows=5)
 
         # Initialise instance variables.
         self._horizScrollbarOn = 0
@@ -7246,7 +7246,7 @@ class ScrolledText(Pmw.MegaWidget):
     def clear(self):
         self.settext('')
 
-    def importfile(self, fileName, where = 'end'):
+    def importfile(self, fileName, where='end'):
         file = open(fileName, 'r')
         self._textbox.insert(where, file.read())
         file.close()
@@ -7505,11 +7505,11 @@ class ScrolledText(Pmw.MegaWidget):
 
         interior = self.interior()
         if self._horizScrollbarOn:
-            self._horizScrollbar.grid(row = 6, column = 4, sticky = 'news')
-            interior.grid_rowconfigure(5, minsize = self['scrollmargin'])
+            self._horizScrollbar.grid(row=6, column=4, sticky='news')
+            interior.grid_rowconfigure(5, minsize=self['scrollmargin'])
         else:
             self._horizScrollbar.grid_forget()
-            interior.grid_rowconfigure(5, minsize = 0)
+            interior.grid_rowconfigure(5, minsize=0)
 
     def _toggleVertScrollbar(self):
 
@@ -7517,11 +7517,11 @@ class ScrolledText(Pmw.MegaWidget):
 
         interior = self.interior()
         if self._vertScrollbarOn:
-            self._vertScrollbar.grid(row = 4, column = 6, sticky = 'news')
-            interior.grid_columnconfigure(5, minsize = self['scrollmargin'])
+            self._vertScrollbar.grid(row=4, column=6, sticky='news')
+            interior.grid_columnconfigure(5, minsize=self['scrollmargin'])
         else:
             self._vertScrollbar.grid_forget()
-            interior.grid_columnconfigure(5, minsize = 0)
+            interior.grid_columnconfigure(5, minsize=0)
 
     # Need to explicitly forward this to override the stupid
     # (grid_)bbox method inherited from Tkinter.Frame.Grid.
@@ -7531,7 +7531,7 @@ class ScrolledText(Pmw.MegaWidget):
 Pmw.forwardmethods(ScrolledText, tkinter.Text, '_textbox')
 
 ######################################################################
-### File: PmwHistoryText.py
+# ## File: PmwHistoryText.py
 import Pmw
 import collections
 
@@ -7541,13 +7541,13 @@ _DISPLAY = 2
 
 class HistoryText(Pmw.ScrolledText):
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         optiondefs = (
-            ('compressany',         1,          None),
-            ('compresstail',        1,          None),
-            ('historycommand',      None,       None),
+            ('compressany', 1, None),
+            ('compresstail', 1, None),
+            ('historycommand', None, None),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -7558,7 +7558,7 @@ class HistoryText(Pmw.ScrolledText):
         self._list = []
         self._currIndex = 0
         self._pastIndex = None
-        self._lastIndex = 0          # pointer to end of history list
+        self._lastIndex = 0  # pointer to end of history list
 
         # Check keywords and initialise options.
         self.initialiseoptions()
@@ -7573,7 +7573,7 @@ class HistoryText(Pmw.ScrolledText):
             self._list.append([text, text, _MODIFIED])
             return
 
-        currentEntry =  self._list[self._currIndex]
+        currentEntry = self._list[self._currIndex]
         if text == currentEntry[_ORIGINAL]:
             # The current history entry has not been modified. Check if
             # we need to add it again.
@@ -7643,7 +7643,7 @@ class HistoryText(Pmw.ScrolledText):
         if currentText[-1] == '\n':
             currentText = currentText[:-1]
 
-        currentEntry =  self._list[self._currIndex]
+        currentEntry = self._list[self._currIndex]
         if currentEntry[_DISPLAY] == _MODIFIED:
             currentEntry[_MODIFIED] = currentText
         elif currentEntry[_ORIGINAL] != currentText:
@@ -7668,7 +7668,7 @@ class HistoryText(Pmw.ScrolledText):
             historycommand = self['historycommand']
             if isinstance(historycommand, collections.Callable):
                 historycommand(prevstate, nextstate)
-            currentEntry =  self._list[self._currIndex]
+            currentEntry = self._list[self._currIndex]
         else:
             if command == 'undo':
                 currentEntry[_DISPLAY] = _ORIGINAL
@@ -7680,7 +7680,7 @@ class HistoryText(Pmw.ScrolledText):
         self.insert('end', currentEntry[currentEntry[_DISPLAY]])
 
 ######################################################################
-### File: PmwSelectionDialog.py
+# ## File: PmwSelectionDialog.py
 # Not Based on iwidgets version.
 
 import Pmw
@@ -7691,12 +7691,12 @@ class SelectionDialog(Pmw.Dialog):
     # Dialog window displaying a list and requesting the user to
     # select one.
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
         # Define the megawidget options.
         
         optiondefs = (
-            ('borderx',     10,    INITOPT),
-            ('bordery',     10,    INITOPT),
+            ('borderx', 10, INITOPT),
+            ('bordery', 10, INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -7712,15 +7712,15 @@ class SelectionDialog(Pmw.Dialog):
         self._list = self.createcomponent('scrolledlist',
                 aliases, None,
                 Pmw.ScrolledListBox, (interior,),
-                dblclickcommand = self.invoke)
+                dblclickcommand=self.invoke)
         self._list.pack(side='top', expand='true', fill='both',
-                padx = self['borderx'], pady = self['bordery'])
+                padx=self['borderx'], pady=self['bordery'])
 
         if 'activatecommand' not in kw:
             # Whenever this dialog is activated, set the focus to the
             # ScrolledListBox's listbox widget.
             listbox = self.component('listbox')
-            self.configure(activatecommand = listbox.focus_set)
+            self.configure(activatecommand=listbox.focus_set)
 
         # Check keywords and initialise options.
         self.initialiseoptions()
@@ -7738,18 +7738,18 @@ class SelectionDialog(Pmw.Dialog):
 Pmw.forwardmethods(SelectionDialog, Pmw.ScrolledListBox, '_list')
 
 ######################################################################
-### File: PmwTextDialog.py
+# ## File: PmwTextDialog.py
 # A Dialog with a ScrolledText widget.
 
 import Pmw
 
 class TextDialog(Pmw.Dialog):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
         # Define the megawidget options.
         
         optiondefs = (
-            ('borderx',     10,    INITOPT),
-            ('bordery',     10,    INITOPT),
+            ('borderx', 10, INITOPT),
+            ('bordery', 10, INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -7766,7 +7766,7 @@ class TextDialog(Pmw.Dialog):
                 aliases, None,
                 Pmw.ScrolledText, (interior,))
         self._text.pack(side='top', expand=1, fill='both',
-                padx = self['borderx'], pady = self['bordery'])
+                padx=self['borderx'], pady=self['bordery'])
 
         # Check keywords and initialise options.
         self.initialiseoptions()
@@ -7779,7 +7779,7 @@ class TextDialog(Pmw.Dialog):
 Pmw.forwardmethods(TextDialog, Pmw.ScrolledText, '_text')
 
 ######################################################################
-### File: PmwTimeCounter.py
+# ## File: PmwTimeCounter.py
 # Authors: Joe VanAndel and Greg McFarlane
 
 import string
@@ -7796,23 +7796,23 @@ class TimeCounter(Pmw.MegaWidget):
     which increment and decrement the Time value in the entry.
     """
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('autorepeat',    1,    None),
-            ('buttonaspect',  1.0,  INITOPT),
-            ('command',       None, None),
-            ('initwait',      300,  None),
-            ('labelmargin',   0,    INITOPT),
-            ('labelpos',      None, INITOPT),
-            ('max',           None, self._max),
-            ('min',           None, self._min),
-            ('padx',          0,    INITOPT),
-            ('pady',          0,    INITOPT),
-            ('repeatrate',    50,   None),
-            ('value',         None, INITOPT),
+            ('autorepeat', 1, None),
+            ('buttonaspect', 1.0, INITOPT),
+            ('command', None, None),
+            ('initwait', 300, None),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('max', None, self._max),
+            ('min', None, self._min),
+            ('padx', 0, INITOPT),
+            ('pady', 0, INITOPT),
+            ('repeatrate', 50, None),
+            ('value', None, INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -7846,14 +7846,14 @@ class TimeCounter(Pmw.MegaWidget):
         if self['labelpos'] is None:
             frame = interior
             if 'hull_relief' not in kw:
-                frame.configure(relief = 'raised')
+                frame.configure(relief='raised')
             if 'hull_borderwidth' not in kw:
-                frame.configure(borderwidth = 1)
+                frame.configure(borderwidth=1)
         else:
             frame = self.createcomponent('frame',
                     (), None,
                     tkinter.Frame, (interior,),
-                    relief = 'raised', borderwidth = 1)
+                    relief='raised', borderwidth=1)
             frame.grid(column=2, row=2, sticky='nsew')
             interior.grid_columnconfigure(2, weight=1)
             interior.grid_rowconfigure(2, weight=1)
@@ -7864,45 +7864,45 @@ class TimeCounter(Pmw.MegaWidget):
         self._downHourArrowBtn = self.createcomponent('downhourarrow',
                 (), 'Arrow',
                 tkinter.Canvas, (frame,),
-                width = 16, height = 16, relief = 'raised', borderwidth = 2)
+                width=16, height=16, relief='raised', borderwidth=2)
         self.arrowDirection[self._downHourArrowBtn] = 'down'
-        self._downHourArrowBtn.grid(column = 0, row = 2)
+        self._downHourArrowBtn.grid(column=0, row=2)
 
         # Create the minute down arrow.
         self._downMinuteArrowBtn = self.createcomponent('downminutearrow',
                 (), 'Arrow',
                 tkinter.Canvas, (frame,),
-                width = 16, height = 16, relief = 'raised', borderwidth = 2)
+                width=16, height=16, relief='raised', borderwidth=2)
         self.arrowDirection[self._downMinuteArrowBtn] = 'down'
-        self._downMinuteArrowBtn.grid(column = 1, row = 2)
+        self._downMinuteArrowBtn.grid(column=1, row=2)
 
         # Create the second down arrow.
         self._downSecondArrowBtn = self.createcomponent('downsecondarrow',
                 (), 'Arrow',
                 tkinter.Canvas, (frame,),
-                width = 16, height = 16, relief = 'raised', borderwidth = 2)
+                width=16, height=16, relief='raised', borderwidth=2)
         self.arrowDirection[self._downSecondArrowBtn] = 'down'
-        self._downSecondArrowBtn.grid(column = 2, row = 2)
+        self._downSecondArrowBtn.grid(column=2, row=2)
 
         # Create the entry fields.
 
         # Create the hour entry field.
         self._hourCounterEntry = self.createcomponent('hourentryfield',
                 (('hourentry', 'hourentryfield_entry'),), None,
-                Pmw.EntryField, (frame,), validate='integer', entry_width = 2)
-        self._hourCounterEntry.grid(column = 0, row = 1, sticky = 'news')
+                Pmw.EntryField, (frame,), validate='integer', entry_width=2)
+        self._hourCounterEntry.grid(column=0, row=1, sticky='news')
 
         # Create the minute entry field.
         self._minuteCounterEntry = self.createcomponent('minuteentryfield',
                 (('minuteentry', 'minuteentryfield_entry'),), None,
-                Pmw.EntryField, (frame,), validate='integer', entry_width = 2)
-        self._minuteCounterEntry.grid(column = 1, row = 1, sticky = 'news')
+                Pmw.EntryField, (frame,), validate='integer', entry_width=2)
+        self._minuteCounterEntry.grid(column=1, row=1, sticky='news')
 
         # Create the second entry field.
         self._secondCounterEntry = self.createcomponent('secondentryfield',
                 (('secondentry', 'secondentryfield_entry'),), None,
-                Pmw.EntryField, (frame,), validate='integer', entry_width = 2)
-        self._secondCounterEntry.grid(column = 2, row = 1, sticky = 'news')
+                Pmw.EntryField, (frame,), validate='integer', entry_width=2)
+        self._secondCounterEntry.grid(column=2, row=1, sticky='news')
 
         # Create the up arrow buttons.
 
@@ -7910,35 +7910,35 @@ class TimeCounter(Pmw.MegaWidget):
         self._upHourArrowBtn = self.createcomponent('uphourarrow',
                 (), 'Arrow',
                 tkinter.Canvas, (frame,),
-                width = 16, height = 16, relief = 'raised', borderwidth = 2)
+                width=16, height=16, relief='raised', borderwidth=2)
         self.arrowDirection[self._upHourArrowBtn] = 'up'
-        self._upHourArrowBtn.grid(column = 0, row = 0)
+        self._upHourArrowBtn.grid(column=0, row=0)
 
         # Create the minute up arrow.
         self._upMinuteArrowBtn = self.createcomponent('upminutearrow',
                 (), 'Arrow',
                 tkinter.Canvas, (frame,),
-                width = 16, height = 16, relief = 'raised', borderwidth = 2)
+                width=16, height=16, relief='raised', borderwidth=2)
         self.arrowDirection[self._upMinuteArrowBtn] = 'up'
-        self._upMinuteArrowBtn.grid(column = 1, row = 0)
+        self._upMinuteArrowBtn.grid(column=1, row=0)
 
         # Create the second up arrow.
         self._upSecondArrowBtn = self.createcomponent('upsecondarrow',
                 (), 'Arrow',
                 tkinter.Canvas, (frame,),
-                width = 16, height = 16, relief = 'raised', borderwidth = 2)
+                width=16, height=16, relief='raised', borderwidth=2)
         self.arrowDirection[self._upSecondArrowBtn] = 'up'
-        self._upSecondArrowBtn.grid(column = 2, row = 0)
+        self._upSecondArrowBtn.grid(column=2, row=0)
 
         # Make it resize nicely.
         padx = self['padx']
         pady = self['pady']
         for col in range(3):
-            frame.grid_columnconfigure(col, weight = 1, pad = padx)
-        frame.grid_rowconfigure(0, pad = pady)
-        frame.grid_rowconfigure(2, pad = pady)
+            frame.grid_columnconfigure(col, weight=1, pad=padx)
+        frame.grid_rowconfigure(0, pad=pady)
+        frame.grid_rowconfigure(2, pad=pady)
 
-        frame.grid_rowconfigure(1, weight = 1)
+        frame.grid_rowconfigure(1, weight=1)
 
         # Create the label.
         self.createlabel(interior)
@@ -7947,11 +7947,11 @@ class TimeCounter(Pmw.MegaWidget):
 
         # Up hour
         self._upHourArrowBtn.bind('<Configure>',
-                lambda  event, s=self,button=self._upHourArrowBtn:
+                lambda  event, s=self, button=self._upHourArrowBtn:
                 s._drawArrow(button, 'up'))
 
         self._upHourArrowBtn.bind('<1>',
-                lambda event, s=self,button=self._upHourArrowBtn:
+                lambda event, s=self, button=self._upHourArrowBtn:
                 s._countUp(button, 3600))
 
         self._upHourArrowBtn.bind('<Any-ButtonRelease-1>',
@@ -7960,12 +7960,12 @@ class TimeCounter(Pmw.MegaWidget):
 
         # Up minute
         self._upMinuteArrowBtn.bind('<Configure>',
-                lambda  event, s=self,button=self._upMinuteArrowBtn:
+                lambda  event, s=self, button=self._upMinuteArrowBtn:
                 s._drawArrow(button, 'up'))
 
 
         self._upMinuteArrowBtn.bind('<1>',
-                lambda event, s=self,button=self._upMinuteArrowBtn:
+                lambda event, s=self, button=self._upMinuteArrowBtn:
                 s._countUp(button, 60))
 
         self._upMinuteArrowBtn.bind('<Any-ButtonRelease-1>',
@@ -7974,12 +7974,12 @@ class TimeCounter(Pmw.MegaWidget):
 
         # Up second
         self._upSecondArrowBtn.bind('<Configure>',
-                lambda  event, s=self,button=self._upSecondArrowBtn:
+                lambda  event, s=self, button=self._upSecondArrowBtn:
                 s._drawArrow(button, 'up'))
 
 
         self._upSecondArrowBtn.bind('<1>',
-                lambda event, s=self,button=self._upSecondArrowBtn:
+                lambda event, s=self, button=self._upSecondArrowBtn:
                 s._countUp(button, 1))
 
         self._upSecondArrowBtn.bind('<Any-ButtonRelease-1>',
@@ -7988,11 +7988,11 @@ class TimeCounter(Pmw.MegaWidget):
 
         # Down hour
         self._downHourArrowBtn.bind('<Configure>',
-                lambda  event, s=self,button=self._downHourArrowBtn:
+                lambda  event, s=self, button=self._downHourArrowBtn:
                 s._drawArrow(button, 'down'))
 
         self._downHourArrowBtn.bind('<1>',
-                lambda event, s=self,button=self._downHourArrowBtn:
+                lambda event, s=self, button=self._downHourArrowBtn:
                 s._countDown(button, 3600))
         self._downHourArrowBtn.bind('<Any-ButtonRelease-1>',
                 lambda event, s=self, button=self._downHourArrowBtn:
@@ -8001,11 +8001,11 @@ class TimeCounter(Pmw.MegaWidget):
 
         # Down minute
         self._downMinuteArrowBtn.bind('<Configure>',
-                lambda  event, s=self,button=self._downMinuteArrowBtn:
+                lambda  event, s=self, button=self._downMinuteArrowBtn:
                 s._drawArrow(button, 'down'))
 
         self._downMinuteArrowBtn.bind('<1>',
-                lambda event, s=self,button=self._downMinuteArrowBtn:
+                lambda event, s=self, button=self._downMinuteArrowBtn:
                 s._countDown(button, 60))
         self._downMinuteArrowBtn.bind('<Any-ButtonRelease-1>',
                 lambda event, s=self, button=self._downMinuteArrowBtn:
@@ -8013,12 +8013,12 @@ class TimeCounter(Pmw.MegaWidget):
 
         # Down second
         self._downSecondArrowBtn.bind('<Configure>',
-                lambda  event, s=self,button=self._downSecondArrowBtn:
+                lambda  event, s=self, button=self._downSecondArrowBtn:
                 s._drawArrow(button, 'down'))
 
         self._downSecondArrowBtn.bind('<1>',
                 lambda event, s=self, button=self._downSecondArrowBtn:
-                s._countDown(button,1))
+                s._countDown(button, 1))
         self._downSecondArrowBtn.bind('<Any-ButtonRelease-1>',
                 lambda event, s=self, button=self._downSecondArrowBtn:
                 s._stopUpDown(button))
@@ -8037,12 +8037,12 @@ class TimeCounter(Pmw.MegaWidget):
     def _drawArrow(self, arrow, direction):
         Pmw.drawarrow(arrow, self['hourentry_foreground'], direction, 'arrow')
 
-    def _resizeArrow(self, event = None):
+    def _resizeArrow(self, event=None):
         for btn in (self._upHourArrowBtn, self._upMinuteArrowBtn,
                 self._upSecondArrowBtn,
                 self._downHourArrowBtn,
                 self._downMinuteArrowBtn, self._downSecondArrowBtn):
-            bw = (int(btn['borderwidth']) +
+            bw = (int(btn['borderwidth']) + 
                     int(btn['highlightthickness']))
             newHeight = self._hourCounterEntry.winfo_reqheight() - 2 * bw
             newWidth = int(newHeight * self['buttonaspect'])
@@ -8094,13 +8094,13 @@ class TimeCounter(Pmw.MegaWidget):
         button.configure(relief='sunken')
         self._count(-1, 'start', increment)
 
-    def increment(self, seconds = 1):
+    def increment(self, seconds=1):
         self._count(1, 'force', seconds)
 
-    def decrement(self, seconds = 1):
+    def decrement(self, seconds=1):
         self._count(-1, 'force', seconds)
 
-    def _count(self, factor, newFlag = None, increment = 1):
+    def _count(self, factor, newFlag=None, increment=1):
         if newFlag != 'force':
             if newFlag is not None:
                 self._flag = newFlag
@@ -8108,8 +8108,8 @@ class TimeCounter(Pmw.MegaWidget):
             if self._flag == 'stopped':
                 return
 
-        value = (int(self._hourCounterEntry.get()) *3600) + \
-              (int(self._minuteCounterEntry.get()) *60) + \
+        value = (int(self._hourCounterEntry.get()) * 3600) + \
+              (int(self._minuteCounterEntry.get()) * 60) + \
               int(self._secondCounterEntry.get()) + \
               factor * increment
         min = self._minVal
@@ -8120,8 +8120,8 @@ class TimeCounter(Pmw.MegaWidget):
             value = max
 
         self._hour = value // 3600
-        self._minute = (value - (self._hour*3600)) // 60
-        self._second = value - (self._hour*3600) - (self._minute*60)
+        self._minute = (value - (self._hour * 3600)) // 60
+        self._second = value - (self._hour * 3600) - (self._minute * 60)
         self._setHMS()
 
         if newFlag != 'force':
@@ -8132,8 +8132,8 @@ class TimeCounter(Pmw.MegaWidget):
                 else:
                     delay = self['repeatrate']
                 self._timerId = self.after(
-                    delay, lambda self=self, factor=factor,increment=increment:
-                      self._count(factor,'running', increment))
+                    delay, lambda self=self, factor=factor, increment=increment:
+                      self._count(factor, 'running', increment))
 
     def _setHMS(self):
         self._hourCounterEntry.setentry('%02d' % self._hour)
@@ -8164,7 +8164,7 @@ class TimeCounter(Pmw.MegaWidget):
         Pmw.MegaWidget.destroy(self)
 
 ######################################################################
-### File: PmwAboutDialog.py
+# ## File: PmwAboutDialog.py
 import Pmw
 
 class AboutDialog(Pmw.MessageDialog):
@@ -8175,16 +8175,16 @@ class AboutDialog(Pmw.MessageDialog):
     _copyright = ''
     _contact = ''
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('applicationname',   '',          INITOPT),
-            ('iconpos',           'w',         None),
-            ('icon_bitmap',       'info',      None),
-            ('buttons',           ('Close',),  None),
-            ('defaultbutton',     0,           None),
+            ('applicationname', '', INITOPT),
+            ('iconpos', 'w', None),
+            ('icon_bitmap', 'info', None),
+            ('buttons', ('Close',), None),
+            ('defaultbutton', 0, None),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -8193,7 +8193,7 @@ class AboutDialog(Pmw.MessageDialog):
 
         applicationname = self['applicationname']
         if 'title' not in kw:
-            self.configure(title = 'About ' + applicationname)
+            self.configure(title='About ' + applicationname)
 
         if 'message_text' not in kw:
             text = applicationname + '\n\n'
@@ -8219,7 +8219,7 @@ def aboutcontact(value):
     AboutDialog._contact = value
 
 ######################################################################
-### File: PmwComboBox.py
+# ## File: PmwComboBox.py
 # Based on iwidgets2.2.0/combobox.itk code.
 
 import os
@@ -8230,22 +8230,22 @@ import Pmw
 import collections
 
 class ComboBox(Pmw.MegaWidget):
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('autoclear',          0,          INITOPT),
-            ('buttonaspect',       1.0,        INITOPT),
-            ('dropdown',           1,          INITOPT),
-            ('fliparrow',          0,          INITOPT),
-            ('history',            1,          INITOPT),
-            ('labelmargin',        0,          INITOPT),
-            ('labelpos',           None,       INITOPT),
-            ('listheight',         200,        INITOPT),
-            ('selectioncommand',   None,       None),
-            ('sticky',            'ew',        INITOPT),
-            ('unique',             1,          INITOPT),
+            ('autoclear', 0, INITOPT),
+            ('buttonaspect', 1.0, INITOPT),
+            ('dropdown', 1, INITOPT),
+            ('fliparrow', 0, INITOPT),
+            ('history', 1, INITOPT),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('listheight', 200, INITOPT),
+            ('selectioncommand', None, None),
+            ('sticky', 'ew', INITOPT),
+            ('unique', 1, INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -8259,26 +8259,26 @@ class ComboBox(Pmw.MegaWidget):
                 (('entry', 'entryfield_entry'),), None,
                 Pmw.EntryField, (interior,))
         self._entryfield.grid(column=2, row=2, sticky=self['sticky'])
-        interior.grid_columnconfigure(2, weight = 1)
+        interior.grid_columnconfigure(2, weight=1)
         self._entryWidget = self._entryfield.component('entry')
 
         if self['dropdown']:
             self._isPosted = 0
-            interior.grid_rowconfigure(2, weight = 1)
+            interior.grid_rowconfigure(2, weight=1)
 
             # Create the arrow button.
             self._arrowBtn = self.createcomponent('arrowbutton',
                     (), None,
-                    tkinter.Canvas, (interior,), borderwidth = 2,
-                    relief = 'raised',
-                    width = 16, height = 16)
+                    tkinter.Canvas, (interior,), borderwidth=2,
+                    relief='raised',
+                    width=16, height=16)
             if 'n' in self['sticky']:
                 sticky = 'n'
             else:
                 sticky = ''
             if 's' in self['sticky']:
                 sticky = sticky + 's'
-            self._arrowBtn.grid(column=3, row=2, sticky = sticky)
+            self._arrowBtn.grid(column=3, row=2, sticky=sticky)
             self._arrowRelief = self._arrowBtn.cget('relief')
 
             # Create the label.
@@ -8295,11 +8295,11 @@ class ComboBox(Pmw.MegaWidget):
             self._list = self.createcomponent('scrolledlist',
                     (('listbox', 'scrolledlist_listbox'),), None,
                     Pmw.ScrolledListBox, (self._popup,),
-                    hull_borderwidth = 2,
-                    hull_relief = 'raised',
-                    hull_height = self['listheight'],
-                    usehullsize = 1,
-                    listbox_exportselection = 0)
+                    hull_borderwidth=2,
+                    hull_relief='raised',
+                    hull_height=self['listheight'],
+                    usehullsize=1,
+                    listbox_exportselection=0)
             self._list.pack(expand=1, fill='both')
             self.__listbox = self._list.component('listbox')
 
@@ -8345,12 +8345,12 @@ class ComboBox(Pmw.MegaWidget):
             self._list = self.createcomponent('scrolledlist',
                     (('listbox', 'scrolledlist_listbox'),), None,
                     Pmw.ScrolledListBox, (interior,),
-                    selectioncommand = self._selectCmd)
+                    selectioncommand=self._selectCmd)
             self._list.grid(column=2, row=3, sticky='nsew')
             self.__listbox = self._list.component('listbox')
 
             # The scrolled listbox should expand vertically.
-            interior.grid_rowconfigure(3, weight = 1)
+            interior.grid_rowconfigure(3, weight=1)
 
             # Create the label.
             self.createlabel(interior, childRows=2)
@@ -8377,7 +8377,7 @@ class ComboBox(Pmw.MegaWidget):
 
     # Public methods
 
-    def get(self, first = None, last=None):
+    def get(self, first=None, last=None):
         if first is None:
             return self._entryWidget.get()
         else:
@@ -8457,8 +8457,8 @@ class ComboBox(Pmw.MegaWidget):
         if len(cursels) == 0:
             index = 0
         else:
-            #Python 3 conversion
-            #index = string.atoi(cursels[0])
+            # Python 3 conversion
+            # index = string.atoi(cursels[0])
             index = int(cursels[0])
             if index == size - 1:
                 index = 0
@@ -8477,8 +8477,8 @@ class ComboBox(Pmw.MegaWidget):
         if len(cursels) == 0:
             index = size - 1
         else:
-            #Python 3 conversion
-            #index = string.atoi(cursels[0])
+            # Python 3 conversion
+            # index = string.atoi(cursels[0])
             index = int(cursels[0])
             if index == 0:
                 index = size - 1
@@ -8512,9 +8512,9 @@ class ComboBox(Pmw.MegaWidget):
         arrow = self._arrowBtn
         if sunken:
             self._arrowRelief = arrow.cget('relief')
-            arrow.configure(relief = 'sunken')
+            arrow.configure(relief='sunken')
         else:
-            arrow.configure(relief = self._arrowRelief)
+            arrow.configure(relief=self._arrowRelief)
 
         if self._isPosted and self['fliparrow']:
             direction = 'up'
@@ -8522,7 +8522,7 @@ class ComboBox(Pmw.MegaWidget):
             direction = 'down'
         Pmw.drawarrow(arrow, self['entry_foreground'], direction, 'arrow')
 
-    def _postList(self, event = None):
+    def _postList(self, event=None):
         self._isPosted = 1
         self._drawArrow(sunken=1)
 
@@ -8533,7 +8533,7 @@ class ComboBox(Pmw.MegaWidget):
         y = self._entryfield.winfo_rooty() + \
             self._entryfield.winfo_height()
         w = self._entryfield.winfo_width() + self._arrowBtn.winfo_width()
-        h =  self.__listbox.winfo_height()
+        h = self.__listbox.winfo_height()
         sh = self.winfo_screenheight()
 
         if y + h > sh and y > sh / 2:
@@ -8570,14 +8570,14 @@ class ComboBox(Pmw.MegaWidget):
                 event.y >= 0 and event.y < self.__listbox.winfo_height()):
             self._selectCmd()
 
-    def _unpostOnNextRelease(self, event = None):
+    def _unpostOnNextRelease(self, event=None):
         self._ignoreRelease = 0
 
     def _resizeArrow(self, event):
-        #Python 3 conversion
-        #bw = (string.atoi(self._arrowBtn['borderwidth']) +
+        # Python 3 conversion
+        # bw = (string.atoi(self._arrowBtn['borderwidth']) +
         #        string.atoi(self._arrowBtn['highlightthickness']))
-        bw = (int(self._arrowBtn['borderwidth']) +
+        bw = (int(self._arrowBtn['borderwidth']) + 
                 int(self._arrowBtn['highlightthickness']))
         newHeight = self._entryfield.winfo_reqheight() - 2 * bw
         newWidth = int(newHeight * self['buttonaspect'])
@@ -8612,7 +8612,7 @@ Pmw.forwardmethods(ComboBox, Pmw.ScrolledListBox, '_list')
 Pmw.forwardmethods(ComboBox, Pmw.EntryField, '_entryfield')
 
 ######################################################################
-### File: PmwComboBoxDialog.py
+# ## File: PmwComboBoxDialog.py
 # Not Based on iwidgets version.
 
 import Pmw
@@ -8623,12 +8623,12 @@ class ComboBoxDialog(Pmw.Dialog):
     # Dialog window displaying a list and entry field and requesting
     # the user to make a selection or enter a value
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
         # Define the megawidget options.
         
         optiondefs = (
-            ('borderx',    10,              INITOPT),
-            ('bordery',    10,              INITOPT),
+            ('borderx', 10, INITOPT),
+            ('bordery', 10, INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -8647,17 +8647,17 @@ class ComboBoxDialog(Pmw.Dialog):
         self._combobox = self.createcomponent('combobox',
                 aliases, None,
                 Pmw.ComboBox, (interior,),
-                scrolledlist_dblclickcommand = self.invoke,
-                dropdown = 0,
+                scrolledlist_dblclickcommand=self.invoke,
+                dropdown=0,
         )
         self._combobox.pack(side='top', expand='true', fill='both',
-                padx = self['borderx'], pady = self['bordery'])
+                padx=self['borderx'], pady=self['bordery'])
 
         if 'activatecommand' not in kw:
             # Whenever this dialog is activated, set the focus to the
             # ComboBox's listbox widget.
             listbox = self.component('listbox')
-            self.configure(activatecommand = listbox.focus_set)
+            self.configure(activatecommand=listbox.focus_set)
 
         # Check keywords and initialise options.
         self.initialiseoptions()
@@ -8675,7 +8675,7 @@ class ComboBoxDialog(Pmw.Dialog):
 Pmw.forwardmethods(ComboBoxDialog, Pmw.ComboBox, '_combobox')
 
 ######################################################################
-### File: PmwCounter.py
+# ## File: PmwCounter.py
 import string
 import sys
 import types
@@ -8685,23 +8685,23 @@ import collections
 
 class Counter(Pmw.MegaWidget):
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('autorepeat',     1,             None),
-            ('buttonaspect',   1.0,           INITOPT),
-            ('datatype',       'numeric',     self._datatype),
-            ('increment',      1,             None),
-            ('initwait',       300,           None),
-            ('labelmargin',    0,             INITOPT),
-            ('labelpos',       None,          INITOPT),
-            ('orient',         'horizontal',  INITOPT),
-            ('padx',           0,             INITOPT),
-            ('pady',           0,             INITOPT),
-            ('repeatrate',     50,            None),
-            ('sticky',         'ew',          INITOPT),
+            ('autorepeat', 1, None),
+            ('buttonaspect', 1.0, INITOPT),
+            ('datatype', 'numeric', self._datatype),
+            ('increment', 1, None),
+            ('initwait', 300, None),
+            ('labelmargin', 0, INITOPT),
+            ('labelpos', None, INITOPT),
+            ('orient', 'horizontal', INITOPT),
+            ('padx', 0, INITOPT),
+            ('pady', 0, INITOPT),
+            ('repeatrate', 50, None),
+            ('sticky', 'ew', INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -8722,14 +8722,14 @@ class Counter(Pmw.MegaWidget):
         if self['labelpos'] is None:
             frame = interior
             if 'hull_relief' not in kw:
-                frame.configure(relief = 'raised')
+                frame.configure(relief='raised')
             if 'hull_borderwidth' not in kw:
-                frame.configure(borderwidth = 1)
+                frame.configure(borderwidth=1)
         else:
             frame = self.createcomponent('frame',
                     (), None,
                     tkinter.Frame, (interior,),
-                    relief = 'raised', borderwidth = 1)
+                    relief='raised', borderwidth=1)
             frame.grid(column=2, row=2, sticky=self['sticky'])
             interior.grid_columnconfigure(2, weight=1)
             interior.grid_rowconfigure(2, weight=1)
@@ -8738,7 +8738,7 @@ class Counter(Pmw.MegaWidget):
         self._downArrowBtn = self.createcomponent('downarrow',
                 (), 'Arrow',
                 tkinter.Canvas, (frame,),
-                width = 16, height = 16, relief = 'raised', borderwidth = 2)
+                width=16, height=16, relief='raised', borderwidth=2)
 
         # Create the entry field.
         self._counterEntry = self.createcomponent('entryfield',
@@ -8749,34 +8749,34 @@ class Counter(Pmw.MegaWidget):
         self._upArrowBtn = self.createcomponent('uparrow',
                 (), 'Arrow',
                 tkinter.Canvas, (frame,),
-                width = 16, height = 16, relief = 'raised', borderwidth = 2)
+                width=16, height=16, relief='raised', borderwidth=2)
 
         padx = self['padx']
         pady = self['pady']
         orient = self['orient']
         if orient == 'horizontal':
-            self._downArrowBtn.grid(column = 0, row = 0)
-            self._counterEntry.grid(column = 1, row = 0,
-                    sticky = self['sticky'])
-            self._upArrowBtn.grid(column = 2, row = 0)
-            frame.grid_columnconfigure(1, weight = 1)
-            frame.grid_rowconfigure(0, weight = 1)
+            self._downArrowBtn.grid(column=0, row=0)
+            self._counterEntry.grid(column=1, row=0,
+                    sticky=self['sticky'])
+            self._upArrowBtn.grid(column=2, row=0)
+            frame.grid_columnconfigure(1, weight=1)
+            frame.grid_rowconfigure(0, weight=1)
             if tkinter.TkVersion >= 4.2:
-                frame.grid_columnconfigure(0, pad = padx)
-                frame.grid_columnconfigure(2, pad = padx)
-                frame.grid_rowconfigure(0, pad = pady)
+                frame.grid_columnconfigure(0, pad=padx)
+                frame.grid_columnconfigure(2, pad=padx)
+                frame.grid_rowconfigure(0, pad=pady)
         elif orient == 'vertical':
-            self._upArrowBtn.grid(column = 0, row = 0, sticky = 's')
-            self._counterEntry.grid(column = 0, row = 1,
-                    sticky = self['sticky'])
-            self._downArrowBtn.grid(column = 0, row = 2, sticky = 'n')
-            frame.grid_columnconfigure(0, weight = 1)
-            frame.grid_rowconfigure(0, weight = 1)
-            frame.grid_rowconfigure(2, weight = 1)
+            self._upArrowBtn.grid(column=0, row=0, sticky='s')
+            self._counterEntry.grid(column=0, row=1,
+                    sticky=self['sticky'])
+            self._downArrowBtn.grid(column=0, row=2, sticky='n')
+            frame.grid_columnconfigure(0, weight=1)
+            frame.grid_rowconfigure(0, weight=1)
+            frame.grid_rowconfigure(2, weight=1)
             if tkinter.TkVersion >= 4.2:
-                frame.grid_rowconfigure(0, pad = pady)
-                frame.grid_rowconfigure(2, pad = pady)
-                frame.grid_columnconfigure(0, pad = padx)
+                frame.grid_rowconfigure(0, pad=pady)
+                frame.grid_rowconfigure(2, pad=pady)
+                frame.grid_columnconfigure(0, pad=padx)
         else:
             raise ValueError('bad orient option ' + repr(orient) + \
                 ': must be either \'horizontal\' or \'vertical\'')
@@ -8791,8 +8791,8 @@ class Counter(Pmw.MegaWidget):
         self._downArrowBtn.bind('<Any-ButtonRelease-1>', self._stopCounting)
         self._counterEntry.bind('<Configure>', self._resizeArrow)
         entry = self._counterEntry.component('entry')
-        entry.bind('<Down>', lambda event, s = self: s._key_decrement(event))
-        entry.bind('<Up>', lambda event, s = self: s._key_increment(event))
+        entry.bind('<Down>', lambda event, s=self: s._key_decrement(event))
+        entry.bind('<Up>', lambda event, s=self: s._key_increment(event))
 
         # Need to cancel the timer if an arrow button is unmapped (eg:
         # its toplevel window is withdrawn) while the mouse button is
@@ -8806,7 +8806,7 @@ class Counter(Pmw.MegaWidget):
 
     def _resizeArrow(self, event):
         for btn in (self._upArrowBtn, self._downArrowBtn):
-            bw = (int(btn['borderwidth']) +
+            bw = (int(btn['borderwidth']) + 
                     int(btn['highlightthickness']))
             newHeight = self._counterEntry.winfo_reqheight() - 2 * bw
             newWidth = int(newHeight * self['buttonaspect'])
@@ -8832,7 +8832,7 @@ class Counter(Pmw.MegaWidget):
                 direction = 'left'
         Pmw.drawarrow(arrow, self['entry_foreground'], direction, 'arrow')
 
-    def _stopCounting(self, event = None):
+    def _stopCounting(self, event=None):
         if self._timerId is not None:
             self.after_cancel(self._timerId)
             self._timerId = None
@@ -8889,7 +8889,7 @@ class Counter(Pmw.MegaWidget):
         else:
             validValues = list(_counterCommands.keys())
             validValues.sort()
-            raise ValueError(('bad datatype value "%s":  must be a' +
+            raise ValueError(('bad datatype value "%s":  must be a' + 
                     ' function or one of %s') % (datatype, validValues))
 
     def _forceCount(self, factor):
@@ -8959,10 +8959,10 @@ def _changeNumber(text, factor, increment):
     else:
         value = ((value - 1) // increment) * increment  
 
-    #removed "L" check since we're working with Python 3
+    # removed "L" check since we're working with Python 3
     return str(int(value))
 
-def _changeReal(text, factor, increment, separator = '.'):
+def _changeReal(text, factor, increment, separator='.'):
     value = Pmw.stringtoreal(text, separator)
     div = value / increment
 
@@ -8990,8 +8990,8 @@ def _changeReal(text, factor, increment, separator = '.'):
             text = text[:index] + separator + text[index + 1:]
     return text
 
-def _changeDate(value, factor, increment, format = 'ymd',
-        separator = '/', yyyy = 0):
+def _changeDate(value, factor, increment, format='ymd',
+        separator='/', yyyy=0):
 
     jdn = Pmw.datestringtojdn(value, format, separator) + factor * increment
 
@@ -9014,7 +9014,7 @@ def _changeDate(value, factor, increment, format = 'ymd',
     return result
 
 _SECSPERDAY = 24 * 60 * 60
-def _changeTime(value, factor, increment, separator = ':', time24 = 0):
+def _changeTime(value, factor, increment, separator=':', time24=0):
     unixTime = Pmw.timestringtoseconds(value, separator)
     if factor > 0:
         chunks = unixTime // increment + 1
@@ -9039,28 +9039,28 @@ def _changeTime(value, factor, increment, separator = ':', time24 = 0):
 
 # hexadecimal, alphabetic, alphanumeric not implemented
 _counterCommands = {
-    'numeric'   : _changeNumber,      # } integer
-    'integer'   : _changeNumber,      # } these two use the same function
-    'real'      : _changeReal,        # real number
+    'numeric'   : _changeNumber,  # } integer
+    'integer'   : _changeNumber,  # } these two use the same function
+    'real'      : _changeReal,  # real number
     'time'      : _changeTime,
     'date'      : _changeDate,
 }
 
 ######################################################################
-### File: PmwCounterDialog.py
+# ## File: PmwCounterDialog.py
 import Pmw
 
 # A Dialog with a counter
 
 class CounterDialog(Pmw.Dialog):
 
-    def __init__(self, parent = None, **kw):
+    def __init__(self, parent=None, **kw):
 
         # Define the megawidget options.
         
         optiondefs = (
-            ('borderx',    20,  INITOPT),
-            ('bordery',    20,  INITOPT),
+            ('borderx', 20, INITOPT),
+            ('bordery', 20, INITOPT),
         )
         self.defineoptions(kw, optiondefs)
 
@@ -9080,13 +9080,13 @@ class CounterDialog(Pmw.Dialog):
                 aliases, None,
                 Pmw.Counter, (interior,))
         self._cdCounter.pack(fill='x', expand=1,
-                padx = self['borderx'], pady = self['bordery'])
+                padx=self['borderx'], pady=self['bordery'])
 
         if 'activatecommand' not in kw:
             # Whenever this dialog is activated, set the focus to the
             # Counter's entry widget.
             tkentry = self.component('entry')
-            self.configure(activatecommand = tkentry.focus_set)
+            self.configure(activatecommand=tkentry.focus_set)
 
         # Check keywords and initialise options.
         self.initialiseoptions()
@@ -9104,11 +9104,11 @@ class CounterDialog(Pmw.Dialog):
 Pmw.forwardmethods(CounterDialog, Pmw.Counter, '_cdCounter')
 
 ######################################################################
-### File: PmwLogicalFont.py
+# ## File: PmwLogicalFont.py
 import os
 import string
 
-def _font_initialise(root, size=None, fontScheme = None):
+def _font_initialise(root, size=None, fontScheme=None):
     global _fontSize
     if size is not None:
         _fontSize = size
@@ -9118,28 +9118,28 @@ def _font_initialise(root, size=None, fontScheme = None):
             defaultFont = logicalfont('Helvetica')
             menuFont = logicalfont('Helvetica', weight='bold', slant='italic')
             scaleFont = logicalfont('Helvetica', slant='italic')
-            root.option_add('*Font',            defaultFont,  'userDefault')
-            root.option_add('*Menu*Font',       menuFont,     'userDefault')
-            root.option_add('*Menubutton*Font', menuFont,     'userDefault')
-            root.option_add('*Scale.*Font',     scaleFont,    'userDefault')
+            root.option_add('*Font', defaultFont, 'userDefault')
+            root.option_add('*Menu*Font', menuFont, 'userDefault')
+            root.option_add('*Menubutton*Font', menuFont, 'userDefault')
+            root.option_add('*Scale.*Font', scaleFont, 'userDefault')
 
             if fontScheme == 'pmw1':
-                balloonFont = logicalfont('Helvetica', -6, pixel = '12')
-            else: # fontScheme == 'pmw2'
+                balloonFont = logicalfont('Helvetica', -6, pixel='12')
+            else:  # fontScheme == 'pmw2'
                 balloonFont = logicalfont('Helvetica', -2)
             root.option_add('*Balloon.*Font', balloonFont, 'userDefault')
         else:
             defaultFont = logicalfont('Helvetica')
-            root.option_add('*Font', defaultFont,  'userDefault')
+            root.option_add('*Font', defaultFont, 'userDefault')
     elif fontScheme == 'default':
         defaultFont = ('Helvetica', '-%d' % (_fontSize,), 'bold')
         entryFont = ('Helvetica', '-%d' % (_fontSize,))
         textFont = ('Courier', '-%d' % (_fontSize,))
-        root.option_add('*Font',            defaultFont,  'userDefault')
-        root.option_add('*Entry*Font',      entryFont,    'userDefault')
-        root.option_add('*Text*Font',       textFont,     'userDefault')
+        root.option_add('*Font', defaultFont, 'userDefault')
+        root.option_add('*Entry*Font', entryFont, 'userDefault')
+        root.option_add('*Text*Font', textFont, 'userDefault')
 
-def logicalfont(name='Helvetica', sizeIncr = 0, **kw):
+def logicalfont(name='Helvetica', sizeIncr=0, **kw):
     if name not in _fontInfo:
         raise ValueError('font %s does not exist' % name)
 
@@ -9170,7 +9170,7 @@ def logicalfont(name='Helvetica', sizeIncr = 0, **kw):
 
         rtn.append(realValue)
     return '-'.join(rtn)
-    #return str.join(rtn, '-')
+    # return str.join(rtn, '-')
 
 def logicalfontnames():
     return list(_fontInfo.keys())
