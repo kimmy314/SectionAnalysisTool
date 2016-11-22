@@ -89,39 +89,39 @@ def add_item():
     global canvas
     info = sectionEntry.get().split(',')
 
-    #try:
-    section = None
-    if info[0][0] is 'R' or info[0][0] is 'r':
-        if len(info) < 8:
-            raise ValueError('Not enough inputs')
-        section = RA(info[1], info[2], info[3],
-                     info[4], info[5], info[6], info[7])
-        shapes.append(Rect(section))
-        listbox.addRow(info)
-    elif info[0][0] is 'C' or info[0][0] is 'c':
-        if len(info) < 9:
-            raise ValueError('Not enough inputs')
-        section = CSA(info[1], info[2], info[3],
-                      info[4], info[5], info[6], info[7], info[8])
-        shapes.append(Circ(section))
-        listbox.addRow(info)
-    elif info[0][0] is 'P' or info[0][0] is 'p':
-        if len(info) < 9:
-            raise ValueError('Not enough inputs')
-        section = PA(info[1], info[2:])
-        shapes.append(Poly(section))
-        section.corners()
-        listbox.addRow([info[0], info[1], info[2], '', '', '', '', '', ''])
-    else:
-        raise ValueError('R* or r* for rectangle,'
-                         'C* or c* for circle segment,'
-                         'P* or p* for polygon')
-    sa.addSection(section)
-    infoList.append(info)
-    updateSectionResults()
-    draw()
-    #except BaseException as e:
-        #messagebox.showerror("Error", repr(e))
+    try:
+        section = None
+        if info[0][0] is 'R' or info[0][0] is 'r':
+            if len(info) < 8:
+                raise ValueError('Not enough inputs')
+            section = RA(info[1], info[2], info[3],
+                         info[4], info[5], info[6], info[7])
+            shapes.append(Rect(section))
+            listbox.addRow(info)
+        elif info[0][0] is 'C' or info[0][0] is 'c':
+            if len(info) < 9:
+                raise ValueError('Not enough inputs')
+            section = CSA(info[1], info[2], info[3],
+                          info[4], info[5], info[6], info[7], info[8])
+            shapes.append(Circ(section))
+            listbox.addRow(info)
+        elif info[0][0] is 'P' or info[0][0] is 'p':
+            if len(info) < 9:
+                raise ValueError('Not enough inputs')
+            section = PA(info[1], info[2:])
+            shapes.append(Poly(section))
+            section.corners()
+            listbox.addRow([info[0], info[1], info[2], '', '', '', '', '', ''])
+        else:
+            raise ValueError('R* or r* for rectangle,'
+                             'C* or c* for circle segment,'
+                             'P* or p* for polygon')
+        sa.addSection(section)
+        infoList.append(info)
+        updateSectionResults()
+        draw()
+    except BaseException as e:
+        messagebox.showerror("Error", repr(e))
 
 def delete_item():
     '''
@@ -304,6 +304,8 @@ def runAnalysis():
         global SF
         global IDX_MIN_MAX
         sa.Pz, sa.Mx, sa.My, sa.xP, sa.yP = [loadEntrys[i].get() for i in range(5)];
+        sa.isSuppress = isChk.get()
+        print(sa.isSuppress)
         stressVar.set('Stress: %.2f ' % sa.getStress(coordEntry[2].get(),
                                                     coordEntry[0].get(),
                                                     coordEntry[1].get()))
@@ -371,6 +373,10 @@ clearBtn = tk.Button(fileFrame, text='Clear List', command=clearList)
 clearBtn.pack(side=tk.LEFT, padx=5, pady=5)
 saveBtn = tk.Button(fileFrame, text='Save File', command=saveFile)
 saveBtn.pack(side=tk.LEFT, padx=5, pady=5)
+
+isChk = tk.IntVar()
+chkBx = tk.Checkbutton(fileFrame, text="Suppress Ixy", variable=isChk, font='Helvetica 10 bold', command=runAnalysis)
+chkBx.pack(side=tk.RIGHT)
 
 # Load labels and entries
 loadFrame = tk.Frame(frame)
@@ -462,7 +468,7 @@ button3.pack(side=tk.LEFT)
 button4 = tk.Button(buttonFrame, text='Run Analysis', command=runAnalysis)
 button4.pack(side=tk.LEFT)
 
-sa = SA(0, 0, 0, 0, 0)
+sa = SA(0, 0, 0, 0, 0, False)
 shapes = []
 infoList = []
 data = sa.sectionArr
