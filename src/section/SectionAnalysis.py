@@ -271,7 +271,8 @@ class SectionAnalysis:
             if len(self._sections) != 0:
                 sigma = self._sections[index].E * (Pz / self._AE - Mxp * yp / EIx - Myp * xp / EIy)
                 return sigma
-            return 0
+            else:
+                raise ValueError('Nothing to analyze')
         except ZeroDivisionError:
             raise ValueError('Error during calculating stress, check section validity')
         

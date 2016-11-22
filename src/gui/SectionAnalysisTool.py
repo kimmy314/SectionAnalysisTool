@@ -119,7 +119,7 @@ def add_item():
         sa.addSection(section)
         infoList.append(info)
         updateSectionResults()
-        draw()
+        runAnalysis()
     except BaseException as e:
         messagebox.showerror("Error", repr(e))
 
@@ -135,7 +135,7 @@ def delete_item():
         del shapes[index]
         del infoList[index]
         updateSectionResults()
-        draw()
+        runAnalysis()
     except BaseException as e:
         messagebox.showerror("Error", repr(e))
 
@@ -160,10 +160,60 @@ def edit_item():
                              'P* or p* for polygon')
         infoList[index] = info
         updateSectionResults()
-        draw()
+        runAnalysis()
     except BaseException as e:
         messagebox.showerror("Error", repr(e))
 
+def add_stress():
+    '''
+    add the text in the Entry widget to the end of the stressbox
+    '''
+    info = stressEntry.get().split(',')
+
+    try:
+        stress = round(sa.getStress(info[2], info[0], info[1]),2)
+        info.append(stress)
+        stressbox.addRow(info)
+        stressbox._infoList.append(info)
+        addedStress.append(info)
+    except BaseException as e:
+        messagebox.showerror("Error", repr(e))
+
+def delete_stress():
+    '''
+    delete a selected line from the stressbox
+    '''
+    # get selected line index
+    try:
+        index = stressbox.removeRow()
+        index = int(index)
+        del addedStress[index]
+        del stressbox._infoList[index]
+    except BaseException as e:
+        messagebox.showerror("Error", repr(e))
+
+def edit_stress():
+    '''
+    edits the selected item with the input box for stressbox
+    '''
+    info = stressEntry.get().split(',')
+    try:
+        index = stressbox.index()
+        stress = round(sa.getStress(info[2], info[0], info[1]),2)
+        info.append(stress)
+        stressbox.editRow(info)
+        stressbox._infoList[index] = info
+        addedStress[index] = info
+    except BaseException as e:
+        messagebox.showerror("Error", repr(e))
+        
+def updateStressTable():
+    stressbox.clear()
+    for i in range(len(addedStress)):
+        addedStress[i][3] = round(sa.getStress(addedStress[i][2], addedStress[i][0], addedStress[i][1]),2)
+        stressbox.addRow(addedStress[i])
+        stressbox._infoList.append(addedStress[i])
+        
 def getCanvasData():
     '''
     calculates the in to pixel conversion and origin for the canvas
@@ -235,8 +285,8 @@ def draw():
             x, y = Shape.inLocToPix(Shape, inToPix, origin[0], origin[1], s[0], s[1])
             item = Shape.point(Shape, canvas, x, y, s[2], COLOR_VAL[0], COLOR_VAL[1])
             tooltip.tagbind(canvas, item, ('({}, {}) : {}'
-                                           .format(round(s[0], 2),
-                                                   round(s[1], 2),
+                                           .format(round(s[0], 3),
+                                                   round(s[1], 3),
                                                    round(s[2], 2))))
         # max / min
         if not len(SF) is 0:
@@ -247,8 +297,8 @@ def draw():
                                               fill='yellow',
                                               outline='black')
             tooltip.tagbind(canvas, minRect, ('({}, {}) : {}'
-                                              .format(round(SF[IDX_MIN_MAX[0]][0], 2),
-                                                      round(SF[IDX_MIN_MAX[0]][1], 2),
+                                              .format(round(SF[IDX_MIN_MAX[0]][0], 3),
+                                                      round(SF[IDX_MIN_MAX[0]][1], 3),
                                                       round(SF[IDX_MIN_MAX[0]][2], 2))))
             maxX, maxY = Shape.inLocToPix(Shape, inToPix,
                                           origin[0], origin[1],
@@ -257,8 +307,8 @@ def draw():
                                               fill='yellow',
                                               outline='black')
             tooltip.tagbind(canvas, maxRect, ('({}, {}) : {}'
-                                              .format(round(SF[IDX_MIN_MAX[1]][0], 2),
-                                                      round(SF[IDX_MIN_MAX[1]][1], 2),
+                                              .format(round(SF[IDX_MIN_MAX[1]][0], 3),
+                                                      round(SF[IDX_MIN_MAX[1]][1], 3),
                                                       round(SF[IDX_MIN_MAX[1]][2], 2))))
             
         for i in range(int((canvas.winfo_width() - 100) / 2)):
@@ -272,10 +322,9 @@ def draw():
         canvas.create_text(canvas.winfo_width() - 25, 7, text=int(COLOR_VAL[1]),
                            fill='yellow',
                            font='Helvetica 6')
+        updateStressTable()
     except BaseException as e:
         messagebox.showerror("Error", repr(e))
-
-
 
 def updateSectionResults():
     if len(sa.sectionArr) > 0:
@@ -305,15 +354,11 @@ def runAnalysis():
         global IDX_MIN_MAX
         sa.Pz, sa.Mx, sa.My, sa.xP, sa.yP = [loadEntrys[i].get() for i in range(5)];
         sa.isSuppress = isChk.get()
-        print(sa.isSuppress)
-        stressVar.set('Stress: %.2f ' % sa.getStress(coordEntry[2].get(),
-                                                    coordEntry[0].get(),
-                                                    coordEntry[1].get()))
-        stressLabel.config(textvariable=stressVar, relief='flat')
         temp = sa.stressField()
         SF = temp[0]
         COLOR_VAL = [temp[1], temp[2]]
         IDX_MIN_MAX = [temp[3], temp[4]]
+        updateStressTable()
         draw()
     except BaseException as e:
         messagebox.showerror("Error", repr(e))
@@ -346,8 +391,8 @@ def saveStress():
     if fname:
         try:
             with open(fname, 'w') as f:
-                for s in SF:
-                    f.write(', '.join(str(x) for x in s))
+                for info in addedStress:
+                    f.write(', '.join(str(x) for x in info))
                     f.write('\n')
         except BaseException as e:
             messagebox.showerror("Error", repr(e))
@@ -457,16 +502,16 @@ ToolTip(sectionEntry, 'Sections must contain the following:'
 buttonFrame = tk.Frame(frame);
 buttonFrame.pack(side=tk.TOP, fill=tk.X, pady=5)
 button1 = tk.Button(buttonFrame, text='Add section', command=add_item)
-button1.pack(side=tk.LEFT)
+button1.pack(side=tk.LEFT, padx=5, pady=5)
 
 button2 = tk.Button(buttonFrame, text='Remove section', command=delete_item)
-button2.pack(side=tk.LEFT)
+button2.pack(side=tk.LEFT, padx=5, pady=5)
 
 button3 = tk.Button(buttonFrame, text='Edit section', command=edit_item)
-button3.pack(side=tk.LEFT)
+button3.pack(side=tk.LEFT, padx=5, pady=5)
 
 button4 = tk.Button(buttonFrame, text='Run Analysis', command=runAnalysis)
-button4.pack(side=tk.LEFT)
+button4.pack(side=tk.RIGHT, padx=5, pady=5)
 
 sa = SA(0, 0, 0, 0, 0, False)
 shapes = []
@@ -477,7 +522,7 @@ data = sa.sectionArr
 headers = [' shape  ', '   id   ', '   E   ', '   x    ', '   y    ',
            '  dim1  ', '  dim2  ', ' orient ', ' alpha  ']
 listboxFrame = tk.Frame(frame);
-listboxFrame.pack(side=tk.TOP, padx=5, pady=5, fill=tk.BOTH, expand=tk.YES)
+listboxFrame.pack(side=tk.TOP, padx=5, pady=5, fill=tk.X)
 listbox = MCL(listboxFrame, headers, data, sectionEntry, infoList)
 
 SF = []
@@ -495,6 +540,10 @@ eNameFrame = tk.Frame(bottomFrame)
 eNameFrame.pack(side=tk.TOP, fill=tk.X)
 stressFrame = tk.Frame(bottomFrame)
 stressFrame.pack(side=tk.TOP, fill=tk.X)
+stressBtnFrame = tk.Frame(bottomFrame)
+stressBtnFrame.pack(side=tk.TOP, fill=tk.X)
+stressTableFrame = tk.Frame(bottomFrame)
+stressTableFrame.pack(side=tk.TOP, fill=tk.X)
 
 label1 = tk.Label(infoFrame,
                   text='Section Analysis Results',
@@ -527,36 +576,25 @@ for i in range(6):
     resultLabels.append(resultLabel)
 
 # get stress at location x y on sections[i]
-CRD_WIDTH = 12
-eNameFrames = [0 for i in range(3)]
-for i in range(len(eNameFrames)):
-    eNameFrames[i] = tk.Frame(eNameFrame)
-    eNameFrames[i].pack(side=tk.LEFT, fill=tk.X)
-
-coordNames = ['X Coord', 'Y Coord', 'Section index']
-coordName = []
-coordEntry = []
-
-for i in range(len(eNameFrames)):
-    coordName.append(tk.Label(eNameFrames[i], text=coordNames[i], width=CRD_WIDTH))
-    coordName[i].pack(side=tk.TOP, padx=3)
-
-for i in range(len(eNameFrames)):
-    coordEntry.append(tk.Entry(eNameFrames[i], bg='yellow', width=CRD_WIDTH))
-    coordEntry[i].pack(side=tk.TOP, padx=3)
-    coordEntry[i].insert(0, 0)
-
-stressBtn = tk.Button(eNameFrame, text='Save Stress File', command=saveStress)
-stressBtn.pack(side=tk.LEFT, padx=5)
-stressLabel = tk.Entry(stressFrame,
-                       state='readonly',
-                       readonlybackground='white')
-
-stressLabel.pack(fill=tk.X, padx=5, pady=5)
+stressEntry = tk.Entry(stressFrame, bg='yellow')
+stressEntry.pack(fill=tk.X, padx=5, pady=5)
 stressVar = tk.StringVar()
-stressVar.set('Stress: ')
-stressLabel.config(textvariable=stressVar, relief='flat')
+stressVar.set('X, Y, Index')
+stressEntry.config(textvariable=stressVar)
 
+# stress points
+stressBtn1 = tk.Button(stressBtnFrame, text='Add Stress Point', command=add_stress)
+stressBtn1.pack(side=tk.LEFT, padx=5, pady=5)
+stressBtn2 = tk.Button(stressBtnFrame, text='Remove Stress Point', command=delete_stress)
+stressBtn2.pack(side=tk.LEFT, padx=5, pady=5)
+stressBtn3 = tk.Button(stressBtnFrame, text='Edit Stress Point', command=edit_stress)
+stressBtn3.pack(side=tk.LEFT, padx=5, pady=5)
+stressBtn = tk.Button(stressBtnFrame, text='Save Stress File', command=saveStress)
+stressBtn.pack(side=tk.RIGHT, padx=5, pady=5)
+
+addedStress = []
+addedStressHdr = ['   X   ', '   Y   ', ' Index ', ' Stress ']
+stressbox = MCL(stressTableFrame, addedStressHdr, addedStress, stressEntry, addedStress)
 draw()
 
 root.mainloop(0)

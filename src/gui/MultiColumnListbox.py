@@ -20,7 +20,7 @@ class MultiColumnListbox(object):
         container = ttk.Frame(self._frame)
         container.pack(fill='both', expand=True)
         # create a treeview with dual scrollbars
-        self.tree = ttk.Treeview(columns=self._headers, show="headings")
+        self.tree = ttk.Treeview(columns=self._headers, show="headings", height=10)
         vsb = ttk.Scrollbar(orient="vertical",
             command=self.tree.yview)
         hsb = ttk.Scrollbar(orient="horizontal",
@@ -50,15 +50,16 @@ class MultiColumnListbox(object):
                     self.tree.column(self._headers[ix], width=col_w)
                     
     def OnDoubleClick(self, event):
-        index = self.index()
-        info = self._infoList[index]
-        entryVar = tk.StringVar()
-        entryVar.set(', '.join(str(x) for x in info))
-        self._entry.configure(textvariable=entryVar)
+        if self._entry != None:
+            index = self.index()
+            info = self._infoList[index]
+            entryVar = tk.StringVar()
+            entryVar.set(', '.join(str(x) for x in info))
+            self._entry.configure(textvariable=entryVar)
 
     def addRow(self, item):
         self.tree.insert('', 'end', values=item)
-        for i in range(7):
+        for i in range(len(item)):
             col_w = tkFont.Font().measure(item[i])
             if self.tree.column(self._headers[i], width=None) < col_w:
                 self.tree.column(self._headers[i], width=col_w)
@@ -96,3 +97,5 @@ class MultiColumnListbox(object):
     def clear(self):
         for i in self.tree.get_children():
             self.tree.delete(i)
+        self._data = []
+        self._infoList = []

@@ -15,7 +15,7 @@ class Test(unittest.TestCase):
         self.ra[2] = RA('R3',2,-1,-1,1,1,0);
         self.ra[3] = RA('R4',1,0,-1,1,1,0);
         
-        self.sa = SA(0, 300, 0, 0, 0)
+        self.sa = SA(0, 300, 0, 0, 0, False)
         for i in range(4):
             self.sa.addSection(self.ra[i])
         
