@@ -414,8 +414,6 @@ fileFrame = tk.Frame(frame)
 fileFrame.pack(side=tk.TOP, fill=tk.X)
 loadBtn = tk.Button(fileFrame, text='Load File', command=loadFile)
 loadBtn.pack(side=tk.LEFT, padx=5, pady=5)
-clearBtn = tk.Button(fileFrame, text='Clear List', command=clearList)
-clearBtn.pack(side=tk.LEFT, padx=5, pady=5)
 saveBtn = tk.Button(fileFrame, text='Save File', command=saveFile)
 saveBtn.pack(side=tk.LEFT, padx=5, pady=5)
 
@@ -431,13 +429,13 @@ for i in range(5):
     loadFrames[i] = tk.Frame(loadFrame)
     loadFrames[i].pack(side=tk.LEFT, fill=tk.X)
 
-LE_WIDTH = 8
+LE_WIDTH = 13
 # Load labels
 loadLabelsTxt = ['Pz', 'Mx', 'My', 'xP', 'yP']
 loadLabel = [0 for i in range(5)]
 for i in range(5):
     loadLabel[i] = tk.Label(loadFrames[i], text=loadLabelsTxt[i], width=LE_WIDTH)
-    loadLabel[i].pack(side=tk.TOP, padx=5, pady=5, fill=tk.X)
+    loadLabel[i].pack(side=tk.TOP, padx=5, fill=tk.X)
 
 ToolTip(loadLabel[0], 'Pz is the load in the Z direction'
                  '\nPositive Pz is out of the page'
@@ -453,7 +451,7 @@ ToolTip(loadLabel[4], 'Load application location')
 loadEntrys = [0 for i in range(5)]
 for i in range(5):
     loadEntrys[i] = tk.Entry(loadFrames[i], bg='yellow', width=LE_WIDTH)
-    loadEntrys[i].pack(side=tk.TOP, padx=5, pady=5, fill=tk.X)
+    loadEntrys[i].pack(side=tk.TOP, padx=5, fill=tk.X)
     loadEntrys[i].insert(0, 0)
 
 sectionFrame = tk.Frame(frame)
@@ -510,6 +508,9 @@ button2.pack(side=tk.LEFT, padx=5, pady=5)
 button3 = tk.Button(buttonFrame, text='Edit section', command=edit_item)
 button3.pack(side=tk.LEFT, padx=5, pady=5)
 
+clearBtn = tk.Button(buttonFrame, text='Clear List', command=clearList)
+clearBtn.pack(side=tk.LEFT, padx=5, pady=5)
+
 button4 = tk.Button(buttonFrame, text='Run Analysis', command=runAnalysis)
 button4.pack(side=tk.RIGHT, padx=5, pady=5)
 
@@ -553,7 +554,7 @@ label2 = tk.Label(infoFrame, text='MOI about the principal axis')
 label2.pack(side=tk.TOP)
 labelNames = ['Ixp', 'Iyp', 'Theta', 'Area', 'Xcg', 'Ycg']
 
-RF_WIDTH = 7
+RF_WIDTH = 11
 resultFrames = [0 for i in range(6)]
 for i in range(6):
     resultFrames[i] = tk.Frame(resultFrame)
