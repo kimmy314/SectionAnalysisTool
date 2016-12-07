@@ -69,13 +69,13 @@ class MultiColumnListbox(object):
         try:
             return self.index()
         except IndexError:
-            pass
+            raise ValueError('Please select an item from the list')
         finally:
             try:
                 item = self.tree.selection()[0]
                 self.tree.delete(item)
             except IndexError:
-                pass
+                raise ValueError('Please select an item from the list')
 
     def editRow(self, edits):
         index = self.removeRow()
@@ -84,6 +84,8 @@ class MultiColumnListbox(object):
 
     def index(self):
         item = self.tree.selection()[0]
+        if item == None:
+            raise ValueError('Please select an item from the list')
         return self.tree.index(item)
 
     def getValues(self):
