@@ -11,7 +11,7 @@ class PolygonAnalysis(PartialAnalysis):
     y - y coordinate of the bottom left corner of rectangle
     '''
     def __init__(self, name, E, coords):
-        super(PolygonAnalysis, self).__init__(name, E, 0, 0, 0, 0);
+        super(PolygonAnalysis, self).__init__(name, E, 0, 0, 0, 0, 0);
         self._coords = None;
         self._size = None;
         self.coords = coords;

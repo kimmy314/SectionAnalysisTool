@@ -108,7 +108,7 @@ def add_item():
         elif info[0][0] is 'P' or info[0][0] is 'p':
             if len(info) < 9:
                 raise ValueError('Not enough inputs')
-            section = PA(info[1], info[2:])
+            section = PA(info[1], info[2], info[3:])
             shapes.append(Poly(section))
             section.corners()
             listbox.addRow([info[0], info[1], info[2], '', '', '', '', '', ''])
